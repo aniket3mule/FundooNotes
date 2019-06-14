@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import {
-    Collapse,
-    Navbar,
-    NavItem,
-    NavLink,
-    Nav,
-    NavbarBrand,
-    NavbarToggler
-} from 'reactstrap'
+import {Collapse, Navbar,NavItem,Nav,NavbarBrand,NavbarToggler,Button} from 'reactstrap'
 import {withRouter} from 'react-router-dom'
 
 class HomePage extends Component {
@@ -35,8 +27,8 @@ class HomePage extends Component {
 
     render() {
         return (
-            <div>
-                <Navbar color="light" light expand="md">
+            <div className="Header-color">
+                <Navbar color="#F7F7EF" light expand="md">
                     <NavbarBrand href="/" >
                     <img src={require('../assets/img/keep_48dp.png')} alt="keep Note icon"/>
                     Fundoo Notes
@@ -45,10 +37,10 @@ class HomePage extends Component {
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
-                                <NavLink onClick={this.signInClick}>Sign In</NavLink>
+                            <Button color="link" onClick={this.signInClick}>Sign in</Button>
                             </NavItem>
                             <NavItem>
-                                <NavLink onClick={this.signUpClick}>Sign Up</NavLink>
+                            <Button color="link" onClick={this.signUpClick}>Sign Up</Button>
                             </NavItem>
                         </Nav>
                     </Collapse>

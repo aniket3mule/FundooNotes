@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css'
-import '@fortawesome/free-solid-svg-icons'
-import '@fortawesome/react-fontawesome'
+// import '@fortawesome/free-solid-svg-icons'
+// import '@fortawesome/react-fontawesome'
 import 'font-awesome/css/font-awesome.min.css'
-
+import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
