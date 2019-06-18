@@ -6,21 +6,19 @@ import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import ForgetPassword from './pages/ForgetPassword'
 import ResetPassword from './pages/ResetPassword'
-import Dashboard from './pages/Dashboard'
+import Sidebar from './pages/Sidebar'
 
 class App extends React.Component {
   render() {
     return (
-      <div>
         <Router>
           <Route path="/" component = {Home}/>
           <Route path="/signin" component = {SignIn}/>
           <Route path="/signup" component = {SignUp}/>
           <Route path="/forgetpassword" component = {ForgetPassword}/>
           <Route path="/resetpassword" component = {ResetPassword}/>
-          <Route path="/dashboard" component = {Dashboard}/>
+          <Route path="/Sidebar" component = {Sidebar}/>
         </Router>
-      </div>
     )
   }
 }

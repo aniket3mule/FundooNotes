@@ -16,3 +16,16 @@
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 4.25rem;
 }
+
+.sidenav---sidenav---_2tBP{
+  position: relative;
+  display: grid;
+    /* top: 4.8rem; */
+    bottom: 0;
+    left: 0;
+    z-index: 1006;
+    min-width: 64px;
+    background: #db3d44;
+    transition: min-width 0.15s;
+    /* opacity: 0.5; */
+}

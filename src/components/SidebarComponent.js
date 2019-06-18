@@ -1,16 +1,19 @@
-import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
+import SideNav, {  NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
 import React, { Component } from 'react';
+import {withRouter} from 'react-router-dom';
 class DashboardComponent extends Component {
+    
+    selectNav = (selected) =>{
+        if (selected === "home") {
+            this.props.history.push("/signin")
+        }
+    }
+
     render() {
         return (
-            <SideNav
-                onSelect={(selected) => {
-                    // Add your code here
-                    console.log(selected);
-                }}
-            >
+            <SideNav onSelect = {this.selectNav}>
                 <SideNav.Toggle />
-                <SideNav.Nav defaultSelected="home">
+                <SideNav.Nav>
                     <NavItem eventKey="home">
                         <NavIcon>
                             <i className="fa fa-fw fa-home" style={{ fontSize: '1.75em' }} />
@@ -26,21 +29,27 @@ class DashboardComponent extends Component {
                         <NavText>
                             Charts
             </NavText>
-                        <NavItem eventKey="charts/linechart">
-                            <NavText>
+            </NavItem>
+
+                        <NavItem eventKey="charts">
+                            
+                        <NavIcon>
+                            <i className="fa fa-fw fa-line-chart" style={{ fontSize: '1.75em' }} />
+                        </NavIcon><NavText>
                                 Line Chart
                 </NavText>
                         </NavItem>
-                        <NavItem eventKey="charts/barchart">
-                            <NavText>
+                        <NavItem eventKey="barchart">
+                        <NavIcon>
+                            <i className="fa fa-fw fa-line-chart" style={{ fontSize: '1.75em' }} />
+                        </NavIcon><NavText>
                                 Bar Chart
                 </NavText>
                         </NavItem>
-                    </NavItem>
                 </SideNav.Nav>
             </SideNav>
         )
     }
 }
 
-export default DashboardComponent
+export default withRouter(DashboardComponent);

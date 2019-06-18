@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import { Container} from 'reactstrap'
-import DashboardComponent from '../components/DashboardComponent'
+import SidebarComponent from '../components/SidebarComponent'
 
 export default class  Dashboard extends Component{
     render(){
         return(
-            <Container>
-                <DashboardComponent/>
-            </Container>
+            <div>
+                <SidebarComponent/>
+            </div>
         );
     }
 }
