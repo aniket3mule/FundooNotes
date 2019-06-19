@@ -7,6 +7,7 @@ import { Button, Label, Input, Card, CardImg, CardText, CardBody, CardTitle } fr
 import Services from '../services/UserServices';
 const loginService = new Services().loginService;
 
+
 class SignInComponent extends Component {
     constructor(props) {
         super(props);
@@ -68,7 +69,7 @@ class SignInComponent extends Component {
     render() {
         const { email, password } = this.state;
         return (
-            <Card color="light">
+            <Card className="card-signin-signup" color="light">
                 <CardBody>
                     <CardTitle><h4>Sign in</h4></CardTitle>
                 </CardBody>

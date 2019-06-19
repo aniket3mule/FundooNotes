@@ -3,10 +3,15 @@ import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'
 // import { withRouter } from 'react-router-dom'
 require('dotenv').config();
+const API = process.env.API;
+
+
 class Services {
 
+    
     loginService (data){
-        return axios.post(`http://localhost:4000/login`, data)
+        
+        return axios.post(`${API}/login`, data)
     }
 
     userRegister(data){

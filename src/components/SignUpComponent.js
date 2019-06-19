@@ -77,7 +77,7 @@ class SignUp extends Component {
     render() {
         const { firstName, lastName, email, password, confirmPasswor } = this.state;
         return (
-            <Card>
+            <Card className="card-signin-signup">
                 <CardBody>
                     <CardTitle><h4>Registration Form</h4></CardTitle>
                 </CardBody>
