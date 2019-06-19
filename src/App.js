@@ -7,7 +7,6 @@ import SignUp from './pages/SignUp'
 import ForgetPassword from './pages/ForgetPassword'
 import ResetPassword from './pages/ResetPassword'
 import UserDashboard from './pages/UserDashboard'
-// import Demo from './components/demo'
 import AppBar from './components/DashboardComponent'
 
 class App extends React.Component {

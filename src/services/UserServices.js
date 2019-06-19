@@ -4,6 +4,8 @@ import 'react-toastify/dist/ReactToastify.min.css'
 // import { withRouter } from 'react-router-dom'
 require('dotenv').config();
 const API = process.env.API;
+const login = process.env.login;
+const register = process.env.register;
 
 
 class Services {
@@ -11,11 +13,11 @@ class Services {
     
     loginService (data){
         
-        return axios.post(`${API}/login`, data)
+        return axios.post(`${login}`, data)
     }
 
     userRegister(data){
-        axios.post('register',data)
+        axios.post(`${register}`,data)
         .then(response => {
             console.log(response);
             toast.success("Registration successfull.... Please click login", {

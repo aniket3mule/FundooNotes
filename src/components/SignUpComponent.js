@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Label, Input, Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
+import { Button, Label, Input, Card, CardImg, CardText, CardBody, CardTitle, FormGroup } from 'reactstrap';
 import Services from '../services/UserServices';
 const userRegister = new Services().userRegister;
 
@@ -15,7 +15,7 @@ class SignUp extends Component {
             lastName: '',
             email: '',
             password: '',
-            confirmPasswor: ''
+            selectedOption: ''
         }
     }
 
@@ -23,20 +23,28 @@ class SignUp extends Component {
         this.setState({ [e.target.name]: e.target.value })
     });
 
+    handleOptionChange = (changeEvent =>{
+        this.setState({
+            selectedOption: changeEvent.target.value
+          });
+    })
+
+
     signInButton = (e => {
         e.preventDefault();
         this.props.history.push("/signin")
     });
 
+    
     submitHandler = (e => {
         e.preventDefault();
-        if (!this.state.fname) {
+        if (!this.state.firstName) {
             toast.error("first name can not be empty", {
                 position: toast.POSITION.TOP_CENTER,
                 className: 'rotateY animated'
             });
         }
-        else if (!this.state.lname) {
+        else if (!this.state.lastName) {
             toast.error("last name can not be empty", {
                 position: toast.POSITION.TOP_CENTER
             });
@@ -51,23 +59,22 @@ class SignUp extends Component {
                 position: toast.POSITION.TOP_CENTER
             });
         }
-        else if (!this.state.cpsw) {
+        else if (!this.state.confirmPassword) {
             toast.error("password can not be empty", {
                 position: toast.POSITION.TOP_CENTER
             });
         }
-        else if (this.state.password !== this.state.cpsw) {
+        else if (this.state.password !== this.state.confirmPassword) {
             toast.error("Password and Confirm not matching", {
                 position: toast.POSITION.TOP_CENTER
             });
         }
         else {
             var data = {
-                'fName': this.state.firstName,
-                'lname': this.state.lastName,
+                'firstName': this.state.firstName,
+                'lastName': this.state.lastName,
                 'email': this.state.email,
-                'password': this.state.password,
-                'cpsw': this.state.confirmPasswor
+                'password': this.state.password
             }
 
             userRegister(data);
@@ -75,7 +82,7 @@ class SignUp extends Component {
     })
 
     render() {
-        const { firstName, lastName, email, password, confirmPasswor } = this.state;
+        const { firstName, lastName, email, password, selectedOption, confirmPassword } = this.state;
         return (
             <Card className="card-signin-signup">
                 <CardBody>
@@ -114,6 +121,7 @@ class SignUp extends Component {
                             placeholder='Email'
                             value={email}
                             onChange={this.changeHandler} />
+
                         <Label><i className="fa fa-key fa-fw fa-lg" /><strong>Password</strong> </Label>
                         <Input
                             type='password'
@@ -125,18 +133,40 @@ class SignUp extends Component {
                         <Label><i className="fa fa-key fa-fw fa-lg" /><strong>Confirm Password</strong> </Label>
                         <Input
                             type='password'
-                            name='confirmPasswor'
+                            name='confirmPassword'
                             placeholder='Confirm Password'
-                            value={confirmPasswor}
+                            value={confirmPassword}
                             onChange={this.changeHandler} />
-                        <Label></Label>
+                        <FormGroup tag="fieldset">
+                            <Label><i className="fa fa-key fa-fw fa-lg" /><strong>Services</strong> </Label>
+                            <FormGroup check>
+                                <Label check>
+                                    <Input type="radio" name="Basic" 
+                                    value = {selectedOption}
+                                    checked={this.state.selectedOption === 'Basic'} 
+                                    onChange={this.handleOptionChange}
+                                    />
+                                    Basic
+                                </Label>
+                            </FormGroup>
+                            <FormGroup check>
+                                <Label check>
+                                    <Input type="radio" name="Advance"
+                                    value = {selectedOption}
+                                    checked={this.state.selectedOption === 'Advance'} 
+                                    onChange={this.handleOptionChange}
+                                    />
+                                    Advance
+                                </Label>
+                            </FormGroup>
+                        </FormGroup>
                         <center>
-                            <Button 
-                            outline 
-                            color="info" 
-                            className="text-uppercase" 
-                            onClick={this.submitHandler}>
-                            Sign up
+                            <Button
+                                outline
+                                color="info"
+                                className="text-uppercase"
+                                onClick={this.submitHandler}>
+                                Sign up
                             </Button>
                             <Label />
                             <CardTitle>Already have an Account?

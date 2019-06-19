@@ -43,7 +43,7 @@ class ForgetPasswordComponent extends Component{
     render() {
         const { email } = this.state;
         return (
-            <Card color="light">
+            <Card className="card-signin-signup" color="light">
                 <CardBody>
                     <CardTitle><h4>Forget Password</h4></CardTitle>
                 </CardBody>
