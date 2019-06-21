@@ -3,6 +3,19 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.img {
+  min-width: 1;
+  min-height: 1;
+  max-width: 2rem;
+  max-height: 2rem
+}
+
+.fundoo-text {
+  font-weight: bold;
+  font-size: 14px;
+  font-family: sans-serif Arial, Helvetica, sans-serif
+}
+
 .card-signin-signup {
   position: relative;
   display: flex;
@@ -15,6 +28,7 @@
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 4.25rem;
+  margin-top: 1%;
 }
 
 .sidenav---sidenav---_2tBP {
@@ -30,18 +44,136 @@
   /* opacity: 0.5; */
 }
 
-.input-group-search {
-  margin-left: 2%;
-  display: contents;
-  width: 40%;
+.input {
+  /* margin-left: 2%; */
+  width: 50%;
+  border-radius: 10px;
+  /* box-shadow: 0 4px 6px rgb(143, 143, 143); */
 }
-.inputbase{
-   width: 10px;
+
+input.input:focus {
+  outline-width: 0;
 }
-.search-button{
-  width: 100% 
+
+.search-button {
+  width: 100%
 }
+
 .MuiAppBar-colorPrimary {
-  color: black ;
-  background-color:whitesmoke;
+  color: black;
+  background-color: whitesmoke;
+}
+
+.create {
+  /* border: 1px solid; */
+  width: 25%;
+  display: flex;
+  border-radius: 8px;
+  border: 1px solid rgb(169, 169, 169);
+  /* justify-content: center; */
+}
+
+.create1 {
+  /* border: 1px solid blue; */
+  width: 48%;
+  height: 90%;
+  display: flex;
+  justify-content: baseline;
+  margin-top: 7%;
+  margin-left: 32%;
+}
+
+.take-note-input {
+  border-radius: 8px;
+  border: 1px solid rgb(255, 255, 255);
+  outline-width: 0;
+  width: 100%;
+}
+
+.take-note-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  max-width: 500px;
+  height: auto;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgb(143, 143, 143);
+  margin-top: 7%;
+  width: 100%;
+}
+
+.take-note-div {
+  display: flex;
+  justify-content: center;
+  /* margin-top: 10%; */
+}
+
+.card-body-text {
+  display: flex;
+  justify-content: space-between;
+  min-width: 0;
+  width: 100%;
+}
+
+.card-body-desc {
+  justify-content: space-between;
+  min-width: 0;
+  width: 100%;
+}
+
+.note-description {
+  min-width: 0;
+  width: 100%;
+}
+
+.take-note-card-description {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  max-width: 500px;
+  height: auto;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgb(143, 143, 143);
+  margin-top: 7%;
+  width: 100%;
+
+}
+
+.take-note-div-desc {
+  /* margin-top: 10%; */
+  display: flex;
+  justify-content: center;
+}
+
+.card-bottom {
+  display: flex;
+  /* position: absolute; */
+  width: inherit;
+
+}
+
+.modal-footer-note {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 1rem;
+  border-top: 1px solid #dee2e6;
+  border-bottom-right-radius: 0.3rem;
+  border-bottom-left-radius: 0.3rem;
+}
+
+.close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: end;
 }

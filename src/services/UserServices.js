@@ -3,21 +3,20 @@ import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'
 // import { withRouter } from 'react-router-dom'
 require('dotenv').config();
-const API = process.env.API;
-const login = process.env.login;
-const register = process.env.register;
+// const API = process.env.API;
+// const login = process.env.LOGIN;
+// const register = process.env.REGISTER;
+
 
 
 class Services {
-
-    
     loginService (data){
         
-        return axios.post(`${login}`, data)
+        return axios.post(`http://34.213.106.173/api/user/login`, data)
     }
 
     userRegister(data){
-        axios.post(`${register}`,data)
+        axios.post("http://34.213.106.173/api/user/userSignUp",data)
         .then(response => {
             console.log(response);
             toast.success("Registration successfull.... Please click login", {
@@ -25,7 +24,7 @@ class Services {
             });
         })
         .catch(err => {
-            console.log(err);
+            console.log("Eroorrrrrr....",err);
             toast.info("Email ID already registered", {
                 position: toast.POSITION.TOP_CENTER
             });

@@ -3,10 +3,12 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import MenuItem from '@material-ui/core/MenuItem'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import DrawerMenu from './DrawerMenu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import {Popover, PopoverBody } from 'reactstrap'
 
 const thm = createMuiTheme({
     overrides: {
@@ -42,11 +44,21 @@ class DashboardComponent extends Component {
         super(props);
         this.state = {
             open: false,
+            popoverOpen: false
         }
     }
 
     handleToggle = () => {
         this.setState({ open: !this.state.open });
+    }
+
+    handlePopover = () => {
+        this.setState({ popoverOpen: !this.state.popoverOpen });
+    }
+
+    handleLogout = () =>{
+        localStorage.clear();
+        this.props.history.push('/signin');
     }
     render() {
         return (
@@ -57,21 +69,34 @@ class DashboardComponent extends Component {
                             <IconButton color="inherit" aria-label="Open drawer" >
                                 <MenuIcon id="menu" onClick={this.handleToggle} />
                             </IconButton>
-                            <img className="img" src={require('../assets/img/keep_48dp.png')} alt="keep icon" />
-                            <strong>FundooNotes</strong>
-                                <div className="input-group input-group-search">
-                                    <input type="text" className="form-control inputbase"  placeholder="Search...." />
-                                    <div className="input-group-prepend">
-                                        {/* <SearchIcon /> */}
-                                        <button className="btn fa fa-search search-button" outline color="white"  >
-                                        </button>
-                                    </div>
+                            <img className="img"
+                            src={require('../assets/img/keep_48dp.png')}
+                            alt="keep icon"
+                            />
+                            <span className="fundoo-text">FundooNotes</span>
+                            <div className="input-group input-group-search">
+                                <div className="input-group-prepend">
+                                    {/* <SearchIcon /> */}
+                                    <button className="btn fa fa-search search-button" outline color="white" />
                                 </div>
+                                <input type="text" className=" input" placeholder="Search...." />
+                            </div>
                             <div>
-                            <IconButton>
+                                <IconButton id="Popover1">
                                     <AccountCircle>
                                     </AccountCircle>
-                                </IconButton> 
+                                </IconButton>
+                                
+                                <Popover
+                                placement="bottom"
+                                isOpen={this.state.popoverOpen}
+                                target="Popover1" 
+                                toggle={this.handlePopover}
+                                >
+                                <PopoverBody>
+                                <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+                                </PopoverBody>
+                                </Popover>
                             </div>
                         </Toolbar>
                         <DrawerMenu
