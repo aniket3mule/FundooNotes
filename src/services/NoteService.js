@@ -1,32 +1,22 @@
 import axios from 'axios'
 import {  toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css'
 
-const addNotes = "http://34.213.106.173/api/notes/addNotes";
+
+const addNote = "http://34.213.106.173/api/notes/addNotes";
 const getAllNotes = "http://34.213.106.173/api/notes/getNotesList"
+const updateNote = "http://34.213.106.173/api/notes/updateNotes"
 const token = localStorage.getItem("token");
 
 class NoteServices {
 
     addNotes(data){
         // console.log(localStorage.getItem("token"));
-        axios.post(`${addNotes}`, data, {
+        return axios.post(`${addNote}`, data, {
             headers:{
                 'Authorization' : token
             }
         })
-        .then(response => {
-            console.log(response);
-            toast.success("Note Saved", {
-                position: toast.POSITION.TOP_CENTER
-            });
-        })
-        .catch(err => {
-            console.log("Eroorrrrrr....",err);
-            toast.info("Error in connection", {
-                position: toast.POSITION.TOP_CENTER
-            });
-        })
+       
     }
 
     getAllNotes(){
@@ -37,6 +27,14 @@ class NoteServices {
             }
         })
         
+    }
+
+    updateNote(data){
+        return axios.post(`${updateNote}`, data, {
+            headers:{
+                'Authorization' : token
+            }
+        })
     }
 }
 

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardText, CardTitle, CardLink, Label } from 'reactstrap';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Card, CardBody, CardText, CardTitle, CardLink, Label, Container } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import GetNote from '../services/NoteService'
+import {toast} from 'react-toastify'
 
-const allNotes = new GetNote();
+
+const NoteService = new GetNote();
 class GetAllNotes extends Component {
     constructor(props) {
         super(props);
@@ -21,8 +23,9 @@ class GetAllNotes extends Component {
     }
 
     componentDidMount() {
-        const printAllNotes = allNotes.getAllNotes();
-        printAllNotes
+
+        //Print All notes
+        NoteService.getAllNotes()
             .then(allNotes => {
                 this.setState({ allNotes: allNotes.data.data.data })
                 console.log("this data", this.state.allNotes);
@@ -37,58 +40,72 @@ class GetAllNotes extends Component {
         
     }
 
-    handleToggleOpen(id) {
-       // this.setState({ open: true });
-        this.setState({ noteId: id });
+    handleToggleOpen= ( id, oldTitle, oldDescription)=> {
         this.setState(prevState => ({
-            modal: !prevState.modal
+            modal: !prevState.modal,
+            noteId: id,
+            title: oldTitle,
+            description : oldDescription
         }));
+
         console.log("id ......", id);
-
         console.log("note id ......", this.state.noteId);
-
+//update existing Note
         try {
             if ( this.state.modal && (this.state.description !== null || this.state.title !== null)) {
                 var data = {
+                    'noteId': this.state.noteId,
                     'title': this.state.title,
-                    'description': this.state.description,
-                    'nodeId': this.state.noteId
+                    'description': this.state.description
+                    
                 }
                 let formData = new FormData();    //formdata object
+                formData.append('noteId', this.state.noteId);
                 formData.append('title', this.state.title);   //append the values with key, value pair
                 formData.append('description', this.state.description);
-                formData.append('noteId', this.state.noteId);
-
-                //console.log(data);
-                allNotes.addNotes(data)
+                console.log(data);
+                NoteService.updateNote(data)
+                .then(response => {
+                    console.log(response);
+                    toast.success("Note Saved", {
+                        position: toast.POSITION.TOP_CENTER
+                    });
+                })
+                .catch(err => {
+                    console.log("Eroorrrrrr....",err);
+                    toast.info("Error in connection", {
+                        position: toast.POSITION.TOP_CENTER
+                    });
+                })
             }
         } catch {
 
         }
+    }
+    displayCard=(newCard)=>{
+        this.setState({
+            allNotes:[...this.state.allNotes,newCard]
+        })
     }
 
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    // handleModal() {
-    //     this.setState(prevState => ({
-    //         modal: !prevState.modal
-    //     }));
-    // }
-
     render() {
+        
         var notes = this.state.allNotes.map((key) => {
             return (!this.state.modal ?
-                <Card className="take-note-card-description ">
-                    <CardBody className="card-body-desc">
+                <div>
+               <Container className="card-margin">
+                <Card className="take-note-user-card-description ">
+                    <CardBody className="-user-card-body-desc">
                         <CardTitle>
                             <input type="text"
                                 className="take-note-input"
                                 placeholder="Title"
-                                name="title"
                                 value={key.title}
-                                onClick={() => this.handleToggleOpen(key.id)}
+                                onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
                             />
                         </CardTitle>
                         <CardText>
@@ -96,23 +113,24 @@ class GetAllNotes extends Component {
                                 className="take-note-input note-description"
                                 rows="5"
                                 placeholder="Take a note"
-                                name="description"
                                 value={key.description}
-                                onClick={() => this.handleToggleOpen(key.id)}
+                                onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
                             />
                         </CardText>
                     </CardBody>
                     <CardBody className="card-bottom">
                         <CardText>
                             <CardLink ><i className="fa fa-bell-o fa-fw " aria-hidden="true"></i></CardLink>
-                            <CardLink ><i className="fa fa-user-plus fa-fw" aria-hidden="true"></i></CardLink>
+                            <CardLink ><img className="img" src={require('../assets/img/colaborator.svg')} alt="color picker" /></CardLink>
                             <CardLink ><img className="img" src={require('../assets/img/color.svg')} alt="color picker" /></CardLink>
-                            <CardLink ><i className="fa fa-archive fa-fw" aria-hidden="true"></i></CardLink>
+                            <CardLink ><img className="img" src={require('../assets/img/archived.svg')} alt="color picker" /></CardLink>
                             <CardLink ><i className="fa fa-picture-o fa-fw " aria-hidden="true"></i></CardLink>
                             <CardLink ><i className="fa fa-check-square-o fa-fw " aria-hidden="true"></i></CardLink>
                         </CardText>
                     </CardBody>
                 </Card>
+                </Container>
+                </div>            
                 :
                 (this.state.noteId === key.id) ?
 
@@ -129,7 +147,8 @@ class GetAllNotes extends Component {
                                     className="take-note-input"
                                     placeholder="Title"
                                     name="title"
-                                    value={key.title}
+                                    value={this.state.title}
+                                    onChange={this.handleChange}
                                 />
                             </ModalHeader>
                             <ModalBody>
@@ -138,7 +157,7 @@ class GetAllNotes extends Component {
                                     rows="5"
                                     placeholder="Take a note"
                                     name="description"
-                                    value={key.description}
+                                    value={this.state.description}
                                     onChange={this.handleChange}
                                 />
                              </ModalBody>
@@ -161,45 +180,6 @@ class GetAllNotes extends Component {
                                 </CardLink>
                             </ModalFooter>
                         </Modal>
-                 
-
-
-
-
-
-                    <Card className="take-note-card-description ">
-                        <CardBody className="card-body-desc">
-                            <CardTitle>
-                               
-                            </CardTitle>
-                            <CardText>
-                                <textarea
-                                    className="take-note-input note-description"
-                                    rows="5"
-                                    placeholder="Take a note"
-                                    name="description"
-                                    value={key.description}
-                                    onChange={this.handleChange}
-                                />
-                            </CardText>
-                        </CardBody>
-                        <CardBody className="card-bottom">
-                            <CardText>
-                                <CardLink ><i className="fa fa-bell-o fa-fw" aria-hidden="true"></i></CardLink>
-                                <CardLink ><i className="fa fa-user-plus fa-fw fa-lg" aria-hidden="true"></i></CardLink>
-                                <CardLink ><img className="img" src={require('../assets/img/color.svg')} alt="color picker" /></CardLink>
-                                <CardLink ><i className="fa fa-archive fa-fw fa-lg" aria-hidden="true"></i></CardLink>
-                                <CardLink ><i className="fa fa-picture-o fa-fw fa-lg" aria-hidden="true"></i></CardLink>
-                                <CardLink ><i className="fa fa-check-square-o fa-fw fa-lg" aria-hidden="true"></i></CardLink>
-                                <CardLink ></CardLink>
-                                <CardLink ></CardLink>
-                            </CardText>
-
-                            <CardText>
-                                
-                            </CardText>
-                        </CardBody>
-                    </Card>
                     </div>
                 :
                     null
@@ -207,7 +187,7 @@ class GetAllNotes extends Component {
 
         })
         return (
-            <div>
+            <div className="card-grid">
                 {notes}
             </div>
         )

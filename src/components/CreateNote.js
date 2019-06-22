@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, CardText, CardBody, CardTitle, CardLink, Label } from 'reactstrap'
 import NoteServices from '../services/NoteService';
-
+import {toast} from 'react-toastify'
 
 const addNotes = new NoteServices().addNotes;
 class CreateNote extends Component {
@@ -11,7 +11,8 @@ class CreateNote extends Component {
         this.state = {
             open: false,
             description: '',
-            title: ''
+            title: '',
+            newNote : []
         }
     }
 
@@ -37,6 +38,23 @@ class CreateNote extends Component {
                 formData.append('description',this.state.description);
                 //console.log(data);
                 addNotes(data)
+                .then(response => {
+                    console.log(response);
+                    this.setState({newNote: response.data.status.details})
+
+                    console.log(this.state.newNote);
+                    this.props.getNewNote(this.state.newNote)
+
+                    toast.success("Note Saved", {
+                        position: toast.POSITION.TOP_CENTER
+                    });
+                })
+                .catch(err => {
+                    console.log("Eroorrrrrr....",err);
+                    toast.info("Error in connection", {
+                        position: toast.POSITION.TOP_CENTER
+                    });
+                })
             }
         } catch {
 
@@ -79,7 +97,6 @@ class CreateNote extends Component {
                         <CardText>
                             <textarea
                                 className="take-note-input note-description"
-                                rows="5"
                                 placeholder="Take a note"
                                 name="description"
                                 value={description}

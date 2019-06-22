@@ -6,8 +6,8 @@
 .img {
   min-width: 1;
   min-height: 1;
-  max-width: 2rem;
-  max-height: 2rem
+  max-width: 1.28571429em;
+  max-height: 1.28571429em;
 }
 
 .fundoo-text {
@@ -88,6 +88,7 @@ input.input:focus {
   border: 1px solid rgb(255, 255, 255);
   outline-width: 0;
   width: 100%;
+  border: none;
 }
 
 .take-note-card {
@@ -129,6 +130,7 @@ input.input:focus {
 .note-description {
   min-width: 0;
   width: 100%;
+  border: none;
 }
 
 .take-note-card-description {
@@ -165,7 +167,7 @@ input.input:focus {
 .modal-footer-note {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   padding: 1rem;
   border-top: 1px solid #dee2e6;
   border-bottom-right-radius: 0.3rem;
@@ -175,5 +177,44 @@ input.input:focus {
 .close-btn {
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
 }
+
+.take-note-user-card-description{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgb(143, 143, 143);
+
+}
+
+.user-card-div{
+  /* display: flex; */
+  margin-top: 1%;
+}
+
+.card-grid{
+
+    display: flex;
+    width: 70%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  
+  
+  }
+
+    .all-note-div{
+      display: flex;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .card-margin{
+      margin-top: 4%;
+    }

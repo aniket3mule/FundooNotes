@@ -10,7 +10,13 @@ import {withRouter} from 'react-router-dom'
         this.state = {
             open: false,
         }
+        this.noteToCards = React.createRef();
     }
+    getNewNote=(newCard)=>{
+        this.noteToCards.current.displayCard(newCard);
+    }
+
+ 
     render(){
         if(localStorage.getItem('token1') !== "true"){
             return(
@@ -20,11 +26,17 @@ import {withRouter} from 'react-router-dom'
           }
           else{
         return(
-            <>
+            <div className="dashboard-div">
+                <div>
                 <DashboardComponent/>
-                <CreateNote/>
+                </div>
+                <div>
+                <CreateNote getNewNote={this.getNewNote}/>
+                </div>
+                <div className="all-note-div">
                 <AllNotes/>
-            </>
+                </div>
+            </div>
            
         );
           }
