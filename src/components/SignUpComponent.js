@@ -135,7 +135,7 @@ class SignUp extends Component {
                                     checked={this.state.selectedOption === "Advance"} 
                                     onChange={this.handleOptionChange}
                                     />
-                                    Basic
+                                    Advance
                                 </Label>
                             </FormGroup>
                             <FormGroup check>
@@ -146,7 +146,7 @@ class SignUp extends Component {
                                     checked={this.state.selectedOption === "Basic"} 
                                     onChange={this.handleOptionChange}
                                     />
-                                    Advance
+                                    Basic
                                 </Label>
                             </FormGroup>    
                         </FormGroup>

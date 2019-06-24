@@ -24,7 +24,7 @@ class DrawerMenu extends Component {
                     width={200}
                 >
                     <MenuItem onClick={this.getAllNotes}>
-                        <i class="fa fa-sticky-note-o fa-fw fa-lg" aria-hidden="true"></i>
+                        <i className="fa fa-sticky-note-o fa-fw fa-lg" aria-hidden="true"></i>
                         <span className="fundoo-text"> NOTES</span>
                     </MenuItem>
 

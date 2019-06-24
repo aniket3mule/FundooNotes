@@ -19,16 +19,17 @@ class CreateNote extends Component {
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
+
     handleToggleOpen = (e) =>{
         this.setState({open : true})
-        this.setState({ description: null});
-        this.setState({ title: null});
+        this.setState({ description: ''});
+        this.setState({ title: ''});
     }
 
     handleToggle = (e) => {
         this.setState({ open: !this.state.open });
         try {
-            if (this.state.description !==null && this.state.title !== null) {
+            if (this.state.description !=='' && this.state.title !== '') {
                 var data = {
                     'title': this.state.title,
                     'description': this.state.description
@@ -36,13 +37,16 @@ class CreateNote extends Component {
                 let formData = new FormData();    //formdata object
                 formData.append('title',this.state.title);   //append the values with key, value pair
                 formData.append('description',this.state.description);
-                //console.log(data);
+               
+                console.log("create note 40", data);
+               
                 addNotes(data)
                 .then(response => {
-                    console.log(response);
+                    console.log("create note 44 ",response);
                     this.setState({newNote: response.data.status.details})
 
-                    console.log(this.state.newNote);
+                    console.log("create note 47",this.state.newNote);
+                    
                     this.props.getNewNote(this.state.newNote)
 
                     toast.success("Note Saved", {
@@ -61,7 +65,7 @@ class CreateNote extends Component {
         }
     }
     render() {
-        const { description, title } = this.state;
+        // const { description, title } = this.state;
         return (!this.state.open ?
             <div className="take-note-div">
                 <Card className="take-note-card " >
@@ -90,7 +94,7 @@ class CreateNote extends Component {
                                 className="take-note-input"
                                 placeholder="Title"
                                 name="title"
-                                value={title}
+                                value={this.state.title}
                                 onChange={this.handleChange}
                             />
                         </CardTitle>
@@ -99,13 +103,12 @@ class CreateNote extends Component {
                                 className="take-note-input note-description"
                                 placeholder="Take a note"
                                 name="description"
-                                value={description}
+                                value={this.state.description}
                                 onChange={this.handleChange}
                             />
                         </CardText>
                     </CardBody>
                     <CardBody className="card-bottom">
-                        <CardText>
                             <CardLink ><i className="fa fa-bell-o fa-fw fa-lg" aria-hidden="true"></i></CardLink>
                             <CardLink ><i className="fa fa-user-plus fa-fw fa-lg" aria-hidden="true"></i></CardLink>
                             <CardLink ><img className="img" src={require('../assets/img/color.svg')} alt="color picker" /></CardLink>
@@ -114,16 +117,13 @@ class CreateNote extends Component {
                             <CardLink ><i className="fa fa-check-square-o fa-fw fa-lg" aria-hidden="true"></i></CardLink>
                             <CardLink ></CardLink>
                             <CardLink ></CardLink>
-                        </CardText>
-
-                        <CardText>
+                        
                             <CardLink
                             className="close-btn"
                             onClick={this.handleToggle}
                             >
                             <Label>Close</Label>
                         </CardLink>
-                        </CardText>
                     </CardBody>
                 </Card>
             </div>

@@ -11,9 +11,14 @@ import {withRouter} from 'react-router-dom'
             open: false,
         }
         this.noteToCards = React.createRef();
+        this.archiveNote = React.createRef();
+
     }
     getNewNote=(newCard)=>{
         this.noteToCards.current.displayCard(newCard);
+    }
+    archiveNote = (noteId)=>{
+        this.archiveNote.current.displayArchiveCard(noteId)
     }
 
  

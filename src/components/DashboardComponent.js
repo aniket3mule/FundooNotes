@@ -28,12 +28,8 @@ const thm = createMuiTheme({
                 backgroundColor: 'whitesmoke'
             },
             root: {
-                top: 2,
-                left: 'auto',
-            },
-            InputRoot: {
-                color: 'inherit',
-            },
+                 left: 'auto',
+            }
         }
     }
 });
@@ -60,39 +56,46 @@ class DashboardComponent extends Component {
         localStorage.clear();
         this.props.history.push('/signin');
     }
+    
     render() {
         return (
             <div>
                 <MuiThemeProvider theme={thm}>
                     <AppBar position="relative" >
                         <Toolbar className="toolBar" >
-                            <IconButton color="inherit" aria-label="Open drawer" >
-                                <MenuIcon id="menu" onClick={this.handleToggle} />
+                            <IconButton color="inherit" 
+                            aria-label="Open drawer"
+                            onClick={this.handleToggle} >
+                                <MenuIcon id="menu"  />
                             </IconButton>
+                           
                             <img className="img"
                             src={require('../assets/img/keep_48dp.png')}
                             alt="keep icon"
                             />
+                           
                             <span className="fundoo-text">FundooNotes</span>
                             <div className="input-group input-group-search">
                                 <div className="input-group-prepend">
                                     {/* <SearchIcon /> */}
-                                    <button className="btn fa fa-search search-button" outline color="white" />
+                                    <button className="btn fa fa-search search-button" outline ="true" color="white" />
                                 </div>
                                 <input type="text" className=" input" placeholder="Search...." />
                             </div>
+                           
                             <div>
                                 <IconButton id="Popover1">
                                     <AccountCircle>
                                     </AccountCircle>
                                 </IconButton>
-                                
+
                                 <Popover
                                 placement="bottom"
                                 isOpen={this.state.popoverOpen}
                                 target="Popover1" 
                                 toggle={this.handlePopover}
                                 >
+
                                 <PopoverBody>
                                 <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                                 </PopoverBody>
