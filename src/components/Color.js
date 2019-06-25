@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import { IconButton, Tooltip, Card, ClickAwayListener } from '@material-ui/core';
 
 
-const hexCodesAndNames = [{ name: "lightcoral", hexCode: "#f28b81" },
-{ name: "lavender", hexCode: "#e8eaed" },
-{ name: "orange", hexCode: "#f7bc02" },
-{ name: "khaki", hexCode: "#ccff8f" },
-{ name: "yellow", hexCode: "#fcf475" },
-{ name: "paleturquoise", hexCode: "#a7ffeb" },
-{ name: "lightcyan", hexCode: "#cbf0f8" },
-{ name: "lightblue", hexCode: "#aecbfa" },
-{ name: "plum", hexCode: "#d7aefb" },
-{ name: "wheat", hexCode: "#e6c9a8" },
-{ name: "mistyrose", hexCode: "#fbcfe8" },
-{ name: "white", hexCode: "#ffffff" }
+const hexCodesAndNames = 
+[   { name: "lightcoral", hexCode: "#f28b81" },
+    { name: "lavender", hexCode: "#e8eaed" },
+    { name: "orange", hexCode: "#f7bc02" },
+    { name: "green", hexCode: "#ccff8f" },
+    { name: "yellow", hexCode: "#fcf475" },
+    { name: "paleturquoise", hexCode: "#a7ffeb" },
+    { name: "lightcyan", hexCode: "#cbf0f8" },
+    { name: "lightblue", hexCode: "#aecbfa" },
+    { name: "plum", hexCode: "#d7aefb" },
+    { name: "wheat", hexCode: "#e6c9a8" },
+    { name: "mistyrose", hexCode: "#fbcfe8" },
+    { name: "white", hexCode: "#ffffff" }
 ]
 class ColorPallete extends Component {
     constructor(props) {
@@ -34,7 +35,7 @@ class ColorPallete extends Component {
     }
     handleColor(evt) {
         try{
-        console.log("sasasas", this.props.noteID)
+        console.log("Color Component 37: ", this.props.noteID)
         this.props.toolsPropsToColorpallete(evt.target.value, this.props.noteID);
         console.log(evt.target.value);
         
@@ -52,7 +53,7 @@ class ColorPallete extends Component {
 
         const changeCardColor = hexCodesAndNames.map((colorKey) =>
 
-            <Tooltip title={colorKey.name}>
+            <Tooltip title={colorKey.name} key={colorKey.hexCode}>
                 <IconButton style={{ backgroundColor: colorKey.hexCode, "margin": "2px", }}
                     value={colorKey.hexCode}
                     onClick={this.handleColor}>
@@ -61,7 +62,6 @@ class ColorPallete extends Component {
         );
 
         return (
-
             <div className="color-pallate-icon">
                 <Tooltip title="Change Color">
                     <img src={require('../assets/img/color.svg')}
@@ -72,7 +72,7 @@ class ColorPallete extends Component {
                 </Tooltip>
                 <div>
                     {this.state.open ?
-                        <ClickAwayListener onClick={() => this.closePopper()}>
+                        <ClickAwayListener onClickAway={() => this.closePopper()}>
                             <Card className="colorPalleteCard">
                                 {changeCardColor}
                             </Card>

@@ -45,6 +45,7 @@ class DashboardComponent extends Component {
     }
 
     handleToggle = () => {
+        this.props.slidecard();
         this.setState({ open: !this.state.open });
     }
 

@@ -39,6 +39,14 @@ class NoteServices {
             }
         })
     }
+
+    changesColorNotes(note){
+        return axios.post(`${BaseURL}/changesColorNotes`, note, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+    }
 }
 
 export default NoteServices;

@@ -148,7 +148,7 @@ input.input:focus {
   max-width: 500px;
   height: auto;
   word-wrap: break-word;
-  background-color: #fff;
+  /* background-color: #fff; */
   background-clip: border-box;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgb(143, 143, 143);
@@ -192,7 +192,7 @@ input.input:focus {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #fff;
+  /* background-color: #fff; */
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 8px;
@@ -205,12 +205,21 @@ input.input:focus {
   margin-top: 1%;
 }
 
+.afterslide {
+  margin-left: 150px;
+  transition: margin-left 0.25s;
+}
+
+.beforeslide {
+  transition: 0.25s
+}
 .card-grid{
 
     display: flex;
-    width: 70%;
+    width: 90%;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: normal;
+    margin-left: 20%;
   
   
   }

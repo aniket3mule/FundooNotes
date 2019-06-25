@@ -9,10 +9,16 @@ import {withRouter} from 'react-router-dom'
         super(props);
         this.state = {
             open: false,
+            slidecards:false
         }
         this.noteToCards = React.createRef();
         this.archiveNote = React.createRef();
 
+    }
+    slidecard=()=>{
+        this.setState({
+            slidecards:!this.state.slidecards
+        })
     }
     getNewNote=(newCard)=>{
         this.noteToCards.current.displayCard(newCard);
@@ -23,6 +29,7 @@ import {withRouter} from 'react-router-dom'
 
  
     render(){
+
         if(localStorage.getItem('token1') !== "true"){
             return(
                 // this.props.history.push('signin')
@@ -30,16 +37,22 @@ import {withRouter} from 'react-router-dom'
             )
           }
           else{
+            const slide=this.state.slidecards?"afterslide":"beforeslide";
+
         return(
-            <div className="dashboard-div">
+            <div>
                 <div>
-                <DashboardComponent/>
+                <DashboardComponent
+                slidecard={this.slidecard}
+                />
                 </div>
-                <div>
+                <div className={slide}>
+                    <div>
                 <CreateNote getNewNote={this.getNewNote}/>
                 </div>
                 <div className="all-note-div">
                 <AllNotes/>
+                </div>
                 </div>
             </div>
            

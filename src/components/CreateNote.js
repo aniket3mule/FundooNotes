@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Card, CardText, CardBody, CardTitle, CardLink, Label } from 'reactstrap'
 import NoteServices from '../services/NoteService';
 import {toast} from 'react-toastify'
+import ColorPallete from './Color';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const addNotes = new NoteServices().addNotes;
 class CreateNote extends Component {
@@ -109,12 +111,34 @@ class CreateNote extends Component {
                         </CardText>
                     </CardBody>
                     <CardBody className="card-bottom">
-                            <CardLink ><i className="fa fa-bell-o fa-fw fa-lg" aria-hidden="true"></i></CardLink>
-                            <CardLink ><i className="fa fa-user-plus fa-fw fa-lg" aria-hidden="true"></i></CardLink>
-                            <CardLink ><img className="img" src={require('../assets/img/color.svg')} alt="color picker" /></CardLink>
-                            <CardLink ><i className="fa fa-archive fa-fw fa-lg" aria-hidden="true"></i></CardLink>
-                            <CardLink ><i className="fa fa-picture-o fa-fw fa-lg" aria-hidden="true"></i></CardLink>
-                            <CardLink ><i className="fa fa-check-square-o fa-fw fa-lg" aria-hidden="true"></i></CardLink>
+                            <CardLink >
+                             <Tooltip title="Remind me">
+                                <i className="fa fa-bell-o fa-fw fa-lg" aria-hidden="true"></i>
+                            </Tooltip>    
+                            </CardLink>
+                            
+                            <CardLink >
+                            <Tooltip title="Collaborator">
+                                <i className="fa fa-user-plus fa-fw fa-lg" aria-hidden="true"></i>
+                            </Tooltip>
+                            </CardLink>
+                            
+                            <ColorPallete
+                            toolsPropsToColorpallete={this.handleColorChanger}
+                            ></ColorPallete>
+                            
+                            <CardLink >
+                            <Tooltip title="Archive">
+                                <i className="fa fa-archive fa-fw fa-lg" aria-hidden="true"></i>
+                            </Tooltip>    
+                            </CardLink>
+
+                            <CardLink >
+                            <Tooltip title="Add image">
+                                <i className="fa fa-picture-o fa-fw fa-lg" aria-hidden="true"></i>
+                            </Tooltip>    
+                            </CardLink>
+                            
                             <CardLink ></CardLink>
                             <CardLink ></CardLink>
                         
