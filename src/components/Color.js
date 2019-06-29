@@ -21,10 +21,8 @@ class ColorPallete extends Component {
         super(props);
         this.state = {
             open: false
-
         }
         this.handleToggle = this.handleToggle.bind(this);
-      
         this.handleColor = this.handleColor.bind(this);
     }
    
@@ -35,15 +33,14 @@ class ColorPallete extends Component {
     }
     handleColor(evt) {
         try{
+        this.closePopper() ;
         console.log("Color Component 37: ", this.props.noteID)
         this.props.toolsPropsToColorpallete(evt.target.value, this.props.noteID);
         console.log(evt.target.value);
-        
         }catch(err){
             console.log("error in handle color event");
         } 
     }
-
 
     handleToggle() {
         this.setState({ open: !this.state.open });

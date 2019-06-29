@@ -30,7 +30,7 @@ class DrawerMenu extends Component {
 
                     <MenuItem >
                         <i className="fa fa-bell-o fa-fw fa-lg" aria-hidden="true"></i>
-                        <span className="fundoo-text">REMAINDERS</span>
+                        <span className="fundoo-text">REMINDERS</span>
                     </MenuItem>
 
                     <div style={{ borderBottom: "1px solid lightgrey", borderTop: "1px solid lightgrey" }}>

@@ -13,6 +13,7 @@ import {withRouter} from 'react-router-dom'
         }
         this.noteToCards = React.createRef();
         this.archiveNote = React.createRef();
+        // this.getNewNote = this.getNewNote.bind(this)
 
     }
     slidecard=()=>{
@@ -20,13 +21,15 @@ import {withRouter} from 'react-router-dom'
             slidecards:!this.state.slidecards
         })
     }
-    getNewNote=(newCard)=>{
-        this.noteToCards.current.displayCard(newCard);
+
+    getNewNote =(newNote)=>{
+        console.log("newnote==>",newNote);
+        
+        this.noteToCards.current.displayCard(newNote);
     }
     archiveNote = (noteId)=>{
         this.archiveNote.current.displayArchiveCard(noteId)
     }
-
  
     render(){
 
@@ -51,7 +54,9 @@ import {withRouter} from 'react-router-dom'
                 <CreateNote getNewNote={this.getNewNote}/>
                 </div>
                 <div className="all-note-div">
-                <AllNotes/>
+                <AllNotes
+                ref={this.noteToCards}
+                />
                 </div>
                 </div>
             </div>

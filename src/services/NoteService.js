@@ -47,6 +47,22 @@ class NoteServices {
             }
         })
     }
+
+    updateReminderNotes(note){
+        return axios.post(`${BaseURL}/addUpdateReminderNotes`, note, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+    }
+
+    deleteNote(note){
+        return axios.post(`${BaseURL}/deleteForeverNotes`, note, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+    }
 }
 
 export default NoteServices;
