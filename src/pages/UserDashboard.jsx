@@ -9,7 +9,8 @@ import {withRouter} from 'react-router-dom'
         super(props);
         this.state = {
             open: false,
-            slidecards:false
+            slidecards:false,
+            searchNote:'',
         }
         this.noteToCards = React.createRef();
         this.archiveNote = React.createRef();
@@ -30,6 +31,10 @@ import {withRouter} from 'react-router-dom'
     archiveNote = (noteId)=>{
         this.archiveNote.current.displayArchiveCard(noteId)
     }
+
+    searchNote = (value) =>{
+        this.setState({searchNote: value})
+    }
  
     render(){
 
@@ -47,6 +52,7 @@ import {withRouter} from 'react-router-dom'
                 <div>
                 <DashboardComponent
                 slidecard={this.slidecard}
+                searchNote = {this.searchNote}
                 />
                 </div>
                 <div className={slide}>
@@ -56,6 +62,7 @@ import {withRouter} from 'react-router-dom'
                 <div className="all-note-div">
                 <AllNotes
                 ref={this.noteToCards}
+                searchNote = {this.state.searchNote}
                 />
                 </div>
                 </div>

@@ -23,6 +23,12 @@ const useStyles = makeStyles(theme => ({
   }));
 
 const NoteService = new GetNote();
+
+function searchingFor(search){
+    return function (x){
+        return x.title.includes(search) || x.description.includes(search)
+    }
+}
 class GetAllNotes extends Component {
     constructor(props) {
         super(props);
@@ -33,7 +39,7 @@ class GetAllNotes extends Component {
             description: '',
             noteId: '',
             modal: false,
-            isArchived: true,
+            isArchived: false,
             tooltipOpen: false,
             color: '',
             reminder: '',
@@ -44,7 +50,7 @@ class GetAllNotes extends Component {
         // this.handleModal = this.handleModal.bind(this)
     }
 
-    componentDidMount() {
+    componentWillMount() {
         //Print All notes
         NoteService.getAllNotes()
             .then(allNotes => {
@@ -98,6 +104,7 @@ class GetAllNotes extends Component {
                         // toast.success("Note Saved", {
                         //     position: toast.POSITION.TOP_CENTER
                         // });
+                        // this.props.getNewNote(this.state.newNote);
                     })
                     .catch(err => {
                         console.log("Eroorrrrrr....", err);
@@ -114,7 +121,10 @@ class GetAllNotes extends Component {
     handleArchive = (noteId) => {
         // this.props.archiveNote(noteId);
         console.log(noteId);
-        this.setState({ isArchived: !this.state.isArchived });
+        this.setState(prevState => ({
+            isArchived: !prevState.isArchived
+        }));
+        // this.setState({ isArchived: !this.state.isArchived });
         console.log(this.state.isArchived);
 
         var note = {
@@ -148,9 +158,9 @@ class GetAllNotes extends Component {
 
         NoteService.changesColorNotes(note)
             .then(response => {
-                // toast.success("Note color changed ", {
-                //     position: toast.POSITION.TOP_CENTER
-                // });
+                // this.setState({
+                //     allNotes: [...this.state.allNotes, response]
+                // })
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -180,9 +190,6 @@ class GetAllNotes extends Component {
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
-                // toast.info("Error in note archive", {
-                //     position: toast.POSITION.TOP_CENTER
-                // });
             })
 
     }
@@ -232,7 +239,7 @@ class GetAllNotes extends Component {
                 console.log(response);
                 let newArray = this.state.allNotes
                 console.log("new array",newArray);
-                
+
                 for (let i = 0; i < newArray.length; i++) {
                     // console.log("new aarray",note.noteIdList[i]);
                     if (newArray[i].id === note.noteIdList[i]) {
@@ -258,9 +265,9 @@ class GetAllNotes extends Component {
     }
 
     render() {
-        var notes = this.state.allNotes.map((key) => {
-            return (!this.state.modal ?
-                <div key={key.id}>
+        var notes = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map((key) => {
+            return (!this.state.modal && key.isArchived === false ?
+                <div key={key.id} >
                     <Container className="card-margin" >
                         <Card className="take-note-user-card-description "
                             onChange={() => this.handleColorChanger(key.color, key.id)}
@@ -384,7 +391,6 @@ class GetAllNotes extends Component {
                                 />
                             </ModalBody>
                             <ModalFooter className="modal-footer-note">
-
                                 <CardLink onClick={this.handleRemainder}>
                                     <Reminder
                                         toolsPropsToReminder={this.handleReminder}

@@ -26,9 +26,12 @@ class CreateNote extends Component {
     }
 
     handleToggleOpen = (e) => {
-        this.setState({ open: true })
-        this.setState({ description: '' });
-        this.setState({ title: '' });
+        this.setState({ open: true,
+                        description: '',
+                        title: '',
+                        color:'',
+                        reminder:''
+                     })
     }
 
     handleReminder = (reminderdate) =>{
@@ -75,10 +78,6 @@ class CreateNote extends Component {
                         console.log("create note 47", this.state.newNote);
 
                         this.props.getNewNote(this.state.newNote);
-                        this.setState({color:''})
-                        // toast.success("Note Saved", {
-                        //     position: toast.POSITION.TOP_CENTER
-                        // });
                     })
                     .catch(err => {
                         console.log("Eroorrrrrr....", err);

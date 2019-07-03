@@ -14,7 +14,7 @@ const thm = createMuiTheme({
     overrides: {
         MuiDrawer: {
             paperAnchorLeft: {
-                top: 70,
+                top: 57,
                 width: 240,
                 background: 'white'
             },
@@ -40,7 +40,9 @@ class DashboardComponent extends Component {
         super(props);
         this.state = {
             open: false,
-            popoverOpen: false
+            popoverOpen: false,
+            listgrid:false,
+            searchNote:'',
         }
     }
 
@@ -57,23 +59,29 @@ class DashboardComponent extends Component {
         localStorage.clear();
         this.props.history.push('/signin');
     }
+
+    handleChange =(e) =>{
+        this.setState({[e.target.name] : e.target.value});
+        this.props.searchNote(e.target.value);
+    }
     
     render() {
         return (
             <div>
                 <MuiThemeProvider theme={thm}>
-                    <AppBar position="relative" >
+                    <AppBar position="fixed" >
                         <Toolbar className="toolBar" >
                             <IconButton color="inherit" 
                             aria-label="Open drawer"
                             onClick={this.handleToggle} >
                                 <MenuIcon id="menu"  />
                             </IconButton>
-                           
+                           <div>
                             <img className="img"
                             src={require('../assets/img/keep_48dp.png')}
                             alt="keep icon"
                             />
+                            </div>
                            
                             <span className="fundoo-text">FundooNotes</span>
                             <div className="input-group input-group-search">
@@ -81,15 +89,20 @@ class DashboardComponent extends Component {
                                     {/* <SearchIcon /> */}
                                     <button className="btn fa fa-search search-button" outline ="true" color="white" />
                                 </div>
-                                <input type="text" className=" input" placeholder="Search...." />
+                                <input 
+                                type="text" 
+                                className=" input" 
+                                placeholder="Search...." 
+                                value = {this.state.searchValue}
+                                onChange={this.handleChange}/>
                             </div>
-                           
-                            <div>
-                                <IconButton id="Popover1">
-                                    <AccountCircle>
+                                <div>
+                                {/* <IconButton id="Popover1"> */}
+                                    <AccountCircle id="Popover1">
                                     </AccountCircle>
-                                </IconButton>
-
+                                {/* </IconButton> */}
+                                </div>
+                            <div>
                                 <Popover
                                 placement="bottom"
                                 isOpen={this.state.popoverOpen}
