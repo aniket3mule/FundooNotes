@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Drawer } from '@material-ui/core';
 import { MenuItem } from '@material-ui/core';
-import { Label} from 'reactstrap'
+import { Label } from 'reactstrap'
 
 class DrawerMenu extends Component {
 
@@ -12,9 +12,9 @@ class DrawerMenu extends Component {
         }
     }
 
-    getAllNotes = () =>{
-        
-    }
+    // getAllNotes = () => {
+
+    // }
     render() {
         return (
             <div>
@@ -35,8 +35,8 @@ class DrawerMenu extends Component {
 
                     <div style={{ borderBottom: "1px solid lightgrey", borderTop: "1px solid lightgrey" }}>
                         <div style={{ marginRight: "218px", fontSize: "12px", marginBottom: "10px", marginTop: "10px", fontFamily: "arial" }}>
-                        <Label className="fundoo-text">LABELS</Label>
-                    </div>
+                            <Label className="fundoo-text">LABELS</Label>
+                        </div>
                         <div>
                             <MenuItem>
                                 <i className="fa fa-pencil-square-o fa-fw fa-lg" aria-hidden="true"></i>
@@ -46,8 +46,10 @@ class DrawerMenu extends Component {
                     </div>
 
                     <MenuItem >
-                        <i className="fa fa-archive fa-fw fa-lg" aria-hidden="true"></i>
-                        <span className="fundoo-text">ARCHIVE</span>
+                        <img className="update-card-img"
+                            src={require('../assets/img/archived.svg')}
+                            alt="color picker" />
+                            <span className="fundoo-text">ARCHIVE</span>
                     </MenuItem>
 
                     <MenuItem>

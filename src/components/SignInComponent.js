@@ -59,7 +59,8 @@ class SignInComponent extends Component {
             localStorage.setItem('firstName', response.data.firstName);
             localStorage.setItem('lastName', response.data.lastName);
             localStorage.setItem('token', response.data.id);
-            localStorage.setItem('token1',true)
+            localStorage.setItem('token1',true);
+            localStorage.setItem('userid',response.data.userId);
             this.props.history.push('/dashboard');
         })
         .catch(error => {

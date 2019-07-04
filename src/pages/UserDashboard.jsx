@@ -11,6 +11,7 @@ import {withRouter} from 'react-router-dom'
             open: false,
             slidecards:false,
             searchNote:'',
+            listGridView: false
         }
         this.noteToCards = React.createRef();
         this.archiveNote = React.createRef();
@@ -35,6 +36,16 @@ import {withRouter} from 'react-router-dom'
     searchNote = (value) =>{
         this.setState({searchNote: value})
     }
+
+    listGridView = (listGridView) =>{
+        this.setState({
+            listGridView:!listGridView
+        })
+
+        console.log(this.state.listGridView);
+        
+        
+    }
  
     render(){
 
@@ -53,6 +64,7 @@ import {withRouter} from 'react-router-dom'
                 <DashboardComponent
                 slidecard={this.slidecard}
                 searchNote = {this.searchNote}
+                listGridView = {this.listGridView}
                 />
                 </div>
                 <div className={slide}>
@@ -63,6 +75,7 @@ import {withRouter} from 'react-router-dom'
                 <AllNotes
                 ref={this.noteToCards}
                 searchNote = {this.state.searchNote}
+                listGridView = {this.state.listGridView}
                 />
                 </div>
                 </div>

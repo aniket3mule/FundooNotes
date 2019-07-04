@@ -28,7 +28,7 @@ class HomePage extends Component {
     render() {
         return (
             <div className="Header-color">
-                <Navbar color="#F7F7EF" light expand="md">
+                <Navbar expand="md">
                     <NavbarBrand href="/" >
                     <img src={require('../assets/img/keep_48dp.png')} alt="keep Note icon"/>
                     Fundoo Notes

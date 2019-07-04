@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { Card, CardText, CardBody, CardTitle, CardLink, Label } from 'reactstrap'
-import NoteServices from '../services/NoteService';
+import NoteServices from '../services/NoteServices';
 import ColorPallete from './Color';
 import Tooltip from '@material-ui/core/Tooltip';
 import Reminder from './Reminder';
+import MoreOptions from './MoreOptions'
 
 const addNotes = new NoteServices().addNotes;
 class CreateNote extends Component {
@@ -15,9 +16,10 @@ class CreateNote extends Component {
             description: '',
             title: '',
             newNote: [],
-            reminder : '',
+            reminder: '',
             color: '',
-            isArchived: true
+            isArchived: false,
+            label:'',
         }
     }
 
@@ -26,16 +28,18 @@ class CreateNote extends Component {
     }
 
     handleToggleOpen = (e) => {
-        this.setState({ open: true,
-                        description: '',
-                        title: '',
-                        color:'',
-                        reminder:''
-                     })
+        this.setState({
+            open: true,
+            description: '',
+            title: '',
+            color: '',
+            reminder: '',
+            isArchived: false,
+        })
     }
 
-    handleReminder = (reminderdate) =>{
-        this.setState({reminder:reminderdate})
+    handleReminder = (reminderdate) => {
+        this.setState({ reminder: reminderdate })
     }
 
     handleColorChanger = (value) => {
@@ -44,7 +48,7 @@ class CreateNote extends Component {
     }
 
     handleArchive = () => {
-        this.setState({ isArchived: !this.state.isArchived });
+        this.setState({ isArchived: true });
         console.log(this.state.isArchived);
 
     }
@@ -56,7 +60,8 @@ class CreateNote extends Component {
                 var data = {
                     'title': this.state.title,
                     'description': this.state.description,
-                    'reminder' : this.state.reminder,
+                    'reminder': this.state.reminder,
+                    'labelIdList':[this.state.label],
                     'color': this.state.color,
                     'isArchived': this.state.isArchived,
                 }
@@ -64,12 +69,14 @@ class CreateNote extends Component {
                 formData.append('title', this.state.title);   //append the values with key, value pair
                 formData.append('description', this.state.description);
                 formData.append('reminder', this.state.reminder);
+                formData.append('labelIdList', this.state.label);
                 formData.append('color', this.state.color);
                 formData.append('isArchived', this.state.isArchived);
 
 
                 console.log("create note 40", data);
-
+                console.log("label",  this.state.label);
+                
                 addNotes(data)
                     .then(response => {
                         console.log("create note 44 ", response);
@@ -90,8 +97,15 @@ class CreateNote extends Component {
 
         }
     }
+
+    handleAddNote = (value)=>{
+        this.setState({
+            label:value
+        })
+    }
     render() {
         // const { description, title } = this.state;
+
         return (!this.state.open ?
             <div className="take-note-div">
                 <Card className="take-note-card " >
@@ -135,16 +149,19 @@ class CreateNote extends Component {
                         </CardText>
                     </CardBody>
                     <CardBody className="card-bottom">
-                    
+
                         <Reminder
                             toolsPropsToReminder={this.handleReminder}
                             id="color-picker"
                         >
                         </Reminder>
 
-                        <CardLink >
+                        <CardLink>
                             <Tooltip title="Collaborator">
-                                <i className="fa fa-user-plus fa-fw fa-lg" aria-hidden="true"></i>
+                                <img className="img"
+                                    src={require('../assets/img/colaborator.svg')}
+                                    alt="color picker"
+                                />
                             </Tooltip>
                         </CardLink>
 
@@ -163,13 +180,20 @@ class CreateNote extends Component {
                             </Tooltip>
                         </CardLink>
 
-                        <CardLink >
-                            <Tooltip title="Add image">
-                                <i className="fa fa-picture-o fa-fw fa-lg" aria-hidden="true"></i>
+                        <CardLink>
+                            <Tooltip title="add image">
+                                <img className="img"
+                                    src={require('../assets/img/add_image.svg')}
+                                    alt="color picker"
+                                />
                             </Tooltip>
                         </CardLink>
 
-                        <CardLink ></CardLink>
+                        <MoreOptions
+                            addLabelToCreateNote={this.handleAddNote}
+                            noteID={''}
+                            >
+                        </MoreOptions>
                         <CardLink ></CardLink>
 
                         <CardLink

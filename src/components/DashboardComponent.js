@@ -9,12 +9,13 @@ import { withRouter } from 'react-router-dom';
 import DrawerMenu from './DrawerMenu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import {Popover, PopoverBody } from 'reactstrap'
+import {Tooltip} from '@material-ui/core'
 
 const thm = createMuiTheme({
     overrides: {
         MuiDrawer: {
             paperAnchorLeft: {
-                top: 57,
+                top: 65,
                 width: 240,
                 background: 'white'
             },
@@ -39,7 +40,7 @@ class DashboardComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
+            view: false,
             popoverOpen: false,
             listgrid:false,
             searchNote:'',
@@ -63,6 +64,13 @@ class DashboardComponent extends Component {
     handleChange =(e) =>{
         this.setState({[e.target.name] : e.target.value});
         this.props.searchNote(e.target.value);
+    }
+
+    handleToggleView = (e) => {
+        this.setState({ view: !this.state.view });
+        this.props.listGridView(this.state.view)
+        console.log(this.state.view);
+        
     }
     
     render() {
@@ -96,12 +104,31 @@ class DashboardComponent extends Component {
                                 value = {this.state.searchValue}
                                 onChange={this.handleChange}/>
                             </div>
-                                <div>
+                            {!this.state.view ?
+                             <Tooltip title="List view">
+                            <div onClick={this.handleToggleView}>
+                            <img className="img"
+                            src={require('../assets/img/list_view.svg')}
+                            alt="list icon"
+                            />
+                            
+                            </div>
+                            </Tooltip> :
+                             <Tooltip title="Grid view">
+                            <div onClick={this.handleToggleView}>
+                            <img className="img"
+                            src={require('../assets/img/grid_view.svg')}
+                            alt="list icon"
+                            />
+                            </div> 
+                            </Tooltip>
+                            }
+                            <div>
                                 {/* <IconButton id="Popover1"> */}
                                     <AccountCircle id="Popover1">
                                     </AccountCircle>
                                 {/* </IconButton> */}
-                                </div>
+                            </div>
                             <div>
                                 <Popover
                                 placement="bottom"
