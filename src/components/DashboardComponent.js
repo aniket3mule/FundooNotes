@@ -4,12 +4,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import DrawerMenu from './DrawerMenu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import {Popover, PopoverBody } from 'reactstrap'
-import {Tooltip} from '@material-ui/core'
+import { Popover, PopoverBody } from 'reactstrap'
+import { Tooltip } from '@material-ui/core'
 
 const thm = createMuiTheme({
     overrides: {
@@ -29,7 +29,7 @@ const thm = createMuiTheme({
                 backgroundColor: 'whitesmoke'
             },
             root: {
-                 left: 'auto',
+                left: 'auto',
             }
         }
     }
@@ -42,8 +42,9 @@ class DashboardComponent extends Component {
         this.state = {
             view: false,
             popoverOpen: false,
-            listgrid:false,
-            searchNote:'',
+            listgrid: false,
+            searchNote: '',
+            allLabels:[],
         }
     }
 
@@ -56,90 +57,94 @@ class DashboardComponent extends Component {
         this.setState({ popoverOpen: !this.state.popoverOpen });
     }
 
-    handleLogout = () =>{
+    handleLogout = () => {
         localStorage.clear();
         this.props.history.push('/signin');
     }
 
-    handleChange =(e) =>{
-        this.setState({[e.target.name] : e.target.value});
+    handleChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value });
         this.props.searchNote(e.target.value);
     }
 
     handleToggleView = (e) => {
         this.setState({ view: !this.state.view });
         this.props.listGridView(this.state.view)
-        console.log(this.state.view);
-        
     }
-    
     render() {
         return (
             <div>
                 <MuiThemeProvider theme={thm}>
                     <AppBar position="fixed" >
                         <Toolbar className="toolBar" >
-                            <IconButton color="inherit" 
-                            aria-label="Open drawer"
-                            onClick={this.handleToggle} >
-                                <MenuIcon id="menu"  />
+                            <IconButton color="inherit"
+                                aria-label="Open drawer"
+                                onClick={this.handleToggle} >
+                                <MenuIcon id="menu" />
                             </IconButton>
-                           <div>
-                            <img className="img"
-                            src={require('../assets/img/keep_48dp.png')}
-                            alt="keep icon"
-                            />
-                            </div>
-                           
+                            <div className="note-text-img">
+                                <img className="fundoo-note-img"
+                                    src={require('../assets/img/keep_48dp.png')}
+                                    alt="keep icon"
+                                />
+                                </div>
+                            <div>
                             <span className="fundoo-text">FundooNotes</span>
-                            <div className="input-group input-group-search">
+                            </div>
+                            <div className="view-search-input">
+                            <div className="input-group input-search">
                                 <div className="input-group-prepend">
-                                    {/* <SearchIcon /> */}
+                                    {/* <SearchIcon />  */}
                                     <button className="btn fa fa-search search-button" outline ="true" color="white" />
                                 </div>
-                                <input 
-                                type="text" 
-                                className=" input" 
-                                placeholder="Search...." 
-                                value = {this.state.searchValue}
-                                onChange={this.handleChange}/>
+                                <input
+                                    type="text"
+                                    className=" input"
+                                    placeholder="Search...."
+                                    value={this.state.searchValue}
+                                    onChange={this.handleChange} />
                             </div>
+                    
                             {!this.state.view ?
-                             <Tooltip title="List view">
-                            <div onClick={this.handleToggleView}>
-                            <img className="img"
-                            src={require('../assets/img/list_view.svg')}
-                            alt="list icon"
-                            />
-                            
-                            </div>
-                            </Tooltip> :
-                             <Tooltip title="Grid view">
-                            <div onClick={this.handleToggleView}>
-                            <img className="img"
-                            src={require('../assets/img/grid_view.svg')}
-                            alt="list icon"
-                            />
-                            </div> 
-                            </Tooltip>
+                                <Tooltip title="List view">
+                                    <div onClick={this.handleToggleView}
+                                    className="list-view-div">
+                                        <img className="img"
+                                            src={require('../assets/img/list_view.svg')}
+                                            alt="list icon"
+                                        />
+                                    </div>
+                                </Tooltip> :
+                                <Tooltip title="Grid view">
+                                    <div onClick={this.handleToggleView}
+                                    className="list-view-div">
+                                        <img className="img"
+                                            src={require('../assets/img/grid_view.svg')}
+                                            alt="list icon"
+                                        />
+                                    </div>
+                                </Tooltip>
                             }
+                            </div>
+                            <div className="user-icon">
                             <div>
-                                {/* <IconButton id="Popover1"> */}
-                                    <AccountCircle id="Popover1">
-                                    </AccountCircle>
-                                {/* </IconButton> */}
+                                <IconButton id="Popover1">
+                                <AccountCircle id="Popover1">
+                                </AccountCircle>
+                                </IconButton>
+                            </div>
                             </div>
                             <div>
                                 <Popover
-                                placement="bottom"
-                                isOpen={this.state.popoverOpen}
-                                target="Popover1" 
-                                toggle={this.handlePopover}
+                                    placement="bottom"
+                                    isOpen={this.state.popoverOpen}
+                                    target="Popover1"
+                                    toggle={this.handlePopover}
                                 >
 
-                                <PopoverBody>
-                                <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
-                                </PopoverBody>
+                                    <PopoverBody>
+                                        <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+                                    </PopoverBody>
                                 </Popover>
                             </div>
                         </Toolbar>

@@ -1,5 +1,5 @@
 .Header-color {
-  background-color: whitesmoke;
+  background-color: wheat;
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -19,10 +19,17 @@
   cursor: pointer;
 }
 
-.fundoo-text {
-  font-weight: bold;
-  font-size: 14px;
-  font-family: sans-serif Arial, Helvetica, sans-serif
+.fundoo-text-sidebar {
+    margin: 0% 0% 0% 20%;
+    text-overflow: ellipsis;
+    letter-spacing: .01785714em;
+    font-size: .875rem;
+    font-weight: 500;
+    font-family: 'Google Sans',Roboto,Arial,sans-serif;
+}
+
+.header-text{
+  margin: none
 }
 
 .card-signin-signup {
@@ -55,9 +62,17 @@
 
 .input {
   /* margin-left: 2%; */
-  width: 50%;
-  border-radius: 10px;
+  width: 60%;
+  /* border-radius: 5px; */
+  border: none
   /* box-shadow: 0 4px 6px rgb(143, 143, 143); */
+}
+.input-search{
+  display: flex;
+  flex-wrap: unset;
+  background-color: white;
+  border-radius: 5px;
+  margin: 1% 2% 1% 6%;
 }
 
 input.input:focus {
@@ -106,7 +121,7 @@ input.input:focus {
   flex-direction: column;
   align-items: center;
   min-width: 0;
-  max-width: 500px;
+  max-width: 600px;
   height: auto;
   word-wrap: break-word;
   background-color: #fff;
@@ -148,7 +163,7 @@ input.input:focus {
   flex-direction: column;
   align-items: center;
   min-width: 0;
-  max-width: 500px;
+  max-width: 600px;
   height: auto;
   word-wrap: break-word;
   /* background-color: #fff; */
@@ -170,7 +185,14 @@ input.input:focus {
   display: flex;
   width: inherit;
   justify-content: space-between;
+  visibility: hidden;
 
+}
+
+.create-card-bottom{
+  display: flex;
+  width: inherit;
+  justify-content: space-between;
 }
 
 .modal-footer-note {
@@ -200,7 +222,7 @@ input.input:focus {
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgb(143, 143, 143);
-
+  /* visibility: hidden; */
 }
 
 .user-card-div {
@@ -209,7 +231,7 @@ input.input:focus {
 }
 
 .afterslide {
-  margin-left: 150px;
+  margin-left: 15%;
   transition: margin-left 0.25s;
 }
 
@@ -220,18 +242,16 @@ input.input:focus {
 .card-grid {
 
   display: flex;
-  width: 90%;
+  width: 80%;
   flex-wrap: wrap;
-  justify-content: normal;
-  margin-left: 20%;
-
-
+  justify-content: flex-start;
 }
 
 .all-note-div {
   display: flex;
   width: 100%;
   justify-content: center;
+  margin: 0 0 0 9%;
 }
 
 .card-margin {
@@ -287,7 +307,96 @@ input.input:focus {
 
 }
 
-.grid-view {
+.list-view {
   width: 75%;
   height: auto;
+  margin-left: -12.5%;
+}
+
+@media only screen and (max-width: 600px) {
+  .list-view {
+    width: 100%;
+    /* height: auto; */
+    margin-left: 1%;
+  }
+
+  .take-note-card {
+    margin: 22% 5% 1% 5%;
+  }
+
+  .take-note-card-description{
+    margin: 22% 5% 1% 5%;
+  }
+
+  .all-note-div {
+    display: flex;
+    width: 100%;
+  }
+
+  .card-bottom{
+    visibility: visible;
+  }
+  
+  
+  .list-view-bottom{
+    visibility: visible;
+  }
+  
+}
+.list-view-bottom{
+  display: flex;
+    justify-content: space-between;
+    max-width: 50%;
+    /* min-height: 10px; */
+    visibility: hidden;
+}
+
+.create-note-chip{
+  display: flex;
+    justify-content: normal;
+}
+
+.fundoo-note-img{
+  max-width: 2.5em;
+    max-height: 2.5em;
+    cursor: pointer;
+}
+
+.note-text-img{
+  display: flex;
+  margin: 0 0 0 1%;
+}
+
+.view-search-input{
+  display: flex;
+  width: 65%;
+}
+
+.list-view-div{
+  padding: 1.5%
+}
+
+.user-icon{
+  width: 20%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+.card:hover .card-bottom,
+.card-bottom:hover{
+  visibility: visible;
+}
+
+.card:hover .list-view-bottom,
+.list-view-bottom:hover{
+  visibility: visible;
+}
+
+.edit-label-dialog{
+  display: flex;
+}
+
+.label-text {
+  margin: 0 0 0 5%;
 }

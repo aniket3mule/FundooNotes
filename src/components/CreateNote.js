@@ -3,9 +3,21 @@ import { Card, CardText, CardBody, CardTitle, CardLink, Label } from 'reactstrap
 import NoteServices from '../services/NoteServices';
 import ColorPallete from './Color';
 import Tooltip from '@material-ui/core/Tooltip';
+import { Chip } from '@material-ui/core';
 import Reminder from './Reminder';
+import { makeStyles } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions'
 
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+    },
+    chip: {
+        margin: theme.spacing(1),
+    },
+}));
 const addNotes = new NoteServices().addNotes;
 class CreateNote extends Component {
 
@@ -19,7 +31,8 @@ class CreateNote extends Component {
             reminder: '',
             color: '',
             isArchived: false,
-            label:'',
+            labelIdList: '',
+            label: '',
         }
     }
 
@@ -35,6 +48,8 @@ class CreateNote extends Component {
             color: '',
             reminder: '',
             isArchived: false,
+            labelIdList: '',
+            label: '',
         })
     }
 
@@ -61,7 +76,7 @@ class CreateNote extends Component {
                     'title': this.state.title,
                     'description': this.state.description,
                     'reminder': this.state.reminder,
-                    'labelIdList':[this.state.label],
+                    'labelIdList': [this.state.labelIdList],
                     'color': this.state.color,
                     'isArchived': this.state.isArchived,
                 }
@@ -69,28 +84,22 @@ class CreateNote extends Component {
                 formData.append('title', this.state.title);   //append the values with key, value pair
                 formData.append('description', this.state.description);
                 formData.append('reminder', this.state.reminder);
-                formData.append('labelIdList', this.state.label);
+                formData.append('labelIdList', this.state.labelIdList);
                 formData.append('color', this.state.color);
                 formData.append('isArchived', this.state.isArchived);
 
+                console.log("create note 78", data);
+                console.log("label 80", this.state.labelIdList, this.state.label);
 
-                console.log("create note 40", data);
-                console.log("label",  this.state.label);
-                
                 addNotes(data)
                     .then(response => {
-                        console.log("create note 44 ", response);
+                        console.log("create note 83 ", response);
                         this.setState({ newNote: response.data.status.details })
-
-                        console.log("create note 47", this.state.newNote);
-
+                        console.log("create note 85", this.state.newNote);
                         this.props.getNewNote(this.state.newNote);
                     })
                     .catch(err => {
                         console.log("Eroorrrrrr....", err);
-                        // toast.info("Error in Create Note", {
-                        //     position: toast.POSITION.TOP_CENTER
-                        // });
                     })
             }
         } catch {
@@ -98,9 +107,23 @@ class CreateNote extends Component {
         }
     }
 
-    handleAddNote = (value)=>{
+    addLabelToCreateNote = (labelIdList, label) => {
+        console.log("labelidlist >>>>", labelIdList);
+
         this.setState({
-            label:value
+            labelIdList: labelIdList,
+            label: label
+        })
+    }
+
+    handleLabelDeleteChip = () => {
+        this.setState({
+            label: '',
+        })
+    }
+    handleReminderDeleteChip = () => {
+        this.setState({
+            reminder:''
         })
     }
     render() {
@@ -127,7 +150,9 @@ class CreateNote extends Component {
             </div>
             :
             <div className="take-note-div-desc">
-                <Card className="take-note-card-description ">
+                <Card className="take-note-card-description "
+                
+                style={{ backgroundColor: this.state.color }}>
                     <CardBody className="card-body-desc">
                         <CardTitle>
                             <input type="text"
@@ -136,6 +161,7 @@ class CreateNote extends Component {
                                 name="title"
                                 value={this.state.title}
                                 onChange={this.handleChange}
+                                style={{ backgroundColor: this.state.color }}
                             />
                         </CardTitle>
                         <CardText>
@@ -145,10 +171,42 @@ class CreateNote extends Component {
                                 name="description"
                                 value={this.state.description}
                                 onChange={this.handleChange}
+                                style={{ backgroundColor: this.state.color }}
                             />
+                            <div className="create-note-chip">
+                            {(this.state.reminder !=='') ?
+                                <div>
+                                    <Chip
+                                        // avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
+                                        label={this.state.reminder.toString().substring(0, 24)}
+                                        onDelete={this.handleReminderDeleteChip}
+                                        className={useStyles.chip}
+                                        variant="outlined"
+                                        size="small"
+                                    />
+                                </div>
+                                :
+                                null
+                            }
+
+                            {(this.state.label !== '') ?
+                                <div>
+                                    <Chip
+                                        // avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
+                                        label={this.state.label}
+                                        onDelete={this.handleLabelDeleteChip}
+                                        className={useStyles.chip}
+                                        variant="outlined"
+                                        size="small"
+                                    />
+                                </div>
+                                :
+                                null
+                            }
+                            </div>
                         </CardText>
                     </CardBody>
-                    <CardBody className="card-bottom">
+                    <CardBody className="create-card-bottom">
 
                         <Reminder
                             toolsPropsToReminder={this.handleReminder}
@@ -190,9 +248,9 @@ class CreateNote extends Component {
                         </CardLink>
 
                         <MoreOptions
-                            addLabelToCreateNote={this.handleAddNote}
+                            addLabelToCreateNote={this.addLabelToCreateNote}
                             noteID={''}
-                            >
+                        >
                         </MoreOptions>
                         <CardLink ></CardLink>
 

@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { Drawer } from '@material-ui/core';
 import { MenuItem } from '@material-ui/core';
 import { Label } from 'reactstrap'
-
+import GetAllLabels from './GetAllLabels';
+import CreateLabel from './CreateLabel';
+// import LabelService from '../services/LabelServices';
+// const LabelServices = new LabelService();
 class DrawerMenu extends Component {
 
     constructor(props) {
@@ -12,10 +15,12 @@ class DrawerMenu extends Component {
         }
     }
 
-    // getAllNotes = () => {
-
-    // }
+    handleLabelOpen = ()=>{
+        this.setState({open:!this.state.open})
+    }
+   
     render() {
+       
         return (
             <div>
                 <Drawer
@@ -24,23 +29,34 @@ class DrawerMenu extends Component {
                     width={200}
                 >
                     <MenuItem onClick={this.getAllNotes}>
-                        <i className="fa fa-sticky-note-o fa-fw fa-lg" aria-hidden="true"></i>
-                        <span className="fundoo-text"> NOTES</span>
+                    <img className="update-card-img"
+                            src={require('../assets/img/notes.svg')}
+                            alt="color picker" />
+                        <span className="fundoo-text-sidebar"> Notes</span>
                     </MenuItem>
 
                     <MenuItem >
-                        <i className="fa fa-bell-o fa-fw fa-lg" aria-hidden="true"></i>
-                        <span className="fundoo-text">REMINDERS</span>
+                    <img className="update-card-img"
+                            src={require('../assets/img/reminder.svg')}
+                            alt="reminder" />
+                        <span className="fundoo-text-sidebar">Reminders</span>
                     </MenuItem>
 
                     <div style={{ borderBottom: "1px solid lightgrey", borderTop: "1px solid lightgrey" }}>
                         <div style={{ marginRight: "218px", fontSize: "12px", marginBottom: "10px", marginTop: "10px", fontFamily: "arial" }}>
-                            <Label className="fundoo-text">LABELS</Label>
+                            <Label className="fundoo-text-sidebar">Labels</Label>
                         </div>
                         <div>
-                            <MenuItem>
-                                <i className="fa fa-pencil-square-o fa-fw fa-lg" aria-hidden="true"></i>
-                                <span className="fundoo-text">EDIT LABELS</span>
+                            <GetAllLabels
+                            sidebarLabel = {true}
+                            />
+                            <MenuItem
+                            onClick={this.handleLabelOpen}
+                            >
+                    
+                            <CreateLabel
+                            sidebarLabel = {this.state.open}
+                            />
                             </MenuItem>
                         </div>
                     </div>
@@ -49,12 +65,15 @@ class DrawerMenu extends Component {
                         <img className="update-card-img"
                             src={require('../assets/img/archived.svg')}
                             alt="color picker" />
-                            <span className="fundoo-text">ARCHIVE</span>
+                            <span className="fundoo-text-sidebar">Archive</span>
                     </MenuItem>
 
                     <MenuItem>
-                        <i className="fa fa-trash-o fa-fw fa-lg" aria-hidden="true"></i>
-                        <span className="fundoo-text">TRASH</span>
+                    <img className="update-card-img"
+                    src={require('../assets/img/trash.svg')}
+                    alt="trash notes"
+                    />
+                        <span className="fundoo-text-sidebar">Trash</span>
                     </MenuItem>
                 </Drawer>
             </div>

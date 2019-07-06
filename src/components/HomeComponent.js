@@ -31,7 +31,7 @@ class HomePage extends Component {
                 <Navbar expand="md">
                     <NavbarBrand href="/" >
                     <img src={require('../assets/img/keep_48dp.png')} alt="keep Note icon"/>
-                    Fundoo Notes
+                    <span className="header-text">Fundoo Notes</span>
                     </NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>

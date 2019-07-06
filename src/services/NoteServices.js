@@ -64,7 +64,7 @@ class NoteServices {
         })
     }
 
-    deleteNote(note){
+    trashNote(note){
         return axios.post(`${BaseURL}/trashNotes`, note, {
             headers:{
                 'Authorization' : token

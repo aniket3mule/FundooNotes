@@ -43,8 +43,6 @@ import {withRouter} from 'react-router-dom'
         })
 
         console.log(this.state.listGridView);
-        
-        
     }
  
     render(){
@@ -68,7 +66,8 @@ import {withRouter} from 'react-router-dom'
                 />
                 </div>
                 <div className={slide}>
-                    <div>
+                <div>
+                <div>
                 <CreateNote getNewNote={this.getNewNote}/>
                 </div>
                 <div className="all-note-div">
@@ -77,6 +76,7 @@ import {withRouter} from 'react-router-dom'
                 searchNote = {this.state.searchNote}
                 listGridView = {this.state.listGridView}
                 />
+                </div>
                 </div>
                 </div>
             </div>

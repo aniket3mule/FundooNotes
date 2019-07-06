@@ -53,7 +53,9 @@ class ColorPallete extends Component {
             <Tooltip title={colorKey.name} key={colorKey.hexCode}>
                 <IconButton style={{ backgroundColor: colorKey.hexCode, "margin": "2px", }}
                     value={colorKey.hexCode}
-                    onClick={this.handleColor}>
+                    onClick={this.handleColor}
+                    // onMouseOver={this.handleToggle}
+                    >
                 </IconButton>
             </Tooltip>
         );
@@ -64,7 +66,8 @@ class ColorPallete extends Component {
                     <img src={require('../assets/img/color.svg')}
                         className="img"
                         alt="change color"
-                        onClick={this.handleToggle}
+                        onMouseOver={this.handleToggle}
+                        // onMouseLeave={this.handleToggle}
                     />
                 </Tooltip>
                 <div>

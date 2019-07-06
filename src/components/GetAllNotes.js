@@ -237,7 +237,7 @@ class GetAllNotes extends Component {
             'isDeleted': true
         }
 
-        NoteService.deleteNote(note)
+        NoteService.trashNote(note)
             .then(response => {
                 console.log(response);
                 let newArray = this.state.allNotes
@@ -272,7 +272,11 @@ class GetAllNotes extends Component {
 
     render() {
 
-        const listgridview = this.props.listGridView ? "grid-view" : null;
+        var listgridvalue = this.props.listGridView;
+        const listgridview = listgridvalue ? "list-view" : null;
+        const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
+
+
         var notes = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map((key) => {
             return (
                 !this.state.modal
@@ -321,7 +325,8 @@ class GetAllNotes extends Component {
                                         null
                                     }
                                 </CardBody>
-                                <CardBody className="card-bottom">
+                                <CardBody >
+                                <div className={modalbottom}>
                                     <Reminder
                                         toolsPropsToReminder={this.handleReminder}
                                         noteID={key.id}
@@ -368,6 +373,7 @@ class GetAllNotes extends Component {
                                         noteID={key.id}
                                         id="color-picker">
                                     </MoreOptions>
+                                    </div>
                                 </CardBody>
                             </Card>
                         </Container>

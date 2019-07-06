@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Tooltip, Card, ClickAwayListener, Input } from '@material-ui/core';
-import LabelService from '../services/LabelServices';
+import { Tooltip, Card, ClickAwayListener } from '@material-ui/core';
+import CreateLabel from './CreateLabel';
 
-const LabelServices = new LabelService();
 
 class MoreOptions extends Component {
     constructor(props) {
@@ -16,7 +15,6 @@ class MoreOptions extends Component {
         this.handleToggle = this.handleToggle.bind(this);
         this.handleDeleteNote = this.handleDeleteNote.bind(this);
         this.handleAddLabel = this.handleAddLabel.bind(this);
-        this.handleChange = this.handleChange.bind(this)
 
     }
    
@@ -41,27 +39,11 @@ class MoreOptions extends Component {
         this.setState({ addLabel: !this.state.addLabel });
     }
 
-    handleChange= (e) =>{
-        this.setState({label: e.target.value})
-        console.log("label state more option",this.state.label);
+    addLabelToMoreOptions = (noteIdList, label) =>{
+       console.log("label id list",noteIdList,"label", label);
+       this.props.addLabelToCreateNote(noteIdList, label)
     }
-    addLabel = ()=>{
-        const userId = localStorage.getItem('userid')
-        var label = {
-            'label': this.state.label,
-            'isDeleted': false,
-            'userId': userId,
-        }
-
-        LabelServices.addLabels(label)
-        .then(response => {
-            console.log("new label ", response);
-            
-        })
-
-
-        this.props.addLabelToCreateNote(this.state.label)
-    }
+   
     render() {
 
         return (
@@ -80,36 +62,11 @@ class MoreOptions extends Component {
                             <Card className="remind-me">
                                 {
                                     this.state.addLabel ?
-                                <div>
-                                    <div className="remind-heading">
-                                        Label note:
-                                    </div>
-                                    <div onClick={this.handleRemindToday}>
-                                        <div>
-                                            <Input
-                                            placeholder="Enter Label name" 
-                                            name="label"
-                                            value={this.state.label}
-                                            color="black"
-                                            style={{height:'70%', width:'100%'}}
-                                            onChange={this.handleChange}
-                                            />
-                                       </div>
-                                       <div>
-                                       </div>
-                                       <div onClick={this.addLabel} style={{cursor:'pointer'}}>
-                                           <img
-                                           src={require('../assets/img/add_label.svg')}
-                                           alt="add label"
-                                           className="img"
-                                           />
-                                           <span>Create</span>
-                                           <label>"{this.state.label}"</label>
-                                       </div>
-                                    </div>
-                                </div>
+                                <CreateLabel
+                                addLabelToMoreOptions = {this.addLabelToMoreOptions}
+                                addLabelOpen = {this.state.addLabel}
+                                />
                                 :
-                                
                                 <div>
                                     {
                                         this.props.noteID ==='' 
@@ -131,7 +88,6 @@ class MoreOptions extends Component {
                                 }
                             </Card>
                         </ClickAwayListener>
-
                         : null}
                 </div>
             </div>
