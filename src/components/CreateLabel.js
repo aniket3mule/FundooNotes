@@ -1,14 +1,12 @@
 import LabelService from '../services/LabelServices';
 import React, { Component } from 'react'
-import { Input, ClickAwayListener } from '@material-ui/core'
+import { Input, DialogActions } from '@material-ui/core'
 import GetAllLabels from './GetAllLabels';
-
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Check from '@material-ui/icons/Check'
+import Close from '@material-ui/icons/Close'
 
 const LabelServices = new LabelService();
 
@@ -40,7 +38,7 @@ class CreateLabel extends Component {
         LabelServices.addLabels(label)
             .then(response => {
                 console.log("new label ", response);
-                this.props.addLabelToMoreOptions(response.data.id, this.state.label);
+                // this.props.addLabelToMoreOptions(response.data.id, this.state.label);
             })
     }
 
@@ -85,18 +83,26 @@ class CreateLabel extends Component {
                     {"Edit Label"}
                     </DialogTitle>
                     <DialogContent>
+                        <div className="create-label-div">
+                            <Close/>
                         <Input
-                                placeholder="Create new label"
+                                placeholder="create new label"
                                 name="label"
                                 value={this.state.label}
                                 color="black"
                                 style={{ height: '70%', width: '100%' }}
                                 onChange={this.handleChange}
-                            />
+                        />
+                        <Check
+                        onClick={this.addLabel}/>
+                        </div>
                             <GetAllLabels 
                             editLabels = {this.state.open}
                             />
                     </DialogContent>
+                    <DialogActions>
+                        <span>Close</span>
+                    </DialogActions>
                 </Dialog>
             </div>
 
@@ -108,7 +114,7 @@ class CreateLabel extends Component {
                     <div onClick={this.handleRemindToday}>
                         <div>
                             <Input
-                                placeholder="Enter Label name"
+                                placeholder="create Label name"
                                 name="label"
                                 value={this.state.label}
                                 color="black"

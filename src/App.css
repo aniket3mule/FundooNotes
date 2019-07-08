@@ -200,7 +200,6 @@ input.input:focus {
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  border-top: 1px solid #dee2e6;
   border-bottom-right-radius: 0.3rem;
   border-bottom-left-radius: 0.3rem;
 }
@@ -245,6 +244,7 @@ input.input:focus {
   width: 80%;
   flex-wrap: wrap;
   justify-content: flex-start;
+  
 }
 
 .all-note-div {
@@ -310,39 +310,9 @@ input.input:focus {
 .list-view {
   width: 75%;
   height: auto;
-  margin-left: -12.5%;
+  /* margin-left: -12.5%; */
 }
 
-@media only screen and (max-width: 600px) {
-  .list-view {
-    width: 100%;
-    /* height: auto; */
-    margin-left: 1%;
-  }
-
-  .take-note-card {
-    margin: 22% 5% 1% 5%;
-  }
-
-  .take-note-card-description{
-    margin: 22% 5% 1% 5%;
-  }
-
-  .all-note-div {
-    display: flex;
-    width: 100%;
-  }
-
-  .card-bottom{
-    visibility: visible;
-  }
-  
-  
-  .list-view-bottom{
-    visibility: visible;
-  }
-  
-}
 .list-view-bottom{
   display: flex;
     justify-content: space-between;
@@ -377,7 +347,6 @@ input.input:focus {
 }
 
 .user-icon{
-  width: 20%;
   display: flex;
   justify-content: flex-end;
 }
@@ -399,4 +368,57 @@ input.input:focus {
 
 .label-text {
   margin: 0 0 0 5%;
+}
+
+.create-label-div{
+  display: flex;
+}
+
+.profile-pic{
+  height: 40px;
+  width: 40px;
+}
+/* .MuiDialog-paperWidthSm{
+  width: -webkit-fill-available;
+} */
+
+@media only screen and (max-width: 600px) {
+  .list-view {
+    width: 100%;
+    /* height: auto; */
+    margin-left: 1%;
+  }
+
+  .profile-pic{
+    height: 40px;
+    width: 40px;
+  }
+
+  .take-note-card {
+    margin: 22% 5% 1% 5%;
+  }
+
+  .take-note-card-description{
+    margin: 22% 5% 1% 5%;
+  }
+
+  .all-note-div {
+    display: flex;
+    width: 100%;
+    margin: 0 0 0 1%;
+  }
+
+  .card-bottom{
+    visibility: visible;
+  }
+  
+  
+  .list-view-bottom{
+    visibility: visible;
+  }
+
+  .list-view-div{
+    visibility: hidden;
+  }
+  
 }

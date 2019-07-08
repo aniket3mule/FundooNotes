@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import LabelService from '../services/LabelServices';
 import { MenuItem } from '@material-ui/core';
+import Check from '@material-ui/icons/Check'
+import Edit from '@material-ui/icons/Edit'
 
 const LabelServices = new LabelService();
 export default class GetAllLabels extends Component {
@@ -30,7 +32,7 @@ export default class GetAllLabels extends Component {
         const labels = this.state.allLabels.map((key) => {
             return (
                 this.props.sidebarLabel ?
-                <MenuItem>
+                <MenuItem key={key.id}>
                     <img className="update-card-img"
                         src={require('../assets/img/label.svg')}
                         alt="label"
@@ -40,9 +42,10 @@ export default class GetAllLabels extends Component {
                 </MenuItem>
                 :
                 this.props.editLabels ?
-                <div className="edit-label-dialog">
+                <div className="edit-label-dialog" key={key.id}>
                     {!this.state.mouseOver ?
-                    <div>
+                     
+                    <div className="edit_label_gray">
                     <img className="update-card-img"
                         src={require('../assets/img/edit_label_gray.png')}
                         alt="label"
@@ -50,7 +53,7 @@ export default class GetAllLabels extends Component {
                     />
                     </div>
                     :
-                    <div>
+                    <div className="delete_label_gray" key={key.id}>
                     <img className="update-card-img"
                         src={require('../assets/img/delete_grey.png')}
                         alt="label"
@@ -58,14 +61,19 @@ export default class GetAllLabels extends Component {
                     />
                     </div>
                     }
+                    <div>
                     <span className="label-text">{key.label}</span>
+                    </div>
+                    <div>
+                        <Check/>
+                    </div>
                 </div>
+                
                 :
                 this.props.createLabelNoteCreate && 
-                <div>
+                <div key={key.id}>
                 <span>{key.label}</span>
                 </div>
-
             )
         })
         return (

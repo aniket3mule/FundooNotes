@@ -39,10 +39,10 @@ class MoreOptions extends Component {
         this.setState({ addLabel: !this.state.addLabel });
     }
 
-    addLabelToMoreOptions = (noteIdList, label) =>{
-       console.log("label id list",noteIdList,"label", label);
-       this.props.addLabelToCreateNote(noteIdList, label)
-    }
+    // addLabelToMoreOptions = (noteIdList, label) =>{
+    //    console.log("label id list",noteIdList,"label", label);
+    //    this.props.addLabelToCreateNote(noteIdList, label)
+    // }
    
     render() {
 

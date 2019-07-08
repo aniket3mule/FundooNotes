@@ -3,13 +3,10 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import MenuItem from '@material-ui/core/MenuItem'
 import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
 import DrawerMenu from './DrawerMenu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import { Popover, PopoverBody } from 'reactstrap'
 import { Tooltip } from '@material-ui/core'
+import UploadImage from './UserProfile';
 
 const thm = createMuiTheme({
     overrides: {
@@ -41,7 +38,6 @@ class DashboardComponent extends Component {
         super(props);
         this.state = {
             view: false,
-            popoverOpen: false,
             listgrid: false,
             searchNote: '',
             allLabels:[],
@@ -53,14 +49,9 @@ class DashboardComponent extends Component {
         this.setState({ open: !this.state.open });
     }
 
-    handlePopover = () => {
-        this.setState({ popoverOpen: !this.state.popoverOpen });
-    }
+    
 
-    handleLogout = () => {
-        localStorage.clear();
-        this.props.history.push('/signin');
-    }
+   
 
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
@@ -126,27 +117,7 @@ class DashboardComponent extends Component {
                                 </Tooltip>
                             }
                             </div>
-                            <div className="user-icon">
-                            <div>
-                                <IconButton id="Popover1">
-                                <AccountCircle id="Popover1">
-                                </AccountCircle>
-                                </IconButton>
-                            </div>
-                            </div>
-                            <div>
-                                <Popover
-                                    placement="bottom"
-                                    isOpen={this.state.popoverOpen}
-                                    target="Popover1"
-                                    toggle={this.handlePopover}
-                                >
-
-                                    <PopoverBody>
-                                        <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
-                                    </PopoverBody>
-                                </Popover>
-                            </div>
+                            <UploadImage/>
                         </Toolbar>
                         <DrawerMenu
                             appBarProps={this.state.open}
@@ -157,5 +128,5 @@ class DashboardComponent extends Component {
         )
     }
 }
-export default withRouter(DashboardComponent);
+export default DashboardComponent;
 

@@ -67,6 +67,7 @@ class ColorPallete extends Component {
                         className="img"
                         alt="change color"
                         onMouseOver={this.handleToggle}
+                        onClick={this.handleToggle}
                         // onMouseLeave={this.handleToggle}
                     />
                 </Tooltip>
