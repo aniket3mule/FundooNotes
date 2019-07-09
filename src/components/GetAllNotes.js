@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import Reminder from './Reminder'
 import ColorPallete from './Color';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Chip, Dialog, DialogContent } from '@material-ui/core';
+import { Chip, Dialog } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
 
@@ -43,6 +43,7 @@ class GetAllNotes extends Component {
             tooltipOpen: false,
             color: '',
             reminder: '',
+            reminderStatus: false,
         }
 
         this.handleToggleOpen = this.handleToggleOpen.bind(this);
@@ -287,13 +288,17 @@ class GetAllNotes extends Component {
         const listgridview = listgridvalue ? "list-view" : null;
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
 
+        
+
 
         var notes = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map((key) => {
             return (
                 (
                     key.isArchived === false
-                    && key.isDeleted === false)
+                    && key.isDeleted === false
+                    )
                 &&
+                
                 <div key={key.id} className={listgridview}>
                     <Container className="card-margin" >
                         <Card className="take-note-user-card-description "

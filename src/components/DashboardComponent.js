@@ -49,10 +49,6 @@ class DashboardComponent extends Component {
         this.setState({ open: !this.state.open });
     }
 
-    
-
-   
-
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
         this.props.searchNote(e.target.value);
@@ -62,17 +58,24 @@ class DashboardComponent extends Component {
         this.setState({ view: !this.state.view });
         this.props.listGridView(this.state.view)
     }
+
+    DrawerMenuToDashboard = (value) =>{
+        this.props.DashboardToPage(value);
+    }
+
     render() {
         return (
             <div>
                 <MuiThemeProvider theme={thm}>
                     <AppBar position="fixed" >
                         <Toolbar className="toolBar" >
+                            <Tooltip title="Main menu">
                             <IconButton color="inherit"
                                 aria-label="Open drawer"
                                 onClick={this.handleToggle} >
                                 <MenuIcon id="menu" />
                             </IconButton>
+                            </Tooltip>
                             <div className="note-text-img">
                                 <img className="fundoo-note-img"
                                     src={require('../assets/img/keep_48dp.png')}
@@ -121,6 +124,7 @@ class DashboardComponent extends Component {
                         </Toolbar>
                         <DrawerMenu
                             appBarProps={this.state.open}
+                            DrawerMenuToDashboard = {this.DrawerMenuToDashboard}
                         />
                     </AppBar>
                 </MuiThemeProvider>

@@ -12,30 +12,36 @@ class DrawerMenu extends Component {
         super(props);
         this.state = {
             open: false,
+            status: false,
         }
     }
 
     handleLabelOpen = ()=>{
         this.setState({open:!this.state.open})
     }
-   
+
+    handleSidebarStatus = ()=>{
+        this.setState({status:true});
+        this.props.DrawerMenuToDashboard(this.state.status);
+    }
+
     render() {
-       
         return (
             <div>
+                
                 <Drawer
                     variant="persistent"
                     open={this.props.appBarProps}
                     width={200}
                 >
-                    <MenuItem onClick={this.getAllNotes}>
+                    <MenuItem onClick={this.handleSidebarStatus}>
                     <img className="update-card-img"
                             src={require('../assets/img/notes.svg')}
                             alt="color picker" />
-                        <span className="fundoo-text-sidebar"> Notes</span>
+                    <span className="fundoo-text-sidebar">Notes</span>
                     </MenuItem>
 
-                    <MenuItem >
+                    <MenuItem onClick={this.handleSidebarStatus}>
                     <img className="update-card-img"
                             src={require('../assets/img/reminder.svg')}
                             alt="reminder" />
@@ -61,19 +67,19 @@ class DrawerMenu extends Component {
                         </div>
                     </div>
 
-                    <MenuItem >
+                    <MenuItem onClick={this.handleSidebarStatus}>
                         <img className="update-card-img"
                             src={require('../assets/img/archived.svg')}
                             alt="color picker" />
                             <span className="fundoo-text-sidebar">Archive</span>
                     </MenuItem>
 
-                    <MenuItem>
+                    <MenuItem onClick={this.handleSidebarStatus}>
                     <img className="update-card-img"
                     src={require('../assets/img/trash.svg')}
                     alt="trash notes"
                     />
-                        <span className="fundoo-text-sidebar">Trash</span>
+                    <span className="fundoo-text-sidebar">Trash</span>
                     </MenuItem>
                 </Drawer>
             </div>

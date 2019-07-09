@@ -121,7 +121,7 @@ input.input:focus {
   flex-direction: column;
   align-items: center;
   min-width: 0;
-  max-width: 600px;
+  max-width: 450px;
   height: auto;
   word-wrap: break-word;
   background-color: #fff;
@@ -163,7 +163,7 @@ input.input:focus {
   flex-direction: column;
   align-items: center;
   min-width: 0;
-  max-width: 600px;
+  max-width: 450px;
   height: auto;
   word-wrap: break-word;
   /* background-color: #fff; */
@@ -307,6 +307,10 @@ input.input:focus {
 
 }
 
+.user-profile-btn{
+  background: transparent;
+}
+
 .list-view {
   width: 75%;
   height: auto;
@@ -378,10 +382,30 @@ input.input:focus {
   height: 40px;
   width: 40px;
 }
+
+.profile-pic-popover{
+  /* height:  calc(200px - 100%); */
+  /* width:  calc(230px - 100%); */
+  height: 90px;
+  width: 90px;
+}
 /* .MuiDialog-paperWidthSm{
   width: -webkit-fill-available;
 } */
 
+.user-profile-info{
+  display: flex;
+}
+
+.profile-bottom{
+  display: flex;
+  justify-content: space-between;
+}
+
+.add-account{
+  font-size: 0.7em;
+  font-weight: 0px;
+}
 @media only screen and (max-width: 600px) {
   .list-view {
     width: 100%;

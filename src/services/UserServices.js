@@ -7,8 +7,7 @@ require('dotenv').config();
 // const login = process.env.LOGIN;
 // const register = process.env.REGISTER;
 
-
-
+const BaseURL = "http://34.213.106.173/api/";
 class Services {
     loginService (data){
         
@@ -60,6 +59,14 @@ class Services {
         })
         .catch(err =>{
             console.log(err);       
+        })
+    }
+
+    uploadProfileImage(data){
+        return axios.post(`${BaseURL}/user/uploadProfileImage`, data, {
+            headers:{
+                'Authorization' : localStorage.getItem('token')
+            }
         })
     }
 }

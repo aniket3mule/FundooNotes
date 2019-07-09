@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import LabelService from '../services/LabelServices';
 import { MenuItem } from '@material-ui/core';
 import Check from '@material-ui/icons/Check'
-import Edit from '@material-ui/icons/Edit'
 
 const LabelServices = new LabelService();
 export default class GetAllLabels extends Component {
