@@ -7,7 +7,7 @@ import { Button, Label, Input, Card, CardImg, CardText, CardBody, CardTitle } fr
 import Services from '../services/UserServices';
 const loginService = new Services().loginService;
 
-
+const url = "http://34.213.106.173/"
 class SignInComponent extends Component {
     constructor(props) {
         super(props);
@@ -62,6 +62,7 @@ class SignInComponent extends Component {
             localStorage.setItem('token1',true);
             localStorage.setItem('userid',response.data.userId);
             localStorage.setItem('email', response.data.email)
+            localStorage.setItem('ProfileImage', url+response.data.imageUrl)
             this.props.history.push('/dashboard');
         })
         .catch(error => {

@@ -22,6 +22,16 @@ class LabelServices {
             }
         })
     }
+
+    deleteNoteLabel(id){
+        console.log("label ID",id);
+        
+        return axios.delete(`${BaseURL}/${id}/deleteNoteLabel`, id, {
+            headers:{
+                'Authorization' :token
+            }
+        })
+    }
 }
 
 export default LabelServices;

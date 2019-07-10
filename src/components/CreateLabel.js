@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Check from '@material-ui/icons/Check'
 import Close from '@material-ui/icons/Close'
+import Add from '@material-ui/icons/Add'
 
 const LabelServices = new LabelService();
 
@@ -16,6 +17,7 @@ class CreateLabel extends Component {
         this.state = {
             label: [],
             open: false,
+            closeEdit:false,
 
         }
         this.handleChange = this.handleChange.bind(this);
@@ -59,14 +61,17 @@ class CreateLabel extends Component {
             open: false,
         })
     }
-    render() {
-        // return (
-        // <ClickAwayListener onClickAway={() => this.closePopper()}>
-        
 
+    handleCloseEdit = () =>{
+        this.setState({
+            closeEdit : !this.state.closeEdit
+        })
+    }
+    render() {
+      
         return (
             !this.props.addLabelOpen ?
-            <div>
+            <div> 
                 <div onClick={this.handleClickOpen} style={{ cursor: 'pointer' }}>
                 <img className="update-card-img"
                             src={require('../assets/img/edit_label.svg')}
@@ -84,17 +89,38 @@ class CreateLabel extends Component {
                     </DialogTitle>
                     <DialogContent>
                         <div className="create-label-div">
-                            <Close/>
-                        <Input
+                            {this.state.closeEdit ?
+                            <div style ={{display:"flex"}}>
+                            <Close
+                            onClick={this.handleCloseEdit}
+                            />
+                            <Input
                                 placeholder="create new label"
                                 name="label"
                                 value={this.state.label}
                                 color="black"
-                                style={{ height: '70%', width: '100%' }}
+                                style={{ height: '65%', width: '100%' }}
                                 onChange={this.handleChange}
                         />
                         <Check
                         onClick={this.addLabel}/>
+                        </div>
+                            :
+                            <div style={{display:"flex"}}>
+                            
+                            <Add 
+                            onClick={this.handleCloseEdit}
+                            />
+                            <input
+                                placeholder="create new label"
+                                name="label"
+                                style={{ height: '70%', width: '100%', border:"none" }}
+                                onClick={this.handleCloseEdit}
+                                readOnly
+                        />
+                            </div>
+                            }
+                        
                         </div>
                             <GetAllLabels 
                             editLabels = {this.state.open}
@@ -105,9 +131,8 @@ class CreateLabel extends Component {
                     </DialogActions>
                 </Dialog>
             </div>
-
             :
-            <div>
+            <div style={{width: "200px"}}>
                     <div className="remind-heading">
                         Label note:
                     </div>
@@ -118,7 +143,7 @@ class CreateLabel extends Component {
                                 name="label"
                                 value={this.state.label}
                                 color="black"
-                                style={{ height: '70%', width: '100%' }}
+                                style={{ height: '50%', width: '100%' }}
                                 onChange={this.handleChange}
                             />
                         </div>
@@ -127,7 +152,6 @@ class CreateLabel extends Component {
                                 <GetAllLabels
                                 createLabelNoteCreate = {true}
                                 />
-
                         </div>
                         <div onClick={this.addLabel} style={{ cursor: 'pointer' }}>
                             <img

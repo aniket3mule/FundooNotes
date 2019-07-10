@@ -141,7 +141,7 @@ class CreateNote extends Component {
                                 onClick={this.handleToggleOpen}
                             />
                         </CardText>
-                        <CardText>
+                        <CardText className="create-note-icons">
                             <CardLink ><i className="fa fa-pencil fa-fw fa-lg " aria-hidden="true"></i></CardLink>
                             <CardLink ><i className="fa fa-check-square-o fa-fw fa-lg " aria-hidden="true"></i></CardLink>
                         </CardText>
@@ -177,7 +177,6 @@ class CreateNote extends Component {
                             {(this.state.reminder !=='') ?
                                 <div>
                                     <Chip
-                                        // avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
                                         label={this.state.reminder.toString().substring(0, 24)}
                                         onDelete={this.handleReminderDeleteChip}
                                         className={useStyles.chip}

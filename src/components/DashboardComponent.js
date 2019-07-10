@@ -6,7 +6,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
 import DrawerMenu from './DrawerMenu';
 import { Tooltip } from '@material-ui/core'
-import UploadImage from './UserProfile';
+import UserProfile from './UserProfile';
 
 const thm = createMuiTheme({
     overrides: {
@@ -88,7 +88,6 @@ class DashboardComponent extends Component {
                             <div className="view-search-input">
                             <div className="input-group input-search">
                                 <div className="input-group-prepend">
-                                    {/* <SearchIcon />  */}
                                     <button className="btn fa fa-search search-button" outline ="true" color="white" />
                                 </div>
                                 <input
@@ -120,7 +119,8 @@ class DashboardComponent extends Component {
                                 </Tooltip>
                             }
                             </div>
-                            <UploadImage/>
+
+                            <UserProfile/>
                         </Toolbar>
                         <DrawerMenu
                             appBarProps={this.state.open}

@@ -7,7 +7,7 @@ require('dotenv').config();
 // const login = process.env.LOGIN;
 // const register = process.env.REGISTER;
 
-const BaseURL = "http://34.213.106.173/api/";
+const BaseURL = "http://34.213.106.173/api";
 class Services {
     loginService (data){
         

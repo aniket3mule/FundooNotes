@@ -62,9 +62,11 @@ class MoreOptions extends Component {
                             <Card className="remind-me">
                                 {
                                     this.state.addLabel ?
+                               
                                 <CreateLabel
                                 addLabelToMoreOptions = {this.addLabelToMoreOptions}
                                 addLabelOpen = {this.state.addLabel}
+                                style={{width:"100%"}}
                                 />
                                 :
                                 <div>

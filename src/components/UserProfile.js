@@ -1,130 +1,159 @@
-import React, { Component } from 'react'
-import { Popover, PopoverBody, PopoverHeader } from 'reactstrap'
-import IconButton from '@material-ui/core/IconButton';
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import Popover from "@material-ui/core/Popover";
+import { IconButton, Tooltip, Button } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
-import { Button, Tooltip, ClickAwayListener } from '@material-ui/core';
-import Services from '../services/UserServices';
+import Services from "../services/UserServices";
 
 const profile = new Services();
 const url = "http://34.213.106.173/"
 
-class UploadImage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            popoverOpen: false,
-            profilePic: '',
-        }
-    }
+const styles = theme => ({
+  typography: {
+    margin: theme.spacing.unit * 2
+  }
+});
 
-    componentDidMount() {
-        if (localStorage.getItem("ProfileImage") !== null) {
-            this.setState({
-                profilePic: localStorage.getItem("ProfileImage")
-            })
-        }
-    }
+class UploadProfile extends React.Component {
+  state = {
+    anchorEl: null,
+    profilePic: '',
+  };
 
-    handlePopover = () => {
-        this.setState({ popoverOpen: !this.state.popoverOpen });
+  componentDidMount() {
+    if (localStorage.getItem("ProfileImage") !== null) {
+      this.setState({
+        profilePic: localStorage.getItem("ProfileImage")
+      })
+      console.log("Did mount", localStorage.getItem("ProfileImage"));
     }
-    handleLogout = () => {
-        localStorage.clear();
-        this.props.history.push('/signin');
-    }
+  };
 
-    handleClickAway = () => {
-        this.setState({popoverOpen: false})
-    }
-    handleProfilePic = (event) => {
-        const formData = new FormData()
-        formData.append('file', event.target.files[0])
-        profile.uploadProfileImage(formData)
-            .then(response => {
-                localStorage.setItem('ProfileImage', url+response.data.status.imageUrl)
-                this.setState({
-                    profilePic: url + response.data.status.imageUrl
-                })
-                console.log("Image URL", this.state.profilePic);
-            })
-            .catch(error => {
-                console.log("error while uploading image ",error);
-            })
-    }
+  handleLogout = () => {
+    localStorage.clear();
+    this.props.history.push('/signin');
+  };
 
-    render() {
-        return (
-            <ClickAwayListener onClickAway={this.handleClickAway}>
-            <div>
-                
-                <div className="user-profile">
-                    <div id="Popover1">
-                        <IconButton className="user-profile-btn" >
-                            <Tooltip title="Profile">
-                            <img
-                                src={this.state.profilePic}
-                                alt="profile pic"
-                                style={{ borderRadius: "50%" }}
-                                className="profile-pic"
-                            />
-                            </Tooltip>
-                        </IconButton>
-                    </div>
+  handleClick = event => {
+    this.setState({
+      anchorEl: event.currentTarget
+    });
+  };
+
+  handleClose = () => {
+    this.setState({
+      anchorEl: null
+    });
+  };
+
+  handleProfilePic = (event) => {
+    console.log("Profile Image", event.target.files[0]);
+
+    const formData = new FormData()
+    formData.append('file', event.target.files[0])
+    profile.uploadProfileImage(formData)
+      .then(response => {
+        localStorage.setItem('ProfileImage', url + response.data.status.imageUrl)
+        this.setState({
+          profilePic: url + response.data.status.imageUrl
+        })
+        console.log("Image URL", this.state.profilePic);
+
+      })
+      .catch(error => {
+        console.log("error while uploading image ", error);
+      })
+  };
+
+  render() {
+    const { classes } = this.props;
+    const { anchorEl } = this.state;
+    const open = Boolean(anchorEl);
+
+    return (
+      <div className="user-profile">
+        <IconButton
+          aria-owns={open ? "simple-popper" : undefined}
+          aria-haspopup="true"
+          variant="contained"
+          onClick={this.handleClick}
+          className="user-profile-btn"
+        >
+          <Tooltip title="Profile">
+            <img
+              src={this.state.profilePic}
+              alt="profile pic"
+              style={{ borderRadius: "50%" }}
+              className="profile-pic"
+            />
+          </Tooltip>
+        </IconButton>
+        <Popover
+          id="simple-popper"
+          open={open}
+          anchorEl={anchorEl}
+          onClose={this.handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center"
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "center"
+          }}
+        >
+          <Typography className={classes.typography} >
+            <div >
+              <div className="user-profile-info">
+                <input
+                  accept="image/*"
+                  id="contained-button-file"
+                  multiple
+                  type="file"
+                  onChange={this.handleProfilePic}
+                  style={{ display: "none" }}
+                />
+                <label htmlFor="contained-button-file">
+                  <IconButton component="span">
+                    <Tooltip title="Change profile">
+                      <img
+                        htmlFor="contained-button-file"
+                        src={this.state.profilePic}
+                        alt="profile pic"
+                        style={{ borderRadius: "50%" }}
+                        className="profile-pic-popover"
+                      />
+                    </Tooltip>
+                  </IconButton>
+                </label>
+
+                <div className="user-information">
+                  <label>{localStorage.getItem('firstName')}</label>
+                  <label>{localStorage.getItem('email')}</label>
                 </div>
-                <div>
-                    <Popover
-                        placement="bottom"
-                        isOpen={this.state.popoverOpen}
-                        target="Popover1"
-                        toggle={this.handlePopover}
-                    >
-                        <PopoverHeader>
-                            <div className="user-profile-info">
-                                <input
-                                    accept="image/*"
-                                    id="contained-button-file"
-                                    multiple
-                                    type="file"
-                                    onChange={this.handleProfilePic}
-                                    style={{ display: "none" }}
-                                />
-                                <label htmlFor="contained-button-file">
-                                    <IconButton component="span">
-                                        <Tooltip title="Change profile">
-                                        <img
-                                            htmlFor="contained-button-file"
-                                            src={this.state.profilePic}
-                                            alt="profile pic"
-                                            style={{ borderRadius: "50%" }}
-                                            className="profile-pic-popover"
-                                        />
-                                        </Tooltip>
-                                    </IconButton>
-                                </label>
-
-                                <div>
-                                    <label>{localStorage.getItem('firstName')}</label>
-                                    <label>{localStorage.getItem('email')}</label>
-                                </div>
-                            </div>
-                        </PopoverHeader>
-                        <PopoverBody className="profile-bottom">
-                            <div>
-                                <Button variant="outlined" disabled><span className="add-account">Add account</span></Button>
-                            </div>
-                            <div>
-                                <Button variant="outlined" onClick={this.handleLogout}><span className="add-account">Sign out</span></Button>
-                            </div>
-                        </PopoverBody>
-                    </Popover>
-                </div>
-               
+              </div>
             </div>
-            </ClickAwayListener>
-        )
-    }
+
+            <div className="profile-bottom">
+              <div>
+                <Button variant="outlined" disabled><span className="add-account">Add account</span></Button>
+              </div>
+              <div>
+                <Button variant="outlined" onClick={this.handleLogout}><span className="add-account">Sign out</span></Button>
+              </div>
+            </div>
+          </Typography>
+
+        </Popover>
+      </div>
+    );
+  }
 }
 
+UploadProfile.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 
-export default withRouter(UploadImage);
-
+export default withRouter(withStyles(styles)(UploadProfile));

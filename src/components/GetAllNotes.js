@@ -9,6 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { Chip, Dialog } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
+// import DisplayRemindersComponent from './DisplayRemindersComponent';
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,6 +41,10 @@ class GetAllNotes extends Component {
             noteId: '',
             modal: false,
             isArchived: false,
+            isArchivedStatus: false,
+            isTrash : false,
+            isReminder: false,
+            isNotes: false,
             tooltipOpen: false,
             color: '',
             reminder: '',
@@ -288,9 +293,6 @@ class GetAllNotes extends Component {
         const listgridview = listgridvalue ? "list-view" : null;
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
 
-        
-
-
         var notes = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map((key) => {
             return (
                 (
@@ -510,6 +512,10 @@ class GetAllNotes extends Component {
         return (
             <div className="card-grid">
                 {notes}
+                {/* <DisplayRemindersComponent
+                allNotes = {this.state.allNotes}
+                listGridView={this.props.listGridView}
+                /> */}
             </div>
         )
     }

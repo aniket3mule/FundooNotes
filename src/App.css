@@ -282,7 +282,7 @@ input.input:focus {
 
 .remind-me {
   position: absolute;
-  max-width: 200px;
+  max-width: 100%;
   padding: 3px;
   display: flex;
   justify-content: space-between;
@@ -376,6 +376,7 @@ input.input:focus {
 
 .create-label-div{
   display: flex;
+  
 }
 
 .profile-pic{
@@ -400,6 +401,17 @@ input.input:focus {
 .profile-bottom{
   display: flex;
   justify-content: space-between;
+  border-top: 1px solid lightgray;
+  padding-top: 10px;
+}
+.user-information{
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px
+}
+.create-note-icons{
+  display: flex;
+  flex-direction: row;
 }
 
 .add-account{
