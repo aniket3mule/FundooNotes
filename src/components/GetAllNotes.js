@@ -9,7 +9,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { Chip, Dialog } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
-// import DisplayRemindersComponent from './DisplayRemindersComponent';
+import RemindersDisplayComponent from './ReminderComponent';
+import TrashComponent from './TrashComponent'
 
 
 const useStyles = makeStyles(theme => ({
@@ -42,8 +43,8 @@ class GetAllNotes extends Component {
             modal: false,
             isArchived: false,
             isArchivedStatus: false,
-            isTrash : false,
-            isReminder: false,
+            isTrash: false,
+            // isReminder: false,
             isNotes: false,
             tooltipOpen: false,
             color: '',
@@ -107,16 +108,16 @@ class GetAllNotes extends Component {
                 NoteService.updateNote(data)
                     .then(response => {
                         console.log("uddate note function", response);
-                        // toast.success("Note Saved", {
-                        //     position: toast.POSITION.TOP_CENTER
-                        // });
-                        // this.props.getNewNote(this.state.newNote);
+                        NoteService.getAllNotes()
+                        .then(allNotes => {
+                            this.setState({ allNotes: allNotes.data.data.data })
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
                     })
                     .catch(err => {
                         console.log("Eroorrrrrr....", err);
-                        // toast.info("Error in update note", {
-                        //     position: toast.POSITION.TOP_CENTER
-                        // });
                     })
             }
         } catch {
@@ -125,12 +126,8 @@ class GetAllNotes extends Component {
     }
 
     handleArchive = (noteId) => {
-        // this.props.archiveNote(noteId);
         console.log(noteId);
-        // this.setState(prevState => ({
-        //     isArchived: !prevState.isArchived
-        // }));
-        this.setState({ isArchived: !this.state.isArchived });
+        this.setState({ isArchived: true });
         console.log(this.state.isArchived);
 
         if (this.state.isArchived === true) {
@@ -143,15 +140,17 @@ class GetAllNotes extends Component {
             NoteService.archiveNote(note)
                 .then(response => {
                     console.log(response);
-                    // toast.success("Note archived ", {
-                    //     position: toast.POSITION.TOP_CENTER
-                    // });
+                    NoteService.getAllNotes()
+                    .then(allNotes => {
+                        this.setState({ allNotes: allNotes.data.data.data })
+                        // console.log("this data", this.state.allNotes);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
                 })
                 .catch(err => {
                     console.log("Eroorrrrrr....", err);
-                    // toast.info("Error in note archive", {
-                    //     position: toast.POSITION.TOP_CENTER
-                    // });
                 })
         }
     }
@@ -177,28 +176,28 @@ class GetAllNotes extends Component {
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
-                // toast.info("Error in note archive", {
-                //     position: toast.POSITION.TOP_CENTER
-                // });
             })
 
     }
 
     handleReminder = (reminderdate, noteId) => {
         console.log(reminderdate);
-
-
         this.setState({ reminder: reminderdate })
-        // console.log("state ", this.state.reminder);
-
         var note = {
             'noteIdList': [noteId],
             'reminder': reminderdate,
         }
-
         NoteService.updateReminderNotes(note)
             .then(response => {
                 console.log("update reminder >>>", response);
+                NoteService.getAllNotes()
+                    .then(allNotes => {
+                        this.setState({ allNotes: allNotes.data.data.data })
+                        // console.log("this data", this.state.allNotes);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
 
             })
             .catch(err => {
@@ -208,9 +207,6 @@ class GetAllNotes extends Component {
     }
 
     handleDeleteChip = (noteId) => {
-        // this.setState({
-        //     allNotes: [...this.state.allNotes]
-        // })
         var note = {
             'noteIdList': [noteId],
             'reminder': []
@@ -219,10 +215,6 @@ class GetAllNotes extends Component {
         NoteService.removeReminderNotes(note)
             .then(response => {
                 console.log("update reminder >>>", response);
-                // this.setState({
-                //     allNotes: [...this.state.allNotes]
-                // })
-
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -253,20 +245,14 @@ class GetAllNotes extends Component {
                 console.log(response);
                 let newArray = this.state.allNotes
                 console.log("new array", newArray);
-
-                for (let i = 0; i < newArray.length; i++) {
-                    // console.log("new aarray",note.noteIdList[i]);
-                    if (newArray[i].id === note.noteIdList[i]) {
-                        // console.log("new aarray",newArray[i].noteIdList);
-                        // newArray.pop(i);
-                        console.log("new array", newArray);
-
-                        newArray.splice(i, i + 1);
-                    }
-                    this.setState({
-                        allNotes: newArray
+                NoteService.getAllNotes()
+                    .then(allNotes => {
+                        this.setState({ allNotes: allNotes.data.data.data })
+                        // console.log("this data", this.state.allNotes);
                     })
-                }
+                    .catch(err => {
+                        console.log(err);
+                    })
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -287,8 +273,13 @@ class GetAllNotes extends Component {
         })
     }
 
+    ReminderComponentToAllNotes = (allNotes) =>{
+        this.setState({
+            allNotes:allNotes
+        })
+    }
     render() {
-
+        console.log(this.props.isNotes);
         var listgridvalue = this.props.listGridView;
         const listgridview = listgridvalue ? "list-view" : null;
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
@@ -298,9 +289,9 @@ class GetAllNotes extends Component {
                 (
                     key.isArchived === false
                     && key.isDeleted === false
-                    )
+                )
                 &&
-                
+
                 <div key={key.id} className={listgridview}>
                     <Container className="card-margin" >
                         <Card className="take-note-user-card-description "
@@ -448,7 +439,7 @@ class GetAllNotes extends Component {
                                         <div
                                             className="modal-footer-note"
                                         >
-                                            <CardLink onClick={this.handleRemainder}>
+                                            <CardLink onClick={this.handleReminder}>
                                                 <Reminder
                                                     toolsPropsToReminder={this.handleReminder}
                                                     noteID={key.id}
@@ -489,7 +480,7 @@ class GetAllNotes extends Component {
                                                 </Tooltip>
                                             </CardLink>
                                             <MoreOptions
-                                                toolsPropsToColorpallete={this.handleMoreOptions}
+                                                // toolsPropsToColorpallete={this.handleMoreOptions}
                                                 noteID={key.id}
                                                 id="color-picker">
 
@@ -510,13 +501,35 @@ class GetAllNotes extends Component {
             )
         })
         return (
-            <div className="card-grid">
-                {notes}
-                {/* <DisplayRemindersComponent
-                allNotes = {this.state.allNotes}
-                listGridView={this.props.listGridView}
-                /> */}
+                (this.props.isNotes=== true) ?
+                <div className="card-grid">
+                    {notes}
+                </div>
+                :
+                null
+        ||
+                (this.props.isReminder===true) ?
+                   <div className="card-grid">
+                    <RemindersDisplayComponent
+                    allNotes={this.state.allNotes}
+                    listGridView={this.props.listGridView}
+                    ReminderComponentToAllNotes ={this.ReminderComponentToAllNotes}
+                />
+                </div>
+                :
+                null
+        ||
+                
+                    (this.props.isTrash===true ) ?
+                    <div className="card-grid">
+                    <TrashComponent
+                    allNotes={this.state.allNotes}
+                    listGridView={this.props.listGridView}
+                    ReminderComponentToAllNotes ={this.ReminderComponentToAllNotes}
+                />
             </div>
+            :
+            null
         )
     }
 }

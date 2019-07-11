@@ -13,35 +13,61 @@ class DrawerMenu extends Component {
         this.state = {
             open: false,
             status: false,
+            allLabels: [],
         }
+        // this.labelToCards = React.createRef();
+
     }
+
+    
+    // getNewLabel = (newLabel) => {
+    //     console.log("newnote==>", newLabel);
+
+    //     this.labelToCards.current.displayCard(newLabel);
+    // }
 
     handleLabelOpen = ()=>{
         this.setState({open:!this.state.open})
     }
 
-    handleSidebarStatus = ()=>{
-        this.setState({status:true});
-        this.props.DrawerMenuToDashboard(this.state.status);
+    handleReminder = ()=>{
+        this.props.DrawerMenuToDashboard(true, false, false, false);
     }
+
+    handleArchived = ()=>{
+        this.props.DrawerMenuToDashboard(false, false, true, false);
+    }
+
+    handleTrash = ()=>{
+        this.props.DrawerMenuToDashboard(false, true, false, false);
+    }
+    handleNotes = ()=>{
+        this.props.DrawerMenuToDashboard(false, false, false, true);
+    }
+
+    // GetAllLabelToDrawerMenu = (allLabels) => {
+    //     this.setState({
+    //         allLabels:allLabels
+    //     })
+
+    // }
 
     render() {
         return (
             <div>
-                
                 <Drawer
                     variant="persistent"
                     open={this.props.appBarProps}
                     width={200}
                 >
-                    <MenuItem onClick={this.handleSidebarStatus}>
+                    <MenuItem onClick={this.handleNotes}>
                     <img className="update-card-img"
                             src={require('../assets/img/notes.svg')}
                             alt="color picker" />
                     <span className="fundoo-text-sidebar">Notes</span>
                     </MenuItem>
 
-                    <MenuItem onClick={this.handleSidebarStatus}>
+                    <MenuItem onClick={this.handleReminder}>
                     <img className="update-card-img"
                             src={require('../assets/img/reminder.svg')}
                             alt="reminder" />
@@ -55,6 +81,8 @@ class DrawerMenu extends Component {
                         <div>
                             <GetAllLabels
                             sidebarLabel = {true}
+                            // GetAllLabelToDrawerMenu = {this.GetAllLabelToDrawerMenu}
+                            // ref= {this.labelToCards}
                             />
                             <MenuItem
                             onClick={this.handleLabelOpen}
@@ -67,14 +95,14 @@ class DrawerMenu extends Component {
                         </div>
                     </div>
 
-                    <MenuItem onClick={this.handleSidebarStatus}>
+                    <MenuItem onClick={this.handleArchived}>
                         <img className="update-card-img"
                             src={require('../assets/img/archived.svg')}
                             alt="color picker" />
                             <span className="fundoo-text-sidebar">Archive</span>
                     </MenuItem>
 
-                    <MenuItem onClick={this.handleSidebarStatus}>
+                    <MenuItem onClick={this.handleTrash}>
                     <img className="update-card-img"
                     src={require('../assets/img/trash.svg')}
                     alt="trash notes"

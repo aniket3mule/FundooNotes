@@ -59,9 +59,10 @@ class DashboardComponent extends Component {
         this.props.listGridView(this.state.view)
     }
 
-    DrawerMenuToDashboard = (value) =>{
-        this.props.DashboardToPage(value);
+    DrawerMenuToDashboard = (isReminder, isTrash, isArchive, isNotes) =>{
+        this.props.DashboardToPage(isReminder, isTrash, isArchive, isNotes);
     }
+
 
     render() {
         return (

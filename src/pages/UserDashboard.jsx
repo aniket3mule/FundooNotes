@@ -12,12 +12,14 @@ class UserDashboard extends Component {
             slidecards: false,
             searchNote: '',
             listGridView: false,
-            status: false,
+            isReminder: false,
+            isTrash: false,
+            isArchive: false,
+            isNotes: true,
         }
         this.noteToCards = React.createRef();
         this.archiveNote = React.createRef();
-        // this.getNewNote = this.getNewNote.bind(this)
-
+        // this.labelToCards = React.createRef();
     }
     slidecard = () => {
         this.setState({
@@ -27,7 +29,6 @@ class UserDashboard extends Component {
 
     getNewNote = (newNote) => {
         console.log("newnote==>", newNote);
-
         this.noteToCards.current.displayCard(newNote);
     }
     archiveNote = (noteId) => {
@@ -46,9 +47,19 @@ class UserDashboard extends Component {
         console.log(this.state.listGridView);
     }
 
-    DashboardToPage = (value) => {
-        this.setState({ status: value })
+    DashboardToPage = (isReminder, isTrash, isArchive, isNotes) => {
+        this.setState({
+            isReminder: isReminder, 
+            isTrash: isTrash,
+            isArchive: isArchive,
+            isNotes: isNotes
+         })
+         console.log("dashboard page satte=>", this.state.isArchive , this.state.isTrash, this.state.isReminder, this.state.isNotes);
     }
+    // GetAllLabelToDrawerMenu = (newLabel) => {
+    //     console.log("newnote==>", newLabel);
+    //     this.labelToCards.current.displayCard(newLabel);
+    // }
 
     render() {
 
@@ -69,20 +80,34 @@ class UserDashboard extends Component {
                             searchNote={this.searchNote}
                             listGridView={this.listGridView}
                             DashboardToPage={this.DashboardToPage}
+                            
                         />
                     </div>
                     <div className={slide}>
                         <div>
+                            {(!this.state.isTrash) &&
                             <div>
                                 <CreateNote getNewNote={this.getNewNote} />
                             </div>
+                            }
                             <div className="all-note-div">
                                 <AllNotes
                                     ref={this.noteToCards}
                                     searchNote={this.state.searchNote}
                                     listGridView={this.state.listGridView}
+                                    isReminder ={this.state.isReminder}
+                                    isArchive = {this.state.isArchive}
+                                    isTrash = {this.state.isTrash}
+                                    isNotes = {this.state.isNotes}
                                 />
                             </div>
+                            {/* <div>
+                                <GetAllLabels
+                                GetAllLabelToDrawerMenu={this.GetAllLabelToDrawerMenu}
+                                >
+
+                                </GetAllLabels>
+                            </div> */}
                         </div>
                     </div>
                 </div>

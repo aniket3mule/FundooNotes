@@ -188,7 +188,7 @@ class CreateNote extends Component {
                                 null
                             }
 
-                            {(this.state.label !== '') ?
+                            {(this.state.label !== '') &&
                                 <div>
                                     <Chip
                                         // avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
@@ -199,8 +199,6 @@ class CreateNote extends Component {
                                         size="small"
                                     />
                                 </div>
-                                :
-                                null
                             }
                             </div>
                         </CardText>

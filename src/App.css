@@ -418,6 +418,7 @@ input.input:focus {
   font-size: 0.7em;
   font-weight: 0px;
 }
+
 @media only screen and (max-width: 600px) {
   .list-view {
     width: 100%;

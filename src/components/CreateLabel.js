@@ -18,11 +18,19 @@ class CreateLabel extends Component {
             label: [],
             open: false,
             closeEdit:false,
+            newLabel: [],
 
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this)
-        this.handleClose = this.handleClose.bind(this)
+        this.handleClose = this.handleClose.bind(this);
+        this.labelToCards = React.createRef();
+    }
+
+    getNewLabel = (newLabel) => {
+        console.log("newnote==>", newLabel);
+
+        this.labelToCards.current.displayCard(newLabel);
     }
 
     handleChange = (e) => {
@@ -39,8 +47,12 @@ class CreateLabel extends Component {
 
         LabelServices.addLabels(label)
             .then(response => {
-                console.log("new label ", response);
-                // this.props.addLabelToMoreOptions(response.data.id, this.state.label);
+                
+                this.setState({
+                    newLabel : response.data
+                })
+                console.log("new label ", this.state.newLabel);
+                this.getNewLabel(response.data);
             })
     }
 
@@ -93,6 +105,7 @@ class CreateLabel extends Component {
                             <div style ={{display:"flex"}}>
                             <Close
                             onClick={this.handleCloseEdit}
+                            style ={{marginLeft:"-4px"}}
                             />
                             <Input
                                 placeholder="create new label"
@@ -103,18 +116,20 @@ class CreateLabel extends Component {
                                 onChange={this.handleChange}
                         />
                         <Check
-                        onClick={this.addLabel}/>
+                        onClick={this.addLabel}
+                        />
                         </div>
                             :
                             <div style={{display:"flex"}}>
                             
                             <Add 
                             onClick={this.handleCloseEdit}
+                            style ={{marginLeft:"-4px"}}
                             />
                             <input
                                 placeholder="create new label"
                                 name="label"
-                                style={{ height: '70%', width: '100%', border:"none" }}
+                                style={{ height: '65%', width: '100%', border:"none" }}
                                 onClick={this.handleCloseEdit}
                                 readOnly
                         />
@@ -124,6 +139,8 @@ class CreateLabel extends Component {
                         </div>
                             <GetAllLabels 
                             editLabels = {this.state.open}
+                            newLabel = {this.state.newLabel}
+                            ref= {this.labelToCards}
                             />
                     </DialogContent>
                     <DialogActions>
@@ -147,10 +164,10 @@ class CreateLabel extends Component {
                                 onChange={this.handleChange}
                             />
                         </div>
-                       
                         <div>
                                 <GetAllLabels
                                 createLabelNoteCreate = {true}
+                                ref= {this.labelToCards}
                                 />
                         </div>
                         <div onClick={this.addLabel} style={{ cursor: 'pointer' }}>

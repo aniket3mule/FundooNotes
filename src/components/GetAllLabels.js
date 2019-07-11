@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import LabelService from '../services/LabelServices';
 import { MenuItem } from '@material-ui/core';
 import Check from '@material-ui/icons/Check'
+import Edit from '@material-ui/icons/Edit'
 
 const LabelServices = new LabelService();
 export default class GetAllLabels extends Component {
@@ -11,6 +12,15 @@ export default class GetAllLabels extends Component {
             allLabels: [],
             mouseOver:false,
         }
+
+    }
+
+    displayCard(newLabel) {
+        console.log("display card==>", newLabel);
+
+        this.setState({
+            allLabels: [...this.state.allLabels, newLabel]
+        })
     }
 
     componentDidMount() {
@@ -46,6 +56,10 @@ export default class GetAllLabels extends Component {
             .then(allLabels => {
                 this.setState({ allLabels: allLabels.data.data.details })
                 console.log("this data", this.state.allLabels);
+                this.setState({
+                    allLabel: [...this.state.allLabel, this.props.newLabel]
+                })
+                // this.props.GetAllLabelToDrawerMenu(this.state.allLabels)
             })
             .catch(err => {
                 console.log(err);
@@ -57,7 +71,16 @@ export default class GetAllLabels extends Component {
         })
     }
 
+
+    getNewNote = (newNote) => {
+        console.log("newnote==>", newNote);
+
+        this.labelToCards.current.displayCard(newNote);
+        // this.props.getNewNote(newNote);
+    }
+
     render() {
+        
         const labels = this.state.allLabels.map((key) => {
             return (
                 this.props.sidebarLabel ?
@@ -100,12 +123,22 @@ export default class GetAllLabels extends Component {
                     />
                     </div>
                     }
-                    <div>
-                    <span className="label-text">{key.label}</span>
-                    </div>
-                    <div>
-                        <Check/>
-                    </div>
+                    
+                    <div style ={{display:"flex"}}>
+                    <input
+                                placeholder="create new label"
+                                name="label"
+                                value={key.label}
+                                style={{ height: '65%', width: '100%', border:"none" }}
+                                onClick={() => this.handleCloseEdit(key.id)}
+                                readOnly
+                        />
+                        <Edit
+                        onClick={() => this.handleCloseEdit(key.id)}
+                        />
+                        <Check
+                        onClick={this.addLabel}/>
+                        </div>
                 </div>
                 
                 :
