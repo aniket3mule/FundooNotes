@@ -11,6 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
 import RemindersDisplayComponent from './ReminderComponent';
 import TrashComponent from './TrashComponent'
+import ArchivedComponent from './ArchivedComponent';
+import CollaboratorComponent from './CollaboratorComponent';
 
 
 const useStyles = makeStyles(theme => ({
@@ -42,14 +44,12 @@ class GetAllNotes extends Component {
             noteId: '',
             modal: false,
             isArchived: false,
-            isArchivedStatus: false,
             isTrash: false,
             // isReminder: false,
             isNotes: false,
             tooltipOpen: false,
             color: '',
             reminder: '',
-            reminderStatus: false,
         }
 
         this.handleToggleOpen = this.handleToggleOpen.bind(this);
@@ -342,12 +342,9 @@ class GetAllNotes extends Component {
                                     </Reminder>
 
                                     <CardLink>
-                                        <Tooltip title="Collaborator">
-                                            <img className="img"
-                                                src={require('../assets/img/colaborator.svg')}
-                                                alt="color picker"
-                                            />
-                                        </Tooltip>
+                                           <CollaboratorComponent
+                                           />
+                                       
                                     </CardLink>
 
                                     <ColorPallete
@@ -449,20 +446,18 @@ class GetAllNotes extends Component {
                                             </CardLink>
 
                                             <CardLink >
-                                                <Tooltip title="Collaborator">
-                                                    <img className="img"
-                                                        src={require('../assets/img/colaborator.svg')}
-                                                        alt="color picker" />
-                                                </Tooltip>
+                                                
+                                                <CollaboratorComponent
+                                                />
                                             </CardLink>
-
+                                            <CardLink >
                                             <ColorPallete
                                                 toolsPropsToColorpallete={this.handleColorChanger}
                                                 noteID={key.id}
                                                 id="color-picker"
                                             >
                                             </ColorPallete>
-
+                                            </CardLink>
                                             <CardLink
                                                 onClick={() => this.handleArchive(key.id)}>
                                                 <Tooltip title="Archive">
@@ -511,9 +506,9 @@ class GetAllNotes extends Component {
                 (this.props.isReminder===true) ?
                    <div className="card-grid">
                     <RemindersDisplayComponent
-                    allNotes={this.state.allNotes}
                     listGridView={this.props.listGridView}
                     ReminderComponentToAllNotes ={this.ReminderComponentToAllNotes}
+                    searchNote = {this.props.searchNote}
                 />
                 </div>
                 :
@@ -523,13 +518,25 @@ class GetAllNotes extends Component {
                     (this.props.isTrash===true ) ?
                     <div className="card-grid">
                     <TrashComponent
-                    allNotes={this.state.allNotes}
                     listGridView={this.props.listGridView}
                     ReminderComponentToAllNotes ={this.ReminderComponentToAllNotes}
+                    searchNote = {this.props.searchNote}
                 />
             </div>
             :
             null
+        ||
+
+        (this.props.isArchive  === true) ?
+        <div className="card-grid">
+            <ArchivedComponent
+            listGridView={this.props.listGridView}
+            ReminderComponentToAllNotes ={this.ReminderComponentToAllNotes}
+            searchNote = {this.props.searchNote}
+        />
+        </div>
+        :
+        null
         )
     }
 }

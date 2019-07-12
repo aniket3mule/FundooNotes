@@ -91,7 +91,6 @@ class CreateLabel extends Component {
                                 <span className="fundoo-text-sidebar">Edit Labels</span>
                 </div>
                 <Dialog
-                    // fullScreen={fullScreen}
                     open={this.state.open}
                     onClose={this.handleClose}
                     aria-labelledby="responsive-dialog-title"

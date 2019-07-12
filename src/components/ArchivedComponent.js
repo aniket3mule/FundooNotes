@@ -27,7 +27,7 @@ function searchingFor(search) {
     }
 }
 
-class RemindersDisplayComponent extends Component {
+class ArchivedComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -38,9 +38,9 @@ class RemindersDisplayComponent extends Component {
             allNotes: [],
         }
     }
-    
+
     componentDidMount(){
-        NoteService.getReminderNotesList()
+        NoteService.getArchiveNotesList()
         .then(response => {
             console.log("trash notes ", response);
             this.setState({
@@ -92,6 +92,7 @@ class RemindersDisplayComponent extends Component {
                     })
             }
         } catch {
+
         }
     }
 
@@ -196,10 +197,10 @@ class RemindersDisplayComponent extends Component {
         const listgridview = listgridvalue ? "list-view" : null;
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
 
-        const allReminders = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map(key => {
+        const allArchived = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map(key => {
             // console.log("key data",key)
             return (
-                    (key.reminder.length > 0 && key.isDeleted === false) &&
+                (key.isDeleted === false && key.isArchived === true) &&
                     <div key={key.id} className={listgridview}>
                             <Container className="card-margin" >
                                 <Card className="take-note-user-card-description "
@@ -292,6 +293,7 @@ class RemindersDisplayComponent extends Component {
                                     </CardBody>
                                 </Card>
                             </Container>
+
                         {(this.state.noteId === key.id) &&
                             <div key={key.id} >
                                 <Dialog
@@ -407,11 +409,11 @@ class RemindersDisplayComponent extends Component {
             )
         })
         return (
-            <div className="all-reminders">
-                {allReminders}
+            <div className="all-trash">
+                {allArchived}
             </div>
         )
     }
 }
 
-export default RemindersDisplayComponent
+export default ArchivedComponent;

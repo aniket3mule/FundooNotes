@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import Popover from "@material-ui/core/Popover";
 import { IconButton, Tooltip, Button } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
@@ -12,7 +11,7 @@ const url = "http://34.213.106.173/"
 
 const styles = theme => ({
   typography: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   }
 });
 
@@ -81,7 +80,18 @@ class UploadProfile extends React.Component {
           onClick={this.handleClick}
           className="user-profile-btn"
         >
-          <Tooltip title="Profile">
+          <Tooltip title={
+          <div>
+            <div>
+              <span  style={{fontSize:"14px"}}>BridgeLabz Account</span>
+            </div>
+            <div style={{fontSize:"12px"}}>
+            <label>{localStorage.getItem('firstName')} {localStorage.getItem('lastName')}</label>
+            </div>
+            <div style={{fontSize:"12px"}}>
+             {localStorage.getItem('email')}
+            </div>
+          </div>}>
             <img
               src={this.state.profilePic}
               alt="profile pic"
@@ -104,7 +114,7 @@ class UploadProfile extends React.Component {
             horizontal: "center"
           }}
         >
-          <Typography className={classes.typography} >
+          <div className={classes.typography} >
             <div >
               <div className="user-profile-info">
                 <input
@@ -130,7 +140,7 @@ class UploadProfile extends React.Component {
                 </label>
 
                 <div className="user-information">
-                  <label>{localStorage.getItem('firstName')}</label>
+                  <label>{localStorage.getItem('firstName')} {localStorage.getItem('lastName')}</label>
                   <label>{localStorage.getItem('email')}</label>
                 </div>
               </div>
@@ -144,8 +154,7 @@ class UploadProfile extends React.Component {
                 <Button variant="outlined" onClick={this.handleLogout}><span className="add-account">Sign out</span></Button>
               </div>
             </div>
-          </Typography>
-
+          </div>
         </Popover>
       </div>
     );

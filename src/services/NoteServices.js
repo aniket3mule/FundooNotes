@@ -71,6 +71,41 @@ class NoteServices {
             }
         })
     }
+    deleteForeverNote(note){
+        return axios.post(`${BaseURL}/deleteForeverNotes`, note, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+    }
+
+    getTrashNotes(){
+        return axios
+        .get(`${BaseURL}/getTrashNotesList`, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+        
+    }
+
+    getReminderNotesList(){
+        return axios
+        .get(`${BaseURL}/getReminderNotesList`, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+    }
+
+    getArchiveNotesList(){
+        return axios
+        .get(`${BaseURL}/getArchiveNotesList`, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+    }
 }
 
 export default NoteServices;

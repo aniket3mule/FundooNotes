@@ -59,6 +59,7 @@ class DrawerMenu extends Component {
                     variant="persistent"
                     open={this.props.appBarProps}
                     width={200}
+                   
                 >
                     <MenuItem onClick={this.handleNotes}>
                     <img className="update-card-img"

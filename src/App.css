@@ -244,6 +244,7 @@ input.input:focus {
   width: 80%;
   flex-wrap: wrap;
   justify-content: flex-start;
+  margin-left: 20%;
   
 }
 
@@ -417,6 +418,16 @@ input.input:focus {
 .add-account{
   font-size: 0.7em;
   font-weight: 0px;
+}
+
+.all-reminders{
+  display: flex;
+  flex-wrap: wrap;
+}
+.all-trash { 
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 15%
 }
 
 @media only screen and (max-width: 600px) {

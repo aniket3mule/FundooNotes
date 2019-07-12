@@ -35,12 +35,18 @@ class MoreOptions extends Component {
         this.props.toolsPropsToMoreOptions(this.props.noteID);
     }
 
+    handleRestore = () => {
+        this.props.restoreProps(this.props.noteID, false, this.props.noteTitle, this.props.noteDescription);
+    }
+
     handleAddLabel(){
         this.setState({ addLabel: !this.state.addLabel });
     }
    
     render() {
 
+        console.log("More Options",this.props.isTrashed);
+        
         return (
             <div className="remind-me-icon">
                 <Tooltip title="More">
@@ -70,17 +76,32 @@ class MoreOptions extends Component {
                                     ?
                                     null 
                                     :
+                                    this.props.isTrashed === true ?
+                                    <div className="remind-day" onClick={this.handleDeleteNote}>
+                                        <div>
+                                            Delete Forever
+                                       </div>
+                                    </div>
+                                    :
                                     <div className="remind-day" onClick={this.handleDeleteNote}>
                                         <div>
                                             Delete Note
                                        </div>
                                     </div>
                                    }
+                                   { this.props.isTrashed === true ?
+                                    <div className="remind-day" onClick={this.handleRestore}>
+                                        <div>
+                                            Restore
+                                       </div>
+                                    </div>
+                                    :
                                     <div className="remind-day" onClick={this.handleAddLabel}>
                                         <div>
                                             Add label
                                        </div>
                                     </div>
+                                }
                                 </div>
                                 }
                             </Card>

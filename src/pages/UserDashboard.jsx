@@ -85,12 +85,12 @@ class UserDashboard extends Component {
                     </div>
                     <div className={slide}>
                         <div>
-                            {(!this.state.isTrash) &&
+                            {(!this.state.isTrash && !this.state.isArchive) &&
                             <div>
                                 <CreateNote getNewNote={this.getNewNote} />
                             </div>
                             }
-                            <div className="all-note-div">
+                            <div className="allDemo">
                                 <AllNotes
                                     ref={this.noteToCards}
                                     searchNote={this.state.searchNote}

@@ -18,6 +18,12 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+function searchingFor(search) {
+    return function (x) {
+        return x.title.includes(search) || x.description.includes(search)
+    }
+}
+
 class RemindersDisplayComponent extends Component {
     constructor(props) {
         super(props);
@@ -27,7 +33,21 @@ class RemindersDisplayComponent extends Component {
             description: '',
             modal: false,
             allNotes: [],
+            isTrashed: true,
         }
+    }
+
+
+
+    componentDidMount(){
+        NoteService.getTrashNotes()
+        .then(response => {
+            console.log("trash notes ", response);
+            this.setState({
+                allNotes: response.data.data.data
+            })
+            
+        })
     }
 
     handleToggleOpen = (id, oldTitle, oldDescription) => {
@@ -144,13 +164,13 @@ class RemindersDisplayComponent extends Component {
             })
     }
 
-    handleDeleteNote = (noteId) => {
+    handleDelete = (noteId) => {
         var note = {
             'noteIdList': [noteId],
             'isDeleted': true
         }
 
-        NoteService.trashNote(note)
+        NoteService.deleteForeverNote(note)
             .then(response => {
                 console.log(response);
                 let newArray = this.state.allNotes
@@ -168,6 +188,35 @@ class RemindersDisplayComponent extends Component {
                 console.log("Eroorrrrrr....", err);
             })
     }
+
+    handleRestore = (noteId, isDeleted, title, description) => {
+        var note = {
+            'title': title,
+            'description': description,
+            'noteId': noteId,
+            'noteIdList': [noteId],
+            'isDeleted': isDeleted,
+        }
+
+        NoteService.updateNote(note)
+            .then(response => {
+                console.log(response);
+                let newArray = this.state.allNotes
+                console.log("new array", newArray);
+                NoteService.getAllNotes()
+                .then(allNotes => {
+                    this.setState({ allNotes: allNotes.data.data.data })
+                    this.props.ReminderComponentToAllNotes(allNotes.data.data.data)
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            })
+            .catch(err => {
+                console.log("Eroorrrrrr....", err);
+            })
+    }
+
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
@@ -176,11 +225,8 @@ class RemindersDisplayComponent extends Component {
         var listgridvalue = this.props.listGridView;
         const listgridview = listgridvalue ? "list-view" : null;
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
-
-        const allReminders = this.props.allNotes.map(key => {
-            // console.log("key data",key)
+        const allTrash = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map(key => {
             return (
-                (key.isDeleted === true) &&
                     <div key={key.id} className={listgridview}>
                         <div>
                             <Container className="card-margin" >
@@ -226,9 +272,12 @@ class RemindersDisplayComponent extends Component {
                                         <div className={modalbottom}>
                                             
                                             <MoreOptions
-                                                toolsPropsToMoreOptions={this.handleDeleteNote}
+                                                toolsPropsToMoreOptions={this.handleDelete}
+                                                restoreProps={this.handleRestore}
                                                 noteID={key.id}
-                                                id="color-picker">
+                                                id="color-picker"
+                                                isTrashed={true}
+                                                >
                                             </MoreOptions>
                                         </div>
                                     </CardBody>
@@ -291,12 +340,15 @@ class RemindersDisplayComponent extends Component {
                                             >
                                                 
                                                 <MoreOptions
-                                                    // toolsPropsToColorpallete={this.handleMoreOptions}
+                                                    toolsPropsToMoreOptions={this.handleDelete}
+                                                    restoreProps={this.handleRestore}
                                                     noteID={key.id}
-                                                    id="color-picker">
-
+                                                    noteTitle={key.title}
+                                                    noteDescription= {key.description}
+                                                    id="color-picker"
+                                                    isTrashed={this.state.isTrashed}
+                                                    >
                                                 </MoreOptions>
-                                                
                                             </div>
                                         </CardBody>
                                     </Card>
@@ -306,8 +358,8 @@ class RemindersDisplayComponent extends Component {
             )
         })
         return (
-            <div>
-                {allReminders}
+            <div className="all-trash">
+                {allTrash}
             </div>
         )
     }
