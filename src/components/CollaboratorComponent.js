@@ -55,9 +55,11 @@ class CollaboratorComponent extends Component {
                     aria-labelledby="responsive-dialog-title"
                 >
                     <div style={{minHeight:"300px", minWidth:"550px"}}>
+                    <div>
                     <DialogTitle id="responsive-dialog-title">
                         Collaborator
                     </DialogTitle>
+                    </div>
                     <DialogContent
                     style={{minHeight:"200px", minWidth:"250px"}}
                     >
@@ -68,6 +70,8 @@ class CollaboratorComponent extends Component {
                         <span>Close</span>
                     </DialogActions>
                     </div>
+
+                    hello
                 </Dialog>
             </div>
         )

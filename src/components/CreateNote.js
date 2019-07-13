@@ -127,8 +127,6 @@ class CreateNote extends Component {
         })
     }
     render() {
-        // const { description, title } = this.state;
-
         return (!this.state.open ?
             <div className="take-note-div">
                 <Card className="take-note-card " >
@@ -164,7 +162,7 @@ class CreateNote extends Component {
                                 style={{ backgroundColor: this.state.color }}
                             />
                         </CardTitle>
-                        <CardText>
+                        <div>
                             <textarea
                                 className="take-note-input note-description"
                                 placeholder="Take a note"
@@ -201,7 +199,7 @@ class CreateNote extends Component {
                                 </div>
                             }
                             </div>
-                        </CardText>
+                        </div>
                     </CardBody>
                     <CardBody className="create-card-bottom">
 

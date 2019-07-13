@@ -49,6 +49,16 @@ class RemindersDisplayComponent extends Component {
             
         })
     }
+    getUpdatedNotes(){
+        NoteService.getReminderNotesList()
+        .then(response => {
+            console.log("trash notes ", response);
+            this.setState({
+                allNotes: response.data.data.data
+            })
+            
+        })
+    }
 
     handleToggleOpen = (id, oldTitle, oldDescription) => {
         this.setState(prevState => ({
@@ -79,13 +89,7 @@ class RemindersDisplayComponent extends Component {
                 NoteService.updateNote(data)
                     .then(response => {
                         console.log("uddate note function", response);
-                        NoteService.getAllNotes()
-                        .then(allNotes => {
-                            this.setState({ allNotes: allNotes.data.data.data })
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        })
+                        this.getUpdatedNotes();
                     })
                     .catch(err => {
                         console.log("Eroorrrrrr....", err);
@@ -126,14 +130,7 @@ class RemindersDisplayComponent extends Component {
         NoteService.updateReminderNotes(note)
             .then(response => {
                 console.log("update reminder >>>", response);
-                NoteService.getAllNotes()
-                    .then(allNotes => {
-                        this.setState({ allNotes: allNotes.data.data.data })
-                        this.props.ReminderComponentToAllNotes(allNotes.data.data.data)
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
+                this.getUpdatedNotes();
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -149,14 +146,7 @@ class RemindersDisplayComponent extends Component {
 
         NoteService.changesColorNotes(note)
             .then(() => {
-                NoteService.getAllNotes()
-                .then(allNotes => {
-                    this.setState({ allNotes: allNotes.data.data.data })
-                    this.props.ReminderComponentToAllNotes(allNotes.data.data.data)
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+                this.getUpdatedNotes();
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -174,14 +164,7 @@ class RemindersDisplayComponent extends Component {
                 console.log(response);
                 let newArray = this.state.allNotes
                 console.log("new array", newArray);
-                NoteService.getAllNotes()
-                .then(allNotes => {
-                    this.setState({ allNotes: allNotes.data.data.data })
-                    this.props.ReminderComponentToAllNotes(allNotes.data.data.data)
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+                this.getUpdatedNotes();
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -266,7 +249,7 @@ class RemindersDisplayComponent extends Component {
                                             </ColorPallete>
 
                                             <CardLink
-                                                onClick={() => this.handleArchive(key.id)}
+                                                onClick={() => this.props.handleArchive(key.id, true)}
                                             >
                                                 <Tooltip title="Archive">
                                                     <img className="img"
@@ -370,7 +353,7 @@ class RemindersDisplayComponent extends Component {
                                                 </ColorPallete>
 
                                                 <CardLink
-                                                    onClick={() => this.handleArchive(key.id)}>
+                                                    onClick={() => this.props.handleArchive(key.id, true)}>
                                                     <Tooltip title="Archive">
                                                         <img className="img"
                                                             src={require('../assets/img/archived.svg')}

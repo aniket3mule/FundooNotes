@@ -72,7 +72,7 @@
   flex-wrap: unset;
   background-color: white;
   border-radius: 5px;
-  margin: 1% 2% 1% 6%;
+  /* margin: 1% 2% 1% 6%; */
 }
 
 input.input:focus {
@@ -467,6 +467,16 @@ input.input:focus {
 
   .list-view-div{
     visibility: hidden;
+  }
+
+  .card-grid {
+
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-left: 1%;
+    
   }
   
 }

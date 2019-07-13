@@ -82,8 +82,6 @@ class DrawerMenu extends Component {
                         <div>
                             <GetAllLabels
                             sidebarLabel = {true}
-                            // GetAllLabelToDrawerMenu = {this.GetAllLabelToDrawerMenu}
-                            // ref= {this.labelToCards}
                             />
                             <MenuItem
                             onClick={this.handleLabelOpen}

@@ -54,11 +54,10 @@ class GetAllNotes extends Component {
 
         this.handleToggleOpen = this.handleToggleOpen.bind(this);
         this.displayCard = this.displayCard.bind(this)
-        // this.handleModal = this.handleModal.bind(this)
+        this.getUpdateNotes = this.getUpdateNotes.bind(this)
     }
 
-    componentDidMount() {
-        //Print All notes
+    getUpdateNotes () {
         NoteService.getAllNotes()
             .then(allNotes => {
                 this.setState({ allNotes: allNotes.data.data.data })
@@ -68,6 +67,12 @@ class GetAllNotes extends Component {
                 console.log(err);
             })
     }
+
+    componentDidMount(){
+        //Print All notes
+        this.getUpdateNotes();
+    }
+
 
     handleToggle = (e) => {
         this.setState({ open: !this.state.open });
@@ -108,13 +113,7 @@ class GetAllNotes extends Component {
                 NoteService.updateNote(data)
                     .then(response => {
                         console.log("uddate note function", response);
-                        NoteService.getAllNotes()
-                        .then(allNotes => {
-                            this.setState({ allNotes: allNotes.data.data.data })
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        })
+                       this.getUpdateNotes();
                     })
                     .catch(err => {
                         console.log("Eroorrrrrr....", err);
@@ -125,34 +124,26 @@ class GetAllNotes extends Component {
         }
     }
 
-    handleArchive = (noteId) => {
+    handleArchive = (noteId, isArchive) => {
         console.log(noteId);
-        this.setState({ isArchived: true });
+        this.setState({ isArchived: isArchive });
         console.log(this.state.isArchived);
-
-        if (this.state.isArchived === true) {
-            var note = {
+            
+        
+        var note = {
                 'noteIdList': [noteId],
-                'isArchived': this.state.isArchived,
+                'isArchived': this.state.isArchived
             }
 
             //Update service
             NoteService.archiveNote(note)
                 .then(response => {
                     console.log(response);
-                    NoteService.getAllNotes()
-                    .then(allNotes => {
-                        this.setState({ allNotes: allNotes.data.data.data })
-                        // console.log("this data", this.state.allNotes);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
+                    this.getUpdateNotes()
                 })
                 .catch(err => {
                     console.log("Eroorrrrrr....", err);
                 })
-        }
     }
 
     handleColorChanger = (value, noteId) => {
@@ -165,14 +156,7 @@ class GetAllNotes extends Component {
 
         NoteService.changesColorNotes(note)
             .then(response => {
-                NoteService.getAllNotes()
-                    .then(allNotes => {
-                        this.setState({ allNotes: allNotes.data.data.data })
-                        // console.log("this data", this.state.allNotes);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
+                this.getUpdateNotes();
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -190,15 +174,7 @@ class GetAllNotes extends Component {
         NoteService.updateReminderNotes(note)
             .then(response => {
                 console.log("update reminder >>>", response);
-                NoteService.getAllNotes()
-                    .then(allNotes => {
-                        this.setState({ allNotes: allNotes.data.data.data })
-                        // console.log("this data", this.state.allNotes);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-
+                this.getUpdateNotes();
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -215,6 +191,7 @@ class GetAllNotes extends Component {
         NoteService.removeReminderNotes(note)
             .then(response => {
                 console.log("update reminder >>>", response);
+                this.getUpdateNotes();
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -245,14 +222,7 @@ class GetAllNotes extends Component {
                 console.log(response);
                 let newArray = this.state.allNotes
                 console.log("new array", newArray);
-                NoteService.getAllNotes()
-                    .then(allNotes => {
-                        this.setState({ allNotes: allNotes.data.data.data })
-                        // console.log("this data", this.state.allNotes);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
+                this.getUpdateNotes();
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -355,7 +325,7 @@ class GetAllNotes extends Component {
                                     </ColorPallete>
 
                                     <CardLink
-                                        onClick={() => this.handleArchive(key.id)}
+                                        onClick={() => this.handleArchive(key.id, true)}
                                     >
                                         <Tooltip title="Archive">
                                             <img className="img"
@@ -459,7 +429,7 @@ class GetAllNotes extends Component {
                                             </ColorPallete>
                                             </CardLink>
                                             <CardLink
-                                                onClick={() => this.handleArchive(key.id)}>
+                                                onClick={() => this.handleArchive(key.id, true)}>
                                                 <Tooltip title="Archive">
                                                     <img className="img"
                                                         src={require('../assets/img/archived.svg')}
@@ -509,6 +479,8 @@ class GetAllNotes extends Component {
                     listGridView={this.props.listGridView}
                     ReminderComponentToAllNotes ={this.ReminderComponentToAllNotes}
                     searchNote = {this.props.searchNote}
+                    handleArchive = {this.handleArchive}
+
                 />
                 </div>
                 :
@@ -533,6 +505,8 @@ class GetAllNotes extends Component {
             listGridView={this.props.listGridView}
             ReminderComponentToAllNotes ={this.ReminderComponentToAllNotes}
             searchNote = {this.props.searchNote}
+            handleArchive = { this.handleArchive}
+            handleDeleteNote = {this.handleDeleteNote}
         />
         </div>
         :

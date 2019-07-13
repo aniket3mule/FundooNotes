@@ -41,6 +41,10 @@ class DashboardComponent extends Component {
             listgrid: false,
             searchNote: '',
             allLabels:[],
+            isReminder: false, 
+            isTrash: false, 
+            isArchive: false, 
+            isNotes: true,
         }
     }
 
@@ -60,6 +64,12 @@ class DashboardComponent extends Component {
     }
 
     DrawerMenuToDashboard = (isReminder, isTrash, isArchive, isNotes) =>{
+        this.setState({
+            isReminder : isReminder,
+            isTrash: isTrash,
+            isArchive: isArchive, 
+            isNotes: isNotes
+        })
         this.props.DashboardToPage(isReminder, isTrash, isArchive, isNotes);
     }
 
@@ -77,14 +87,37 @@ class DashboardComponent extends Component {
                                 <MenuIcon id="menu" />
                             </IconButton>
                             </Tooltip>
+                           
+                            <div style={{width:"10%"}}>
+                                {this.state.isNotes=== true ? 
                             <div className="note-text-img">
                                 <img className="fundoo-note-img"
                                     src={require('../assets/img/keep_48dp.png')}
                                     alt="keep icon"
                                 />
-                                </div>
-                            <div>
-                            <span className="fundoo-text">FundooNotes</span>
+                            <div style={{margin:"5%"}}>
+                                <span className="fundoo-text">Fundoo</span>
+                            </div>
+                        </div>
+                                    
+                                    :
+                                    null
+                                    ||
+                                    this.state.isReminder === true ?
+                                    <span className="fundoo-text">Reminders</span>
+                                    :
+                                    null
+                                    ||
+                                    this.state.isArchive === true ?
+                                    <span className="fundoo-text">Archive</span>
+                                    :
+                                    null
+                                    ||
+                                    this.state.isTrash === true ? 
+                                    <span className="fundoo-text">Trash</span>
+                                    :
+                                    null
+                                }
                             </div>
                             <div className="view-search-input">
                             <div className="input-group input-search">

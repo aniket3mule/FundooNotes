@@ -39,15 +39,23 @@ class ArchivedComponent extends Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         NoteService.getArchiveNotesList()
-        .then(response => {
-            console.log("trash notes ", response);
-            this.setState({
-                allNotes: response.data.data.data
+            .then(response => {
+                this.setState({
+                    allNotes: response.data.data.data
+                })
+
             })
-            
-        })
+    }
+    getUpdatedNotes() {
+        NoteService.getArchiveNotesList()
+            .then(response => {
+                this.setState({
+                    allNotes: response.data.data.data
+                })
+
+            })
     }
 
     handleToggleOpen = (id, oldTitle, oldDescription) => {
@@ -78,14 +86,7 @@ class ArchivedComponent extends Component {
 
                 NoteService.updateNote(data)
                     .then(response => {
-                        console.log("uddate note function", response);
-                        NoteService.getAllNotes()
-                        .then(allNotes => {
-                            this.setState({ allNotes: allNotes.data.data.data })
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        })
+                        this.getUpdatedNotes();
                     })
                     .catch(err => {
                         console.log("Eroorrrrrr....", err);
@@ -111,6 +112,7 @@ class ArchivedComponent extends Component {
         NoteService.removeReminderNotes(note)
             .then(response => {
                 console.log("update reminder >>>", response);
+                this.getUpdatedNotes();
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -127,14 +129,8 @@ class ArchivedComponent extends Component {
         NoteService.updateReminderNotes(note)
             .then(response => {
                 console.log("update reminder >>>", response);
-                NoteService.getAllNotes()
-                    .then(allNotes => {
-                        this.setState({ allNotes: allNotes.data.data.data })
-                        this.props.ReminderComponentToAllNotes(allNotes.data.data.data)
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
+                this.getUpdatedNotes();
+                this.props.ReminderComponentToAllNotes(this.state.allNotes);
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -150,14 +146,8 @@ class ArchivedComponent extends Component {
 
         NoteService.changesColorNotes(note)
             .then(() => {
-                NoteService.getAllNotes()
-                .then(allNotes => {
-                    this.setState({ allNotes: allNotes.data.data.data })
-                    this.props.ReminderComponentToAllNotes(allNotes.data.data.data)
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+                this.getUpdatedNotes();
+                this.props.ReminderComponentToAllNotes(this.state.allNotes)
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -165,32 +155,18 @@ class ArchivedComponent extends Component {
     }
 
     handleDeleteNote = (noteId) => {
-        var note = {
-            'noteIdList': [noteId],
-            'isDeleted': true
-        }
+        this.props.handleDeleteNote(noteId);
+        this.getUpdatedNotes();
+    }
 
-        NoteService.trashNote(note)
-            .then(response => {
-                console.log(response);
-                let newArray = this.state.allNotes
-                console.log("new array", newArray);
-                NoteService.getAllNotes()
-                .then(allNotes => {
-                    this.setState({ allNotes: allNotes.data.data.data })
-                    this.props.ReminderComponentToAllNotes(allNotes.data.data.data)
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-            })
-            .catch(err => {
-                console.log("Eroorrrrrr....", err);
-            })
+    handleArchive = (noteId, unarchived) =>{
+        this.props.handleArchive(noteId,unarchived);
+        this.getUpdatedNotes();
     }
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
+
 
     render() {
         var listgridvalue = this.props.listGridView;
@@ -201,31 +177,133 @@ class ArchivedComponent extends Component {
             // console.log("key data",key)
             return (
                 (key.isDeleted === false && key.isArchived === true) &&
-                    <div key={key.id} className={listgridview}>
-                            <Container className="card-margin" >
+                <div key={key.id} className={listgridview}>
+                    <Container className="card-margin" >
+                        <Card className="take-note-user-card-description "
+                            onChange={() => this.handleColorChanger(key.color, key.id)}
+                            style={{ backgroundColor: key.color }}>
+                            <CardBody className="user-card-body-desc">
+                                <CardTitle>
+                                    <input
+                                        type="text"
+                                        className="take-note-input"
+                                        placeholder="Title"
+                                        value={key.title}
+                                        onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
+                                        readOnly
+                                        style={{ backgroundColor: key.color }}
+                                    />
+                                </CardTitle>
+                                <textarea
+                                    className="take-note-input note-description"
+                                    rows="5"
+                                    placeholder="Take a note"
+                                    value={key.description}
+                                    onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
+                                    readOnly
+                                    style={{ backgroundColor: key.color }}
+                                />
+
+                                {(key.reminder.length > 0) &&
+                                    <div>
+                                        <Chip
+                                            // avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
+                                            label={key.reminder.toString().substring(0, 24)}
+                                            onDelete={() => this.handleDeleteChip(key.id)}
+                                            className={useStyles.chip}
+                                            variant="outlined"
+                                            size="small"
+                                        />
+                                    </div>
+                                }
+                            </CardBody>
+                            <CardBody >
+                                <div className={modalbottom}>
+                                    <Reminder
+                                        toolsPropsToReminder={this.handleReminder}
+                                        noteID={key.id}
+                                        id="color-picker"
+                                    >
+                                    </Reminder>
+
+                                    <CardLink>
+                                        <Tooltip title="Collaborator">
+                                            <img className="img"
+                                                src={require('../assets/img/colaborator.svg')}
+                                                alt="color picker"
+                                            />
+                                        </Tooltip>
+                                    </CardLink>
+
+                                    <ColorPallete
+                                        toolsPropsToColorpallete={this.handleColorChanger}
+                                        noteID={key.id}
+                                        id="color-picker"
+                                    >
+                                    </ColorPallete>
+
+                                    <CardLink
+                                        onClick={() => this.handleArchive(key.id, false)}
+                                    >
+                                        <Tooltip title="Unarchive">
+                                            <img className="img"
+                                                src={require('../assets/img/unarchive.svg')}
+                                                alt="color picker"
+                                            />
+                                        </Tooltip>
+                                    </CardLink>
+                                    <CardLink className="add-image">
+                                        <Tooltip title="add image">
+                                            <img className="img"
+                                                src={require('../assets/img/add_image.svg')}
+                                                alt="color picker"
+                                            />
+                                        </Tooltip>
+                                    </CardLink>
+                                    <MoreOptions
+                                        toolsPropsToMoreOptions={this.handleDeleteNote}
+                                        noteID={key.id}
+                                        id="color-picker">
+                                    </MoreOptions>
+                                </div>
+                            </CardBody>
+                        </Card>
+                    </Container>
+
+                    {(this.state.noteId === key.id) &&
+                        <div key={key.id} >
+                            <Dialog
+                                key={key.id}
+                                open={this.state.modal}
+                                onClose={this.handleClose}
+                                aria-labelledby="responsive-dialog-title"
+                                className="dialog-bottom-icons"
+                            >
+
                                 <Card className="take-note-user-card-description "
                                     onChange={() => this.handleColorChanger(key.color, key.id)}
                                     style={{ backgroundColor: key.color }}>
                                     <CardBody className="user-card-body-desc">
                                         <CardTitle>
-                                            <input
+                                            <textarea
+                                                style={{ backgroundColor: key.color }}
                                                 type="text"
                                                 className="take-note-input"
                                                 placeholder="Title"
-                                                value={key.title}
-                                                onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
-                                                readOnly
-                                                style={{ backgroundColor: key.color }}
+                                                name="title"
+                                                value={this.state.title}
+                                                onChange={this.handleChange}
+                                                rows="2"
                                             />
                                         </CardTitle>
                                         <textarea
+                                            style={{ backgroundColor: key.color }}
                                             className="take-note-input note-description"
                                             rows="5"
                                             placeholder="Take a note"
-                                            value={key.description}
-                                            onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
-                                            readOnly
-                                            style={{ backgroundColor: key.color }}
+                                            name="description"
+                                            value={this.state.description}
+                                            onChange={this.handleChange}
                                         />
 
                                         {(key.reminder.length > 0) &&
@@ -242,20 +320,23 @@ class ArchivedComponent extends Component {
                                         }
                                     </CardBody>
                                     <CardBody >
-                                        <div className={modalbottom}>
-                                            <Reminder
-                                                toolsPropsToReminder={this.handleReminder}
-                                                noteID={key.id}
-                                                id="color-picker"
-                                            >
-                                            </Reminder>
+                                        <div
+                                            className="modal-footer-note"
+                                        >
+                                            <CardLink onClick={this.handleReminder}>
+                                                <Reminder
+                                                    toolsPropsToReminder={this.handleReminder}
+                                                    noteID={key.id}
+                                                    id="color-picker"
+                                                >
+                                                </Reminder>
+                                            </CardLink>
 
-                                            <CardLink>
+                                            <CardLink >
                                                 <Tooltip title="Collaborator">
                                                     <img className="img"
                                                         src={require('../assets/img/colaborator.svg')}
-                                                        alt="color picker"
-                                                    />
+                                                        alt="color picker" />
                                                 </Tooltip>
                                             </CardLink>
 
@@ -267,16 +348,15 @@ class ArchivedComponent extends Component {
                                             </ColorPallete>
 
                                             <CardLink
-                                                onClick={() => this.handleArchive(key.id)}
+                                                onClick={() => this.props.handleArchive(key.id, false)}
                                             >
-                                                <Tooltip title="Archive">
+                                                <Tooltip title="Unarchive">
                                                     <img className="img"
-                                                        src={require('../assets/img/archived.svg')}
-                                                        alt="color picker"
-                                                    />
+                                                        src={require('../assets/img/unarchive.svg')}
+                                                        alt="color picker" />
                                                 </Tooltip>
                                             </CardLink>
-                                            <CardLink className="add-image">
+                                            <CardLink>
                                                 <Tooltip title="add image">
                                                     <img className="img"
                                                         src={require('../assets/img/add_image.svg')}
@@ -285,127 +365,24 @@ class ArchivedComponent extends Component {
                                                 </Tooltip>
                                             </CardLink>
                                             <MoreOptions
-                                                toolsPropsToMoreOptions={this.handleDeleteNote}
+                                                // toolsPropsToColorpallete={this.handleMoreOptions}
                                                 noteID={key.id}
                                                 id="color-picker">
+
                                             </MoreOptions>
+                                            <CardLink ></CardLink>
+                                            <CardLink
+                                                className="close-btn"
+                                                onClick={this.handleToggleOpen}
+                                            >
+                                                <Label>Close</Label>
+                                            </CardLink>
                                         </div>
                                     </CardBody>
                                 </Card>
-                            </Container>
-
-                        {(this.state.noteId === key.id) &&
-                            <div key={key.id} >
-                                <Dialog
-                                    key={key.id}
-                                    open={this.state.modal}
-                                    onClose={this.handleClose}
-                                    aria-labelledby="responsive-dialog-title"
-                                    className="dialog-bottom-icons"
-                                >
-
-                                    <Card className="take-note-user-card-description "
-                                        onChange={() => this.handleColorChanger(key.color, key.id)}
-                                        style={{ backgroundColor: key.color }}>
-                                        <CardBody className="user-card-body-desc">
-                                            <CardTitle>
-                                                <textarea
-                                                    style={{ backgroundColor: key.color }}
-                                                    type="text"
-                                                    className="take-note-input"
-                                                    placeholder="Title"
-                                                    name="title"
-                                                    value={this.state.title}
-                                                    onChange={this.handleChange}
-                                                    rows="2"
-                                                />
-                                            </CardTitle>
-                                            <textarea
-                                                style={{ backgroundColor: key.color }}
-                                                className="take-note-input note-description"
-                                                rows="5"
-                                                placeholder="Take a note"
-                                                name="description"
-                                                value={this.state.description}
-                                                onChange={this.handleChange}
-                                            />
-
-                                            {(key.reminder.length > 0) &&
-                                                <div>
-                                                    <Chip
-                                                        // avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
-                                                        label={key.reminder.toString().substring(0, 24)}
-                                                        onDelete={() => this.handleDeleteChip(key.id)}
-                                                        className={useStyles.chip}
-                                                        variant="outlined"
-                                                        size="small"
-                                                    />
-                                                </div>
-                                            }
-                                        </CardBody>
-                                        <CardBody >
-                                            <div
-                                                className="modal-footer-note"
-                                            >
-                                                <CardLink onClick={this.handleReminder}>
-                                                    <Reminder
-                                                        toolsPropsToReminder={this.handleReminder}
-                                                        noteID={key.id}
-                                                        id="color-picker"
-                                                    >
-                                                    </Reminder>
-                                                </CardLink>
-
-                                                <CardLink >
-                                                    <Tooltip title="Collaborator">
-                                                        <img className="img"
-                                                            src={require('../assets/img/colaborator.svg')}
-                                                            alt="color picker" />
-                                                    </Tooltip>
-                                                </CardLink>
-
-                                                <ColorPallete
-                                                    toolsPropsToColorpallete={this.handleColorChanger}
-                                                    noteID={key.id}
-                                                    id="color-picker"
-                                                >
-                                                </ColorPallete>
-
-                                                <CardLink
-                                                    onClick={() => this.handleArchive(key.id)}>
-                                                    <Tooltip title="Archive">
-                                                        <img className="img"
-                                                            src={require('../assets/img/archived.svg')}
-                                                            alt="color picker" />
-                                                    </Tooltip>
-                                                </CardLink>
-                                                <CardLink>
-                                                    <Tooltip title="add image">
-                                                        <img className="img"
-                                                            src={require('../assets/img/add_image.svg')}
-                                                            alt="color picker"
-                                                        />
-                                                    </Tooltip>
-                                                </CardLink>
-                                                <MoreOptions
-                                                    // toolsPropsToColorpallete={this.handleMoreOptions}
-                                                    noteID={key.id}
-                                                    id="color-picker">
-
-                                                </MoreOptions>
-                                                <CardLink ></CardLink>
-                                                <CardLink
-                                                    className="close-btn"
-                                                    onClick={this.handleToggleOpen}
-                                                >
-                                                    <Label>Close</Label>
-                                                </CardLink>
-                                            </div>
-                                        </CardBody>
-                                    </Card>
-                                </Dialog>
-                            </div>}
-                    </div>
+                            </Dialog>
+                        </div>}
+                </div>
             )
         })
         return (

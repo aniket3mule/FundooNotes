@@ -36,7 +36,7 @@ class MoreOptions extends Component {
     }
 
     handleRestore = () => {
-        this.props.restoreProps(this.props.noteID, false, this.props.noteTitle, this.props.noteDescription);
+        this.props.moreOptionsToTrashNotes(this.props.noteID);
     }
 
     handleAddLabel(){
@@ -44,9 +44,6 @@ class MoreOptions extends Component {
     }
    
     render() {
-
-        console.log("More Options",this.props.isTrashed);
-        
         return (
             <div className="remind-me-icon">
                 <Tooltip title="More">
