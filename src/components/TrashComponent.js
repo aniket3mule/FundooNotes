@@ -122,42 +122,6 @@ class RemindersDisplayComponent extends Component {
             })
     }
 
-    handleReminder = (reminderdate, noteId) => {
-        console.log(reminderdate);
-        this.setState({ reminder: reminderdate })
-        var note = {
-            'noteIdList': [noteId],
-            'reminder': reminderdate,
-        }
-        NoteService.updateReminderNotes(note)
-            .then(response => {
-                console.log("update reminder >>>", response);
-                this.getUpdateNotes();
-                this.props.ReminderComponentToAllNotes(this.state.allNotes)
-            })
-            .catch(err => {
-                console.log("Eroorrrrrr....", err);
-            })
-    }
-
-    handleColorChanger = (value, noteId) => {
-        this.setState({ color: value })
-        var note = {
-            'noteIdList': [noteId],
-            'color': value,
-        }
-
-        NoteService.changesColorNotes(note)
-            .then(() => {
-                this.getUpdateNotes();
-                this.props.ReminderComponentToAllNotes(this.state.allNotes)
-
-            })
-            .catch(err => {
-                console.log("Eroorrrrrr....", err);
-            })
-    }
-
     handleDelete = (noteId) => {
         var note = {
             'noteIdList': [noteId],
@@ -166,11 +130,7 @@ class RemindersDisplayComponent extends Component {
 
         NoteService.deleteForeverNote(note)
             .then(response => {
-                console.log(response);
-                let newArray = this.state.allNotes
-                console.log("new array", newArray);
                 this.getUpdateNotes();
-                this.props.ReminderComponentToAllNotes(this.state.allNotes)
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -194,8 +154,6 @@ class RemindersDisplayComponent extends Component {
                     })
                     this.props.ReminderComponentToAllNotes(this.state.allNotes)
                 })
-                
-                
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -212,7 +170,7 @@ class RemindersDisplayComponent extends Component {
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
         const allTrash = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map(key => {
             return (
-                (key.isDeleted=== true)&&
+                (key.isDeleted === true)&&
                     <div key={key.id} className={listgridview}>
                         <div>
                             <Container className="card-margin" >

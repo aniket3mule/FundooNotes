@@ -7,15 +7,15 @@ require('dotenv').config();
 // const login = process.env.LOGIN;
 // const register = process.env.REGISTER;
 
-const BaseURL = "http://34.213.106.173/api";
+const BaseURL = "http://34.213.106.173/api/user";
 class Services {
     loginService (data){
         
-        return axios.post(`http://34.213.106.173/api/user/login`, data)
+        return axios.post(`${BaseURL}/login`, data)
     }
 
     userRegister(data){
-        axios.post("http://34.213.106.173/api/user/userSignUp",data)
+        axios.post(`${BaseURL}/userSignUp`,data)
         .then(response => {
             console.log(response);
             toast.success("Registration successfull.... Please click login", {
@@ -63,7 +63,15 @@ class Services {
     }
 
     uploadProfileImage(data){
-        return axios.post(`${BaseURL}/user/uploadProfileImage`, data, {
+        return axios.post(`${BaseURL}/uploadProfileImage`, data, {
+            headers:{
+                'Authorization' : localStorage.getItem('token')
+            }
+        })
+    }
+
+    getAllUsers(){
+        return axios.get(`${BaseURL}`, {
             headers:{
                 'Authorization' : localStorage.getItem('token')
             }
