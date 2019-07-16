@@ -22,7 +22,6 @@ class NoteServices {
                 'Authorization' : token
             }
         })
-        
     }
 
     updateNote(data){
@@ -32,6 +31,7 @@ class NoteServices {
             }
         })
     }
+
     archiveNote(note){
         return axios.post(`${BaseURL}/archiveNotes`, note, {
             headers:{
@@ -71,6 +71,7 @@ class NoteServices {
             }
         })
     }
+
     deleteForeverNote(note){
         return axios.post(`${BaseURL}/deleteForeverNotes`, note, {
             headers:{
@@ -101,6 +102,15 @@ class NoteServices {
     getArchiveNotesList(){
         return axios
         .get(`${BaseURL}/getArchiveNotesList`, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+    }
+
+    addcollaboratorsNotes(data, noteId){
+        return axios
+        .post(`${BaseURL}/${noteId}/AddcollaboratorsNotes`, data,{
             headers:{
                 'Authorization' : token
             }

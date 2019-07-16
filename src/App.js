@@ -21,7 +21,6 @@ class App extends React.Component {
           <Route path="/forgetpassword" component = {ForgetPassword}/>
           <Route path="/resetpassword" component = {ResetPassword}/>
           <Route path="/dashboard" component = {UserDashboard}/>
-          <Route path="/allnotes" component = {GetAllNotes}/>
         </Router>
     )
   }

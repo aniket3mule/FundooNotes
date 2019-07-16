@@ -25,10 +25,10 @@ class SignUp extends Component {
         this.setState({ [e.target.name]: e.target.value })
     });
 
-    handleOptionChange = (e =>{
-        this.setState({[e.target.name] : e.target.value});
+    handleOptionChange = (e => {
+        this.setState({ [e.target.name]: e.target.value });
         console.log(this.state.selectedOption);
-        
+
     })
 
 
@@ -37,7 +37,7 @@ class SignUp extends Component {
         this.props.history.push("/signin")
     });
 
-    
+
     submitHandler = (e => {
         e.preventDefault();
         if (!this.state.firstName) {
@@ -75,10 +75,10 @@ class SignUp extends Component {
             var data = {
                 'firstName': this.state.firstName,
                 'lastName': this.state.lastName,
-                'service' : this.state.selectedOption,
+                'service': this.state.selectedOption,
                 'email': this.state.email,
                 'password': this.state.password
-                
+
             }
             userRegister(data);
         }
@@ -125,30 +125,30 @@ class SignUp extends Component {
                             value={email}
                             onChange={this.changeHandler} />
 
-<FormGroup tag="fieldset">
+                        <FormGroup tag="fieldset">
                             <Label><i className="fa fa-user-o fa-fw fa-lg" /><strong>Service</strong> </Label>
                             <FormGroup check>
                                 <Label check>
-                                    <Input type="radio" 
-                                    name="selectedOption"
-                                    value = "Advance"
-                                    checked={this.state.selectedOption === "Advance"} 
-                                    onChange={this.handleOptionChange}
+                                    <Input type="radio"
+                                        name="selectedOption"
+                                        value="Advance"
+                                        checked={this.state.selectedOption === "Advance"}
+                                        onChange={this.handleOptionChange}
                                     />
                                     Advance
                                 </Label>
                             </FormGroup>
                             <FormGroup check>
                                 <Label check>
-                                    <Input type="radio" 
-                                    name="selectedOption" 
-                                    value = "Basic"
-                                    checked={this.state.selectedOption === "Basic"} 
-                                    onChange={this.handleOptionChange}
+                                    <Input type="radio"
+                                        name="selectedOption"
+                                        value="Basic"
+                                        checked={this.state.selectedOption === "Basic"}
+                                        onChange={this.handleOptionChange}
                                     />
                                     Basic
                                 </Label>
-                            </FormGroup>    
+                            </FormGroup>
                         </FormGroup>
 
                         <Label><i className="fa fa-key fa-fw fa-lg" /><strong>Password</strong> </Label>
@@ -166,7 +166,7 @@ class SignUp extends Component {
                             placeholder='Confirm Password'
                             value={confirmPassword}
                             onChange={this.changeHandler} />
-                        
+
                         <center>
                             <Button
                                 outline

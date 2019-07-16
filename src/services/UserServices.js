@@ -77,6 +77,14 @@ class Services {
             }
         })
     }
+
+    searchUserList(data){
+        return axios.post(`${BaseURL}/searchUserList`, data, {
+            headers:{
+                'Authorization' : localStorage.getItem('token')
+            }
+        })
+    }
 }
 
 export default Services;
