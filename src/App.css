@@ -545,4 +545,14 @@ input.input:focus {
 
   }
 
+  .default-view {
+    width: 100%;
+    height: auto;
+  }
+
+  .afterslide {
+    margin-left: 0%;
+    transition: margin-left 0.25s;
+  }
+
 }

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Button, List, ListItem, ListItemText, Paper } from '@material-ui/core';
+import { Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Button, List, ListItem, ListItemText, Paper, Avatar } from '@material-ui/core';
 import UserService from '../services/UserServices'
 import NoteService from '../services/NoteServices'
 import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
+import Close from '@material-ui/icons/Close'
 
 const UserServices = new UserService();
 const NoteServices = new NoteService();
@@ -11,6 +12,7 @@ const thm = createMuiTheme({
         MuiDialog: {
             paperWidthSm: {
                 overflow: "Hidden",
+                width: "100%"
             }
         },
         MuiPaper: {
@@ -51,6 +53,7 @@ class CollaboratorComponent extends Component {
             suggetions: [],
             searchText: '',
             userDetails: [],
+            collaborators:[],
         }
         this.handleClickOpen = this.handleClickOpen.bind(this)
         this.handleClose = this.handleClose.bind(this);
@@ -72,6 +75,10 @@ class CollaboratorComponent extends Component {
             })
             .catch(err => {
                 console.log("error in collab : ", err);
+            })
+
+            this.setState({
+                collaborators: this.props.collaborators
             })
     }
 
@@ -96,6 +103,17 @@ class CollaboratorComponent extends Component {
     handleCloseEdit = () => {
         this.setState({
             closeEdit: !this.state.closeEdit
+        })
+    }
+
+    removeCollaboratorsNotes= (collaboratorUserId) =>{
+        NoteServices.removeCollaboratorsNotes( this.props.noteID, collaboratorUserId)
+        .then((response) => {
+            console.log("delete response", response);
+            this.props.removeCollaborator(true);
+            this.setState({
+                collaborators: this.props.collaborators
+            })
         })
     }
 
@@ -132,7 +150,7 @@ class CollaboratorComponent extends Component {
     suggetionSelected = (value) => {
         this.setState(() => ({
             searchText: value,
-            suggetions: []
+            suggetions: [],
         }))
 
         var data = {
@@ -166,6 +184,27 @@ class CollaboratorComponent extends Component {
 
     render() {
         console.log("user list data", this.state.searchText);
+        const collaboratorUser = this.state.collaborators.map(user => {
+            return (
+                <div className="user-profile-info">
+                    <Avatar>
+                        <span>{user.firstName.toString().substring(0, 1)}</span>
+                    </Avatar>
+
+                    <div className="collab-owner">
+                        <div><strong><span>{user.firstName} {user.lastName}</span></strong></div>
+                        <div>{user.email}</div>
+                    </div>
+                    <div>
+                        <Close
+                        onClick={() => this.removeCollaboratorsNotes(user.userId)}
+                        />
+                    </div>
+                </div>
+            )
+        })
+
+
         const { searchText } = this.state;
         return (
             <div>
@@ -185,7 +224,7 @@ class CollaboratorComponent extends Component {
                         aria-labelledby="responsive-dialog-title"
                         style={{ borderRadius: "8px" }}
                     >
-                        <div style={{ minHeight: "130px", minWidth: "500px", borderRadius: "8px" }}>
+                        <div style={{ minHeight: "40%", minWidth: "50%", borderRadius: "8px" }}>
                             <div>
                                 <DialogTitle id="responsive-dialog-title"
                                     style={{ borderBottom: "solid 1px lightgray", padding: "10px 24px" }}
@@ -210,6 +249,7 @@ class CollaboratorComponent extends Component {
                                         <div>{localStorage.getItem('email')}</div>
                                     </div>
                                 </div>
+                                {collaboratorUser}
                                 <div className="collab-input-search" >
                                     <div className="collab-icon-sm">
                                         <img

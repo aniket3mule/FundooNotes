@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { IconButton, Tooltip, Card, ClickAwayListener } from '@material-ui/core';
+import { IconButton, Tooltip, Card, ClickAwayListener, Paper } from '@material-ui/core';
 
 
 const hexCodesAndNames = 
@@ -71,7 +71,7 @@ class ColorPallete extends Component {
                         // onMouseLeave={this.handleToggle}
                     />
                 </Tooltip>
-                <div>
+                <Paper>
                     {this.state.open ?
                         <ClickAwayListener onClickAway={() => this.closePopper()}>
                             <Card className="colorPalleteCard">
@@ -80,7 +80,7 @@ class ColorPallete extends Component {
                         </ClickAwayListener>
 
                         : null}
-                </div>
+                </Paper>
             </div>
 
         )

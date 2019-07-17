@@ -116,6 +116,16 @@ class NoteServices {
             }
         })
     }
+
+    removeCollaboratorsNotes(noteId, collaboratorUserId){
+        return axios
+        .delete(`${BaseURL}/${noteId}/removeCollaboratorsNotes/${collaboratorUserId}`,{
+            headers:{
+                'Authorization' : token
+            }
+        })
+    }
+    
 }
 
 export default NoteServices;

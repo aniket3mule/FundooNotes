@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Label, Input, Card, CardImg, CardText, CardBody, CardTitle, FormGroup } from 'reactstrap';
+import { Button, Label, Input, Card, CardImg, CardBody, CardTitle, FormGroup } from 'reactstrap';
 import Services from '../services/UserServices';
 const userRegister = new Services().userRegister;
 
@@ -93,7 +92,7 @@ class SignUp extends Component {
                 </CardBody>
                 <CardImg width="120" height="125" src={require('../assets/img/signin.svg')} alt="sign up logo" />
                 <CardBody>
-                    <CardText>
+                    <div>
                         <Label>
                             <i className="fa fa-user-o fa-fw fa-lg" />
                             <strong>First Name</strong>
@@ -101,6 +100,7 @@ class SignUp extends Component {
                         <Input
                             type='text'
                             name='firstName'
+                            id='firstName'
                             placeholder='First Name'
                             value={firstName}
                             onChange={this.changeHandler} />
@@ -111,6 +111,7 @@ class SignUp extends Component {
                         <Input
                             type='text'
                             name='lastName'
+                            id='lastName'
                             placeholder='Last Name'
                             value={lastName}
                             onChange={this.changeHandler} />
@@ -121,6 +122,7 @@ class SignUp extends Component {
                         <Input
                             type='email'
                             name='email'
+                            id='email'
                             placeholder='Email'
                             value={email}
                             onChange={this.changeHandler} />
@@ -131,6 +133,7 @@ class SignUp extends Component {
                                 <Label check>
                                     <Input type="radio"
                                         name="selectedOption"
+                                        id='selectedOption'
                                         value="Advance"
                                         checked={this.state.selectedOption === "Advance"}
                                         onChange={this.handleOptionChange}
@@ -142,6 +145,7 @@ class SignUp extends Component {
                                 <Label check>
                                     <Input type="radio"
                                         name="selectedOption"
+                                        id='selectedOption1'
                                         value="Basic"
                                         checked={this.state.selectedOption === "Basic"}
                                         onChange={this.handleOptionChange}
@@ -155,6 +159,7 @@ class SignUp extends Component {
                         <Input
                             type='password'
                             name='password'
+                            id='password'
                             placeholder='Password'
                             value={password}
                             onChange={this.changeHandler} />
@@ -182,11 +187,14 @@ class SignUp extends Component {
                                 </Button>
                             </CardTitle>
                         </center>
-                    </CardText>
+                    </div>
                 </CardBody>
                 <ToastContainer />
             </Card>
         );
     }
 }
-export default withRouter(SignUp)
+export default 
+withRouter(
+    SignUp
+    )

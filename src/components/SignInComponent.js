@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Label, Input, Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
+import { Button, Label, Input, Card, CardImg, CardBody, CardTitle } from 'reactstrap';
 import Services from '../services/UserServices';
 const loginService = new Services().loginService;
 
@@ -91,12 +90,13 @@ class SignInComponent extends Component {
                 </CardBody>
                 <CardImg width="120" height="125" src={require('../assets/img/signin.svg')} alt="sign up logo" />
                 <CardBody>
-                    <CardText>
+                    <div>
                     <Label><i className="fa fa-envelope-o fa-fw fa-lg" />
                         <strong>Email</strong> </Label>
                         <Input
                             type='email'
                             name='email'
+                            id='email'
                             placeholder='Email'
                             value={email}
                             onChange={this.changeHandler}
@@ -106,6 +106,7 @@ class SignInComponent extends Component {
                         <Input
                             type='password'
                             name='password'
+                            id='password'
                             placeholder='Password'
                             value={password}
                             onChange={this.changeHandler} />
@@ -124,7 +125,7 @@ class SignInComponent extends Component {
                                 </Button>
                             </CardTitle>
                         </center>
-                    </CardText>
+                    </div>
                 </CardBody>
                 <ToastContainer/>
             </Card>
@@ -132,4 +133,7 @@ class SignInComponent extends Component {
     }
 }
 
-export default withRouter(SignInComponent);
+export default 
+withRouter(
+    SignInComponent
+    );
