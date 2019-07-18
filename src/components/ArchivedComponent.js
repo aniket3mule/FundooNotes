@@ -5,7 +5,7 @@ import Reminder from './Reminder'
 import ColorPallete from './Color';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Chip, Dialog } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
 import GetNote from '../services/NoteServices';
 
@@ -20,6 +20,17 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1),
     },
 }));
+
+const thm = createMuiTheme({
+    overrides: {
+        MuiDialog:{
+            paperWidthSm:{
+                overflow: "visible",
+                borderRadius:"10px",
+            }
+        }
+    }
+});
 
 function searchingFor(search) {
     return function (x) {
@@ -170,7 +181,7 @@ class ArchivedComponent extends Component {
 
     render() {
         var listgridvalue = this.props.listGridView;
-        const listgridview = listgridvalue ? "list-view" : null;
+        const listgridview = listgridvalue ? "list-view" : "default-view";
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
 
         const allArchived = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map(key => {
@@ -178,6 +189,7 @@ class ArchivedComponent extends Component {
             return (
                 (key.isDeleted === false && key.isArchived === true) &&
                 <div key={key.id} className={listgridview}>
+                    <MuiThemeProvider theme={thm}>
                     <Container className="card-margin" >
                         <Card className="take-note-user-card-description "
                             onChange={() => this.handleColorChanger(key.color, key.id)}
@@ -280,7 +292,7 @@ class ArchivedComponent extends Component {
                                 className="dialog-bottom-icons"
                             >
 
-                                <Card className="take-note-user-card-description "
+                                <Card className="take-note-user-card-dialog"
                                     onChange={() => this.handleColorChanger(key.color, key.id)}
                                     style={{ backgroundColor: key.color }}>
                                     <CardBody className="user-card-body-desc">
@@ -319,7 +331,6 @@ class ArchivedComponent extends Component {
                                             </div>
                                         }
                                     </CardBody>
-                                    <CardBody >
                                         <div
                                             className="modal-footer-note"
                                         >
@@ -378,10 +389,10 @@ class ArchivedComponent extends Component {
                                                 <Label>Close</Label>
                                             </CardLink>
                                         </div>
-                                    </CardBody>
                                 </Card>
                             </Dialog>
                         </div>}
+                    </MuiThemeProvider>
                 </div>
             )
         })

@@ -5,7 +5,7 @@ import Reminder from './Reminder'
 import ColorPallete from './Color';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Chip, Dialog } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
 import GetNote from '../services/NoteServices';
 
@@ -20,6 +20,17 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1),
     },
 }));
+
+const thm = createMuiTheme({
+    overrides: {
+        MuiDialog:{
+            paperWidthSm:{
+                overflow: "visible",
+                borderRadius:"10px",
+            }
+        }
+    }
+});
 
 function searchingFor(search) {
     return function (x) {
@@ -176,7 +187,7 @@ class RemindersDisplayComponent extends Component {
 
     render() {
         var listgridvalue = this.props.listGridView;
-        const listgridview = listgridvalue ? "list-view" : null;
+        const listgridview = listgridvalue ? "list-view" : "default-view";
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
 
         const allReminders = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map(key => {
@@ -184,6 +195,7 @@ class RemindersDisplayComponent extends Component {
             return (
                     (key.reminder.length > 0 && key.isDeleted === false) &&
                     <div key={key.id} className={listgridview}>
+                         <MuiThemeProvider theme={thm}>
                             <Container className="card-margin" >
                                 <Card className="take-note-user-card-description "
                                     onChange={() => this.handleColorChanger(key.color, key.id)}
@@ -285,7 +297,7 @@ class RemindersDisplayComponent extends Component {
                                     className="dialog-bottom-icons"
                                 >
 
-                                    <Card className="take-note-user-card-description "
+                                    <Card className="take-note-user-card-dialog"
                                         onChange={() => this.handleColorChanger(key.color, key.id)}
                                         style={{ backgroundColor: key.color }}>
                                         <CardBody className="user-card-body-desc">
@@ -324,7 +336,6 @@ class RemindersDisplayComponent extends Component {
                                                 </div>
                                             }
                                         </CardBody>
-                                        <CardBody >
                                             <div
                                                 className="modal-footer-note"
                                             >
@@ -382,10 +393,10 @@ class RemindersDisplayComponent extends Component {
                                                     <Label>Close</Label>
                                                 </CardLink>
                                             </div>
-                                        </CardBody>
                                     </Card>
                                 </Dialog>
                             </div>}
+                            </MuiThemeProvider>
                     </div>
             )
         })

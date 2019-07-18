@@ -85,12 +85,14 @@ class CollaboratorComponent extends Component {
     closePopper() {
         this.setState({
             open: false,
+           
         })
     }
 
     handleClickOpen() {
         this.setState({
             open: true,
+            collaborators: this.props.collaborators
         })
     }
 
@@ -111,9 +113,9 @@ class CollaboratorComponent extends Component {
         .then((response) => {
             console.log("delete response", response);
             this.props.removeCollaborator(true);
-            this.setState({
-                collaborators: this.props.collaborators
-            })
+            // this.setState({
+            //     collaborators: this.props.updatedCollaborator
+            // })
         })
     }
 
@@ -174,12 +176,19 @@ class CollaboratorComponent extends Component {
         const user = userDetails.map(key => { return key })
 
         NoteServices.addcollaboratorsNotes(user[0], this.props.noteID)
-            .then(() => {
-                console.log("collab added successfully");
+            .then((response) => {
+                console.log("collab added successfully", response);
+                this.setState({
+                    open: false,
+                    searchText: ''      
+                })
+                this.props.SaveCollaborator(true);
             })
-            .catch(err => {
-                console.log("err in collab", err);
+            .catch(error => {
+                console.log("err in collab", error);
             })
+
+            
     }
 
     render() {
@@ -192,13 +201,14 @@ class CollaboratorComponent extends Component {
                     </Avatar>
 
                     <div className="collab-owner">
-                        <div><strong><span>{user.firstName} {user.lastName}</span></strong></div>
-                        <div>{user.email}</div>
+                        <div><strong>{user.email}</strong></div>
                     </div>
-                    <div>
+                    <div style={{alignSelf:"center", cursor: "pointer"}}>
+                        <Tooltip title="Delete">
                         <Close
                         onClick={() => this.removeCollaboratorsNotes(user.userId)}
                         />
+                        </Tooltip>
                     </div>
                 </div>
             )
@@ -257,7 +267,7 @@ class CollaboratorComponent extends Component {
                                             alt="profile pic"
                                         />
                                     </div>
-                                    <div style={{ display: "flex", flexDirection: "column" }}>
+                                    <div style={{ display: "flex", flexDirection: "column", width:"100%" }}>
                                         <div className="collab-input-search-div">
                                             <input
                                                 className="collab-input"

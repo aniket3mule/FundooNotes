@@ -57,7 +57,7 @@ class MoreOptions extends Component {
                     {
                         this.state.open ?
                         <ClickAwayListener onClickAway={() => this.closePopper()}>
-                            <Card className="remind-me">
+                            <Card className="more-options">
                                 {
                                     this.state.addLabel ?
                                

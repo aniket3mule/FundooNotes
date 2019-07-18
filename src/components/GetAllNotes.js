@@ -6,7 +6,8 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import Reminder from './Reminder'
 import ColorPallete from './Color';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Chip, Dialog, Avatar } from '@material-ui/core';
+import { Chip, Dialog, Avatar, Button, IconButton } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar'
 import { makeStyles } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
 import RemindersDisplayComponent from './ReminderComponent';
@@ -14,7 +15,7 @@ import TrashComponent from './TrashComponent'
 import ArchivedComponent from './ArchivedComponent';
 import CollaboratorComponent from './CollaboratorComponent';
 import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
-
+import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -37,6 +38,12 @@ const thm = createMuiTheme({
         MuiAvatar: {
             colorDefault: {
                 border: "3px solid"
+            }
+        },
+        MuiDialog:{
+            paperWidthSm:{
+                overflow: "visible",
+                borderRadius:"10px",
             }
         }
     }
@@ -66,6 +73,9 @@ class GetAllNotes extends Component {
             tooltipOpen: false,
             color: '',
             reminder: '',
+            openSnackbar: false,
+            messageInfo: '',
+            collaborator: [],
         }
 
         this.handleToggleOpen = this.handleToggleOpen.bind(this);
@@ -109,13 +119,20 @@ class GetAllNotes extends Component {
             title: oldTitle,
             description: oldDescription
         }));
-
         console.log("id ......", id);
         console.log("note id ......", this.state.noteId);
+    }
 
-        //update existing Note
+    /**
+     * Update existing note
+     */
+
+    handleToggleClose = () => {
         try {
-            if (this.state.modal && (this.state.description !== oldTitle || this.state.title !== oldDescription)) {
+            this.setState(prevState => ({
+                modal: !prevState.modal,
+            }))
+            if (this.state.modal) {
                 var data = {
                     'noteId': this.state.noteId,
                     'title': this.state.title,
@@ -132,6 +149,7 @@ class GetAllNotes extends Component {
                     .then(response => {
                         console.log("uddate note function", response);
                         this.getUpdateNotes();
+                        this.handleClickSnackbar("Note Updated successfully");
                     })
                     .catch(err => {
                         console.log("Eroorrrrrr....", err);
@@ -141,6 +159,7 @@ class GetAllNotes extends Component {
 
         }
     }
+    /** */
 
     handleArchive = (noteId, isArchive) => {
         console.log(noteId);
@@ -267,9 +286,60 @@ class GetAllNotes extends Component {
         })
     }
 
-    removeCollaborator = (value) =>{
-        this.getUpdateNotes();
+    removeCollaborator = (value) => {
+        if (value) {
+            this.getUpdateNotes();
+        }
+
     }
+
+    saveCollaborator = (value) => {
+        if (value) {
+            this.getUpdateNotes();
+        }
+    }
+
+
+    /**
+     * Snackbar functions 
+     */
+    handleClickSnackbar = message => () => {
+        this.queue.push({
+            message,
+            //   key: new Date().getTime()
+        });
+
+        if (this.state.open) {
+            // immediately begin dismissing current message
+            // to start showing new one
+            this.setState({ open: false });
+        } else {
+            this.processQueue();
+        }
+    };
+
+    processQueue = () => {
+        if (this.queue.length > 0) {
+            this.setState({
+                messageInfo: this.queue.shift(),
+                open: true
+            });
+        }
+    };
+
+    handleCloseSnackbar = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        this.setState({ open: false });
+    };
+
+    handleExitedSnackbar = () => {
+        this.processQueue();
+    };
+    /**
+     * snackbar ends here
+     */
     render() {
         console.log(this.props.isNotes);
         var listgridvalue = this.props.listGridView;
@@ -324,18 +394,18 @@ class GetAllNotes extends Component {
                                         </div>
                                     }
                                     {(key.collaborators.length > 0) &&
-                                    <div style={{display: "flex"}}>{
-                                        key.collaborators.map(collaborator => {
-                                            return (
-                                                <div className="collab">
-                                                    <Tooltip title={collaborator.email}>
-                                                        <Avatar>
-                                                            <span>{collaborator.firstName.toString().substring(0, 1)}</span>
-                                                        </Avatar>
-                                                    </Tooltip>
+                                        <div style={{ display: "flex" }}>{
+                                            key.collaborators.map(collaborator => {
+                                                return (
+                                                    <div className="collab">
+                                                        <Tooltip title={collaborator.email}>
+                                                            <Avatar>
+                                                                <span>{collaborator.firstName.toString().substring(0, 1)}</span>
+                                                            </Avatar>
+                                                        </Tooltip>
                                                     </div>
-                                            )
-                                        })}
+                                                )
+                                            })}
                                         </div>
                                     }
                                 </CardBody>
@@ -353,6 +423,8 @@ class GetAllNotes extends Component {
                                                 noteID={key.id}
                                                 collaborators={key.collaborators}
                                                 removeCollaborator={this.removeCollaborator}
+                                                saveCollaborator={this.saveCollaborator}
+                                            // updatedCollaborator= {this.state.collaborator}
                                             />
 
                                         </CardLink>
@@ -400,12 +472,11 @@ class GetAllNotes extends Component {
                                 onClose={this.handleClose}
                                 aria-labelledby="responsive-dialog-title"
                                 className="dialog-bottom-icons"
-                                style={{ borderRadius: "10px" }}
                             >
 
-                                <Card className="take-note-user-card-description "
+                                <Card className="take-note-user-card-dialog"
                                     onChange={() => this.handleColorChanger(key.color, key.id)}
-                                    style={{ backgroundColor: key.color, width: "500px" }}
+                                    style={{ backgroundColor: key.color }}
                                 >
                                     <CardBody className="user-card-body-desc">
                                         <CardTitle>
@@ -468,6 +539,10 @@ class GetAllNotes extends Component {
                                         <CardLink >
                                             <CollaboratorComponent
                                                 noteID={key.id}
+                                                collaborators={key.collaborators}
+                                                removeCollaborator={this.removeCollaborator}
+                                                saveCollaborator={this.saveCollaborator}
+                                            // updatedCollaborator= {this.state.collaborator}
                                             />
                                         </CardLink>
                                         <CardLink >
@@ -501,14 +576,13 @@ class GetAllNotes extends Component {
 
                                         </MoreOptions>
                                         <CardLink ></CardLink>
-                                        <CardLink
+                                        <Button
                                             className="close-btn"
-                                            onClick={this.handleToggleOpen}
+                                            onClick={this.handleToggleClose}
                                         >
-                                            <Label>Close</Label>
-                                        </CardLink>
+                                            Close
+                                        </Button>
                                     </div>
-                                    {/* </CardBody> */}
                                 </Card>
                             </Dialog>
                         }
@@ -517,51 +591,88 @@ class GetAllNotes extends Component {
             )
         })
         return (
-            (this.props.isNotes === true) ?
-                <div className="card-grid">
-                    {notes}
-                </div>
-                :
-                null
-                    ||
-                    (this.props.isReminder === true) ?
+            <div>{
+                (this.props.isNotes === true) ?
                     <div className="card-grid">
-                        <RemindersDisplayComponent
-                            listGridView={this.props.listGridView}
-                            ReminderComponentToAllNotes={this.ReminderComponentToAllNotes}
-                            searchNote={this.props.searchNote}
-                            handleArchive={this.handleArchive}
-
-                        />
+                        {notes}
                     </div>
                     :
                     null
                         ||
-
-                        (this.props.isTrash === true) ?
+                        (this.props.isReminder === true) ?
                         <div className="card-grid">
-                            <TrashComponent
+                            <RemindersDisplayComponent
                                 listGridView={this.props.listGridView}
                                 ReminderComponentToAllNotes={this.ReminderComponentToAllNotes}
                                 searchNote={this.props.searchNote}
+                                handleArchive={this.handleArchive}
+
                             />
                         </div>
                         :
                         null
                             ||
 
-                            (this.props.isArchive === true) ?
+                            (this.props.isTrash === true) ?
                             <div className="card-grid">
-                                <ArchivedComponent
+                                <TrashComponent
                                     listGridView={this.props.listGridView}
                                     ReminderComponentToAllNotes={this.ReminderComponentToAllNotes}
                                     searchNote={this.props.searchNote}
-                                    handleArchive={this.handleArchive}
-                                    handleDeleteNote={this.handleDeleteNote}
                                 />
                             </div>
                             :
                             null
+                                ||
+
+                                (this.props.isArchive === true) ?
+                                <div className="card-grid">
+                                    <ArchivedComponent
+                                        listGridView={this.props.listGridView}
+                                        ReminderComponentToAllNotes={this.ReminderComponentToAllNotes}
+                                        searchNote={this.props.searchNote}
+                                        handleArchive={this.handleArchive}
+                                        handleDeleteNote={this.handleDeleteNote}
+                                    />
+                                </div>
+                                :
+                                null
+            }
+                <Snackbar
+                    key={this.state.messageInfo}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center"
+                    }}
+                    open={this.state.openSnackbar}
+                    autoHideDuration={1500}
+                    onClose={this.handleCloseSnackbar}
+                    onExited={this.handleExitedSnackbar}
+                    ContentProps={{
+                        "aria-describedby": "message-id"
+                    }}
+                    message={<span id="message-id">{this.state.messageInfo}</span>}
+                    action={[
+                        <Button
+                            key="undo"
+                            color="secondary"
+                            size="small"
+                            onClick={this.handleCloseSnackbar}
+                        >
+                            UNDO
+                    </Button>,
+                        <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            onClick={this.handleCloseSnackbar}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    ]}
+                />
+
+            </div>
         )
     }
 }

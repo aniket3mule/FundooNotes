@@ -166,7 +166,7 @@ class RemindersDisplayComponent extends Component {
 
     render() {
         var listgridvalue = this.props.listGridView;
-        const listgridview = listgridvalue ? "list-view" : null;
+        const listgridview = listgridvalue ? "list-view" : "default-view";
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
         const allTrash = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map(key => {
             return (
@@ -239,7 +239,7 @@ class RemindersDisplayComponent extends Component {
                                     className="dialog-bottom-icons"
                                 >
 
-                                    <Card className="take-note-user-card-description "
+                                    <Card className="take-note-user-card-dialog"
                                         onChange={() => this.handleColorChanger(key.color, key.id)}
                                         style={{ backgroundColor: key.color }}>
                                         <CardBody className="user-card-body-desc">
@@ -278,7 +278,6 @@ class RemindersDisplayComponent extends Component {
                                                 </div>
                                             }
                                         </CardBody>
-                                        <CardBody >
                                             <div
                                                 className="modal-footer-note"
                                             >
@@ -292,7 +291,6 @@ class RemindersDisplayComponent extends Component {
                                                 >
                                             </MoreOptions>
                                             </div>
-                                        </CardBody>
                                     </Card>
                                 </Dialog>
                             </div>}
