@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tooltip, Card, ClickAwayListener, TextField } from '@material-ui/core';
+import { Tooltip, Card, ClickAwayListener } from '@material-ui/core';
 
 
 class RemindMe extends Component {
@@ -108,7 +108,7 @@ class RemindMe extends Component {
                     {this.state.open ?
                         <ClickAwayListener onClickAway={() => this.closePopper()}>
                             <Card className="remind-me">
-                                <div >
+                                <div style={{width: "200px"}}>
                                     <div className="remind-heading">
                                         Reminder:
                                     </div>

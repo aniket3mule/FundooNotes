@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardTitle, CardLink, Label, Container } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardLink, Container } from 'reactstrap';
 import GetNote from '../services/NoteServices';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -356,7 +356,7 @@ class GetAllNotes extends Component {
                 <div key={key.id} className={listgridview}>
                     <MuiThemeProvider theme={thm}>
                         <Container className="card-margin" >
-                            <Card className="take-note-user-card-description "
+                            <Card className="take-note-user-card-description"
                                 onChange={() => this.handleColorChanger(key.color, key.id)}
                                 style={{ backgroundColor: key.color }}>
                                 <CardBody className="user-card-body-desc">
@@ -426,7 +426,6 @@ class GetAllNotes extends Component {
                                                 saveCollaborator={this.saveCollaborator}
                                             // updatedCollaborator= {this.state.collaborator}
                                             />
-
                                         </CardLink>
 
                                         <ColorPallete

@@ -40,10 +40,10 @@ class DashboardComponent extends Component {
             view: false,
             listgrid: false,
             searchNote: '',
-            allLabels:[],
-            isReminder: false, 
-            isTrash: false, 
-            isArchive: false, 
+            allLabels: [],
+            isReminder: false,
+            isTrash: false,
+            isArchive: false,
             isNotes: true,
         }
     }
@@ -63,11 +63,11 @@ class DashboardComponent extends Component {
         this.props.listGridView(this.state.view)
     }
 
-    DrawerMenuToDashboard = (isReminder, isTrash, isArchive, isNotes) =>{
+    DrawerMenuToDashboard = (isReminder, isTrash, isArchive, isNotes) => {
         this.setState({
-            isReminder : isReminder,
+            isReminder: isReminder,
             isTrash: isTrash,
-            isArchive: isArchive, 
+            isArchive: isArchive,
             isNotes: isNotes
         })
         this.props.DashboardToPage(isReminder, isTrash, isArchive, isNotes);
@@ -81,84 +81,88 @@ class DashboardComponent extends Component {
                     <AppBar position="fixed" >
                         <Toolbar className="toolBar" >
                             <Tooltip title="Main menu">
-                            <IconButton color="inherit"
-                                aria-label="Open drawer"
-                                onClick={this.handleToggle} >
-                                <MenuIcon id="menu" />
-                            </IconButton>
+                                <IconButton color="inherit"
+                                    aria-label="Open drawer"
+                                    onClick={this.handleToggle} >
+                                    <MenuIcon id="menu" />
+                                </IconButton>
                             </Tooltip>
-                           
-                            <div style={{width:"10%"}}>
-                                {this.state.isNotes=== true ? 
-                            <div className="note-text-img">
-                                <img className="fundoo-note-img"
-                                    src={require('../assets/img/keep_48dp.png')}
-                                    alt="keep icon"
-                                />
-                            <div style={{margin:"5%"}}>
-                                <span className="fundoo-text">Fundoo</span>
-                            </div>
-                        </div>
-                                    
+
+                            <div style={{ width: "10%" }}>
+                                {this.state.isNotes === true ?
+                                    <div className="note-text-img">
+                                        <img className="fundoo-note-img"
+                                            src={require('../assets/img/keep_48dp.png')}
+                                            alt="keep icon"
+                                        />
+                                        <div style={{ margin: "5%" }}>
+                                            <span className="fundoo-text">Fundoo</span>
+                                        </div>
+                                    </div>
+
                                     :
                                     null
-                                    ||
-                                    this.state.isReminder === true ?
-                                    <span className="fundoo-text">Reminders</span>
-                                    :
-                                    null
-                                    ||
-                                    this.state.isArchive === true ?
-                                    <span className="fundoo-text">Archive</span>
-                                    :
-                                    null
-                                    ||
-                                    this.state.isTrash === true ? 
-                                    <span className="fundoo-text">Trash</span>
-                                    :
-                                    null
+                                        ||
+                                        this.state.isReminder === true ?
+                                        <span className="fundoo-text">Reminders</span>
+                                        :
+                                        null
+                                            ||
+                                            this.state.isArchive === true ?
+                                            <span className="fundoo-text">Archive</span>
+                                            :
+                                            null
+                                                ||
+                                                this.state.isTrash === true ?
+                                                <span className="fundoo-text">Trash</span>
+                                                :
+                                                null
                                 }
                             </div>
                             <div className="view-search-input">
-                            <div className="input-group input-search">
-                                <div className="input-group-prepend">
-                                    <button className="btn fa fa-search search-button" outline ="true" color="white" />
+                                <div className="input-group input-search">
+                                    <div className="input-group-prepend">
+                                        <button className="btn fa fa-search search-button" outline="true" color="white" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        className=" input"
+                                        placeholder="Search...."
+                                        value={this.state.searchValue}
+                                        onChange={this.handleChange} />
                                 </div>
-                                <input
-                                    type="text"
-                                    className=" input"
-                                    placeholder="Search...."
-                                    value={this.state.searchValue}
-                                    onChange={this.handleChange} />
-                            </div>
-                    
-                            {!this.state.view ?
-                                <Tooltip title="List view">
-                                    <div onClick={this.handleToggleView}
-                                    className="list-view-div">
-                                        <img className="img"
-                                            src={require('../assets/img/list_view.svg')}
-                                            alt="list icon"
-                                        />
-                                    </div>
-                                </Tooltip> :
-                                <Tooltip title="Grid view">
-                                    <div onClick={this.handleToggleView}
-                                    className="list-view-div">
-                                        <img className="img"
-                                            src={require('../assets/img/grid_view.svg')}
-                                            alt="list icon"
-                                        />
-                                    </div>
-                                </Tooltip>
-                            }
+                                {!this.props.QnAEditor ?
+
+                                    !this.state.view ?
+                                    <Tooltip title="List view">
+                                        <div onClick={this.handleToggleView}
+                                            className="list-view-div">
+                                            <img className="img"
+                                                src={require('../assets/img/list_view.svg')}
+                                                alt="list icon"
+                                            />
+                                        </div>
+                                    </Tooltip> :
+                                    <Tooltip title="Grid view">
+                                        <div onClick={this.handleToggleView}
+                                            className="list-view-div">
+                                            <img className="img"
+                                                src={require('../assets/img/grid_view.svg')}
+                                                alt="list icon"
+                                            />
+                                        </div>
+                                    </Tooltip>
+                                    :
+                                    null
+                                }
+
                             </div>
 
-                            <UserProfile/>
+                            <UserProfile />
                         </Toolbar>
                         <DrawerMenu
                             appBarProps={this.state.open}
-                            DrawerMenuToDashboard = {this.DrawerMenuToDashboard}
+                            DrawerMenuToDashboard={this.DrawerMenuToDashboard}
                         />
                     </AppBar>
                 </MuiThemeProvider>

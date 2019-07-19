@@ -251,7 +251,7 @@ class RemindersDisplayComponent extends Component {
                                                     placeholder="Title"
                                                     name="title"
                                                     value={this.state.title}
-                                                    onChange={this.handleChange}
+                                                    readOnly
                                                     rows="2"
                                                 />
                                             </CardTitle>
@@ -262,8 +262,7 @@ class RemindersDisplayComponent extends Component {
                                                 placeholder="Take a note"
                                                 name="description"
                                                 value={this.state.description}
-                                                onChange={this.handleChange}
-                                            />
+                                                readOnly                                            />
 
                                             {(key.reminder.length > 0) &&
                                                 <div>

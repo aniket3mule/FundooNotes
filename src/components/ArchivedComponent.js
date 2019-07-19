@@ -8,6 +8,7 @@ import { Chip, Dialog } from '@material-ui/core';
 import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
 import GetNote from '../services/NoteServices';
+import CollaboratorComponent from './CollaboratorComponent';
 
 const NoteService = new GetNote();
 const useStyles = makeStyles(theme => ({
@@ -178,6 +179,20 @@ class ArchivedComponent extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
+    removeCollaborator = (value) => {
+        if (value) {
+            this.getUpdatedNotes();
+            this.props.ReminderComponentToAllNotes(this.state.allNotes);
+        }
+
+    }
+
+    saveCollaborator = (value) => {
+        if (value) {
+            this.getUpdatedNotes();
+        }
+    }
+
 
     render() {
         var listgridvalue = this.props.listGridView;
@@ -239,13 +254,14 @@ class ArchivedComponent extends Component {
                                     </Reminder>
 
                                     <CardLink>
-                                        <Tooltip title="Collaborator">
-                                            <img className="img"
-                                                src={require('../assets/img/colaborator.svg')}
-                                                alt="color picker"
+                                            <CollaboratorComponent
+                                                noteID={key.id}
+                                                collaborators={key.collaborators}
+                                                removeCollaborator={this.removeCollaborator}
+                                                saveCollaborator={this.saveCollaborator}
+                                            // updatedCollaborator= {this.state.collaborator}
                                             />
-                                        </Tooltip>
-                                    </CardLink>
+                                        </CardLink>
 
                                     <ColorPallete
                                         toolsPropsToColorpallete={this.handleColorChanger}
