@@ -7,6 +7,7 @@ import { Button } from '@material-ui/core';
 import QAService from '../services/QuestionAndAnswerServices'
 import { withRouter } from 'react-router-dom'
 import NoteService from '../services/NoteServices';
+import CloseIcon from '@material-ui/icons/Close'
 
 
 const QASevices = new QAService();
@@ -18,7 +19,8 @@ class EditorQnAComponent extends Component {
             editorState: EditorState.createEmpty(),
             editorText: '',
             askQuestion: false,
-            allNotes: []
+            allNotes: [],
+            message: '',
         }
 
         this.handleAddQuestion = this.handleAddQuestion.bind(this);
@@ -26,6 +28,10 @@ class EditorQnAComponent extends Component {
     }
 
     componentDidMount() {
+        this.getAllNotes();
+    }
+
+    getAllNotes() {
         NoteServices.getAllNotes()
             .then((allNotes) => {
                 this.setState({
@@ -53,72 +59,121 @@ class EditorQnAComponent extends Component {
         }
 
         QASevices.addQuestion(data)
-            .then(() => {
-                console.log("Note added successfully");
-                this.setState({ editorState: EditorState.createEmpty() })
+            .then((response) => {
+                console.log("Note added successfully", response.data.data.details.message);
+                this.setState({
+                    message: response.data.data.details.message,
+                    editorState: EditorState.createEmpty()
+                })
+                this.getAllNotes();
             })
             .catch(() => {
                 console.log("Error in add question");
             })
     }
+    handleRemoveQuestion = () => {
+
+    }
+
     render() {
         const { editorState } = this.state;
         console.log("this.prosp", this.props.noteId);
+        // var date;
+        // date = new Date();
+        var questionDate;
 
         const titleDescription = this.state.allNotes.map(key => {
             return (
                 (this.props.noteId === key.id) ?
-                    <div className="q-a-title-desc">
-                        <div>
+                    <div key={key.id}>
+                        <div className="q-a-title-desc">
                             <div>
-                                {key.title}
+                                <div>
+                                    {key.title}
+                                </div>
+                                <div>
+                                    {key.description}
+                                </div>
                             </div>
-                            <div>
-                                {key.description}
-                            </div>
+                            <Button
+                                // className="close-btn"
+                                onClick={this.handleClose}
+                                style={{ cursor: "pointer" }}
+                            >
+                                <span style={{ textTransform: "none" }}> Close </span>
+                            </Button>
+
                         </div>
-                        <Button
-                            // className="close-btn"
-                            onClick={this.handleClose}
-                            style={{ cursor: "pointer" }}
-                        >
-                            <span style={{ textTransform: "none" }}> Close </span>
-                        </Button>
+
+                        <div className="q-a-asked">
+                            <div>
+                                <span><strong>Question Asked</strong></span>
+                            </div>
+                            {(key.questionAndAnswerNotes.length > 0) &&
+                                <div style={{ display: "flex", justifyContent: "flex-start", flexFlow: "column" }}>{
+                                    key.questionAndAnswerNotes.map(questionAndAnswerNotes => {
+                                        return (
+
+                                            <div>
+                                                <div className="q-a-Font">
+                                                    <div style={{ display: "flex",
+                                                    justifyContent: "space-between",
+                                                    borderBottom: "1px solid gray" }}>
+                                                        <div>{questionAndAnswerNotes.message}</div>
+                                                        <CloseIcon
+                                                            onClick={this.handleRemoveQuestion}
+                                                        />
+                                                        <div style={{ display: "none" }}></div>
+                                                    </div>
+                                                </div>
+                                                <div style={{ display: "flex" }}>
+                                                    <div style={{ borderRadius: "50%", border: "1px solid lightgray", height: "50px", width: "50px" }}>
+                                                        <img
+                                                            src={localStorage.getItem('ProfileImage')}
+                                                            alt="profile pic"
+                                                            style={{ borderRadius: "50%", margin: "10%" }}
+                                                            className="profile-pic"
+                                                        />
+
+                                                    </div>
+                                                    <div>
+                                                        <div style={{ display: "flex", justifyContent: "" }}>
+                                                            <div style={{ padding: "5px" }}>
+                                                                <strong>{localStorage.getItem('firstName')} {localStorage.getItem('lastName')} </strong>
+                                                            </div>
+                                                            <div style={{ padding: "4px" }}>
+                                                                <span style={{ fontSize: "0.7rem" }}>{questionAndAnswerNotes.createdDate}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div>
+                                                            {questionAndAnswerNotes.message}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                        )
+                                    })}
+                                </div>
+                            }
+                        </div>
+
                     </div>
                     :
                     null
             )
         })
-
-        const questionAndAnswerNotes = this.state.allNotes.map(key => {
-            return (
-                (this.props.noteId === key.id) &&
-                key.questionAndAnswerNotes
-            )
-        })
-
-        console.log("questionNotes", questionAndAnswerNotes);
-        
-
-        const questionAsked = questionAndAnswerNotes.map(key => {
-            return (
-                   key.message
-            )
-        })
-
-        console.log("questionNotes", questionAsked);
-
-
-
         return (
             <div className="main-q-a-div">
                 {titleDescription}
-                <div className="q-a-title-desc">
-                    <div>
-                        <span><strong>Question Asked</strong></span>
-                    </div>
-                {questionAsked}
-                </div>
+                {/* {this.state.message} */}
+
+
                 <div>
                     <Editor
                         editorState={editorState}

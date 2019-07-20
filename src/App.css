@@ -142,6 +142,15 @@ input.input:focus {
   margin: 1px;
 }
 
+.collab{
+  height: 20px;
+  font-size: 0.8rem
+}
+
+.card-body{
+  padding: 0.8rem;
+}
+
 .search-button {
   width: 100%
 }
@@ -541,6 +550,12 @@ input.input:focus {
     /* height: 115px; */
     display: flex;
     justify-content: space-between
+}
+
+.q-a-asked{
+    border-bottom: 2px solid gray;
+    margin-bottom: 2%;
+    padding:  0.8rem
 }
 @media only screen and (max-width: 600px) {
   .list-view {

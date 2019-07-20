@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import DashboardComponent from '../components/DashboardComponent'
 import CreateNote from '../components/CreateNote';
 import AllNotes from '../components/GetAllNotes'
-import { withRouter } from 'react-router-dom'
+// import { withRouter } from 'react-router-dom'
 
 class UserDashboard extends Component {
     constructor(props) {
@@ -118,4 +118,4 @@ class UserDashboard extends Component {
     }
 }
 
-export default withRouter(UserDashboard);
+export default UserDashboard;

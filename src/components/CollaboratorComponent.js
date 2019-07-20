@@ -195,7 +195,7 @@ class CollaboratorComponent extends Component {
         console.log("user list data", this.state.searchText);
         const collaboratorUser = this.state.collaborators.map(user => {
             return (
-                <div className="user-profile-info">
+                <div className="user-profile-info" key={user.userId}>
                     <Avatar>
                         <span>{user.firstName.toString().substring(0, 1)}</span>
                     </Avatar>

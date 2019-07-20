@@ -16,6 +16,7 @@ import ArchivedComponent from './ArchivedComponent';
 import CollaboratorComponent from './CollaboratorComponent';
 import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
 import CloseIcon from "@material-ui/icons/Close";
+import { withRouter } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -40,10 +41,10 @@ const thm = createMuiTheme({
                 border: "3px solid"
             }
         },
-        MuiDialog:{
-            paperWidthSm:{
+        MuiDialog: {
+            paperWidthSm: {
                 overflow: "visible",
-                borderRadius:"10px",
+                borderRadius: "10px",
             }
         }
     }
@@ -79,8 +80,9 @@ class GetAllNotes extends Component {
         }
 
         this.handleToggleOpen = this.handleToggleOpen.bind(this);
-        this.displayCard = this.displayCard.bind(this)
-        this.getUpdateNotes = this.getUpdateNotes.bind(this)
+        this.displayCard = this.displayCard.bind(this);
+        this.getUpdateNotes = this.getUpdateNotes.bind(this);
+        this.handleQuestionAnsAnswer = this.handleQuestionAnsAnswer.bind(this);
     }
 
     async getUpdateNotes() {
@@ -340,12 +342,18 @@ class GetAllNotes extends Component {
     /**
      * snackbar ends here
      */
+
+
+    handleQuestionAnsAnswer(noteId){
+        console.log("note id",noteId);
+        this.props.history.push('/questionanswer',noteId)
+    }
     render() {
         console.log(this.props.isNotes);
         var listgridvalue = this.props.listGridView;
         const listgridview = listgridvalue ? "list-view" : "default-view";
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
-
+        // var doc;
         var notes = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map((key) => {
             return (
                 (
@@ -373,7 +381,7 @@ class GetAllNotes extends Component {
                                     </CardTitle>
                                     <textarea
                                         className="take-note-input note-description"
-                                        rows="5"
+                                        rows="auto"
                                         placeholder="Take a note"
                                         value={key.description}
                                         onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
@@ -460,6 +468,32 @@ class GetAllNotes extends Component {
                                         </MoreOptions>
                                     </div>
                                 </CardBody>
+                                {(key.questionAndAnswerNotes.length > 0) &&
+                                <Tooltip title="Reply">
+                                <div
+                                    className="q-a-asked"
+                                    style={{borderTop:"1px solid gray", borderBottom:"none", cursor:"pointer"}}
+                                    onClick={() =>this.handleQuestionAnsAnswer(key.id)}
+                                    >
+                                        <div>
+                                            <span><strong>Question Asked</strong></span>
+                                        </div>
+                                        
+                                            {/* <div style={{ display: "flex", justifyContent: "flex-start", flexFlow: "column" }}>{
+                                                key.questionAndAnswerNotes.map(questionAndAnswerNotes => {
+                                                    return (
+                                                        <div className="collab">
+                                                            <span>{questionAndAnswerNotes.message}</span>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div> */}
+                                    <div>
+                                        {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length-1].message}
+                                    </div>
+                                    </div>
+                                    </Tooltip>
+                                }
                             </Card>
                         </Container>
                         <ToastContainer />
@@ -493,7 +527,7 @@ class GetAllNotes extends Component {
                                         <textarea
                                             style={{ backgroundColor: key.color }}
                                             className="take-note-input note-description"
-                                            rows="5"
+                                            rows="3"
                                             placeholder="Take a note"
                                             name="description"
                                             value={this.state.description}
@@ -574,6 +608,7 @@ class GetAllNotes extends Component {
                                             id="color-picker">
 
                                         </MoreOptions>
+                                       
                                         <CardLink ></CardLink>
                                         <Button
                                             className="close-btn"
@@ -581,7 +616,34 @@ class GetAllNotes extends Component {
                                         >
                                             Close
                                         </Button>
+                                        
                                     </div>
+                                    {(key.questionAndAnswerNotes.length > 0) &&
+                                <Tooltip title="Reply">
+                                <div
+                                    className="q-a-asked"
+                                    style={{borderTop:"1px solid gray", borderBottom:"none", cursor:"pointer"}}
+                                    onClick={() =>this.handleQuestionAnsAnswer(key.id)}
+                                    >
+                                        <div>
+                                            <span><strong>Question Asked</strong></span>
+                                        </div>
+                                        
+                                            {/* <div style={{ display: "flex", justifyContent: "flex-start", flexFlow: "column" }}>{
+                                                key.questionAndAnswerNotes.map(questionAndAnswerNotes => {
+                                                    return (
+                                                        <div className="collab">
+                                                            <span>{questionAndAnswerNotes.message}</span>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div> */}
+                                    <div>
+                                        {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length-1].message}
+                                    </div>
+                                    </div>
+                                    </Tooltip>
+                                }
                                 </Card>
                             </Dialog>
                         }
@@ -676,4 +738,4 @@ class GetAllNotes extends Component {
     }
 }
 
-export default GetAllNotes;
+export default withRouter(GetAllNotes)
