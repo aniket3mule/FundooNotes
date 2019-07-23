@@ -12,6 +12,16 @@ class QuestionAndAnswerServices {
             }
         })
     }
+
+    likeQuestion(data, parentId){
+        // console.log(localStorage.getItem("token"));
+        return axios.post(`${BaseURL}/questionAndAnswerNotes/like/${parentId}`, data, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+    }
+    
 }
 
 export default QuestionAndAnswerServices

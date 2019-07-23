@@ -4,9 +4,37 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'
 import { Button, Label, Input, Card, CardImg, CardBody, CardTitle } from 'reactstrap';
 import Services from '../services/UserServices';
+import { Container, TextField, makeStyles } from '@material-ui/core';
 const loginService = new Services().loginService;
 
-const url = "http://34.213.106.173/"
+const url = "http://34.213.106.173/";
+
+const useStyles = makeStyles(theme => ({
+    
+    MuiContainer: {
+        root:{
+            display: 'flex',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+        }
+       
+    },
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent:'center'
+      },
+      textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+      },
+      dense: {
+        marginTop: theme.spacing(2),
+      },
+    }
+));
+
+
 class SignInComponent extends Component {
     constructor(props) {
         super(props);
@@ -21,22 +49,22 @@ class SignInComponent extends Component {
         // }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         // if(this.cbRef){
         //     this.cbRef.focus();
         // }
         // this.inputRef.current.focus()
         // console.log("Ref", this.inputRef)
-        
+
     }
 
     changeHandler = (e => {
         this.setState({ [e.target.name]: e.target.value })
     })
 
-    submitHandler=(e =>{
+    submitHandler = (e => {
         e.preventDefault()
-        
+
         if (!this.state.email) {
             toast.error("email can not be empty", {
                 position: toast.POSITION.TOP_CENTER
@@ -51,32 +79,33 @@ class SignInComponent extends Component {
             'email': this.state.email,
             'password': this.state.password
         }
-        
+
         loginService(data)
-        .then(response => {
-            console.log(response);
-            localStorage.setItem('firstName', response.data.firstName);
-            localStorage.setItem('lastName', response.data.lastName);
-            localStorage.setItem('token', response.data.id);
-            localStorage.setItem('token1',true);
-            localStorage.setItem('userid',response.data.userId);
-            localStorage.setItem('email', response.data.email)
-            localStorage.setItem('ProfileImage', url+response.data.imageUrl)
-            this.props.history.push('/dashboard');
-        })
-        .catch(error => {
-            console.log(error);
-            toast.error("Invalid username or Password", {
-                position: toast.POSITION.TOP_CENTER
-            });
-        })
+            .then(response => {
+                console.log(response);
+                localStorage.setItem('firstName', response.data.firstName);
+                localStorage.setItem('lastName', response.data.lastName);
+                localStorage.setItem('token', response.data.id);
+                localStorage.setItem('token1', true);
+                localStorage.setItem('userid', response.data.userId);
+                localStorage.setItem('email', response.data.email)
+                localStorage.setItem('ProfileImage', url + response.data.imageUrl)
+                console.log("this.props", this);
+                this.props.props.history.push('/dashboard');
+            })
+            .catch(error => {
+                console.log(error);
+                toast.error("Invalid username or Password", {
+                    position: toast.POSITION.TOP_CENTER
+                });
+            })
     })
 
     signUpButton = (e => {
         e.preventDefault();
         this.props.history.push("/signup")
     })
-    forgetPasswordButton =(e =>{
+    forgetPasswordButton = (e => {
         e.preventDefault();
         this.props.history.push("/forgetpassword")
     })
@@ -101,7 +130,7 @@ class SignInComponent extends Component {
                             value={email}
                             onChange={this.changeHandler}
                             />
-                            
+
                         <Label><i className="fa fa-key fa-fw fa-lg" /><strong>Password</strong> </Label>
                         <Input
                             type='password'
@@ -129,11 +158,40 @@ class SignInComponent extends Component {
                 </CardBody>
                 <ToastContainer/>
             </Card>
+// {/* <div>
+//             <form className={useStyles.container} noValidate autoComplete="off">
+//                 <TextField
+//                     required
+//                     id="outlined-email-input"
+//                     label="Email"
+//                     className={useStyles.textField}
+//                     type="email"
+//                     name="email"
+//                     autoComplete="email"
+//                     margin="normal"
+//                     variant="outlined"
+//                     value={email}
+//                     onChange={this.changeHandler}
+//                 /> 
+//                 <TextField
+//                     required
+//                     id="outlined-with-placeholder"
+//                     label="Password"
+//                     placeholder="Password"
+//                     name="password"
+//                     className={useStyles.textField}
+//                     margin="normal"
+//                     variant="outlined"
+//                     value={password}
+//                     onChange={this.changeHandler}
+//                 />
+//             </form>
+//             </div> */}
         );
     }
 }
 
-export default 
-withRouter(
-    SignInComponent
-    );
+export default
+    // withRouter(
+        SignInComponent
+    // );

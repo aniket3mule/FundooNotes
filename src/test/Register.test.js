@@ -34,10 +34,10 @@ describe('firstName input ', () =>{
         wrapper.find('#firstName').simulate('change', {
             target: {
                 name: 'firstName',
-                value: 'Aarti'
+                value: 'Anuj'
             }
         })
-        expect(wrapper.state('firstName')).toEqual('Aarti');
+        expect(wrapper.state('firstName')).toEqual('Anuj');
     })
 })
 
@@ -60,10 +60,10 @@ describe('email input ', () => {
         wrapper.find('#email').simulate('change', {
             target: {
                 name: 'email',
-                value: 'aartigawai@gmail.com'
+                value: 'anuj@gmail.com'
             }
         })
-        expect(wrapper.state('email')).toEqual('aartigawai@gmail.com')
+        expect(wrapper.state('email')).toEqual('anuj@gmail.com')
     })
 })
 

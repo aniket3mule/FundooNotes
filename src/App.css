@@ -329,7 +329,7 @@ input.input:focus {
 .card-grid {
 
   display: flex;
-  width: 80%;
+  width: 77%;
   flex-wrap: wrap;
   justify-content: flex-start;
   margin-left: 20%;
@@ -546,8 +546,7 @@ input.input:focus {
 .q-a-title-desc{
     border-bottom: 2px solid lightgray;
     margin-bottom: 2%;
-    /* width: 100%; */
-    /* height: 115px; */
+    padding: 0.8rem;
     display: flex;
     justify-content: space-between
 }

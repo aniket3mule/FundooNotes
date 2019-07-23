@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import Reminder from './Reminder'
 import ColorPallete from './Color';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Chip, Dialog, Avatar, Button, IconButton } from '@material-ui/core';
+import { Chip, Dialog, Avatar, Button, IconButton, TextField, InputBase } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar'
 import { makeStyles } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
@@ -30,7 +30,6 @@ const useStyles = makeStyles(theme => ({
     cardWidth: {
         width: "100%"
     }
-
 }
 ));
 
@@ -96,13 +95,10 @@ class GetAllNotes extends Component {
             })
     }
 
-
-
     componentDidMount() {
         //Print All notes
         this.getUpdateNotes();
     }
-
 
     handleToggle = (e) => {
         this.setState({ open: !this.state.open });
@@ -128,7 +124,6 @@ class GetAllNotes extends Component {
     /**
      * Update existing note
      */
-
     handleToggleClose = () => {
         try {
             this.setState(prevState => ({
@@ -161,7 +156,9 @@ class GetAllNotes extends Component {
 
         }
     }
-    /** */
+    /**
+     * Archive Notes Funtions
+    */
 
     handleArchive = (noteId, isArchive) => {
         console.log(noteId);
@@ -185,8 +182,11 @@ class GetAllNotes extends Component {
             })
     }
 
-    handleColorChanger = (value, noteId) => {
+    /**
+     * Note Color Changer function 
+     */
 
+    handleColorChanger = (value, noteId) => {
         this.setState({ color: value })
         var note = {
             'noteIdList': [noteId],
@@ -200,9 +200,10 @@ class GetAllNotes extends Component {
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
             })
-
     }
-
+    /**
+     * Note Reminder function
+     */
     handleReminder = (reminderdate, noteId) => {
         console.log(reminderdate);
         this.setState({ reminder: reminderdate })
@@ -221,6 +222,10 @@ class GetAllNotes extends Component {
 
     }
 
+    /**
+     * Deleting exsting reminder 
+     */
+
     handleDeleteChip = (noteId) => {
         var note = {
             'noteIdList': [noteId],
@@ -238,10 +243,16 @@ class GetAllNotes extends Component {
 
     }
 
+    /**
+     * Handle change event
+     */
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
 
+    /**
+     * Tooltip functions
+     */
     handleToggleTooltip = () => {
         console.log("tooltips......", this.state.tooltipOpen)
         this.setState({
@@ -250,6 +261,9 @@ class GetAllNotes extends Component {
 
     }
 
+    /**
+     * Deleting exsting Note
+     */
     handleDeleteNote = (noteId) => {
         var note = {
             'noteIdList': [noteId],
@@ -268,6 +282,9 @@ class GetAllNotes extends Component {
             })
     }
 
+    /**
+     * Getting ref from child component
+     */
     displayCard(newNote) {
         console.log("display card==>", newNote);
 
@@ -276,12 +293,17 @@ class GetAllNotes extends Component {
         })
     }
 
+    /**
+     * Handle close function
+     */
     handleClose = () => {
         this.setState({
             modal: false
         })
     }
-
+/**
+ * Props starts
+ */
     ReminderComponentToAllNotes = (allNotes) => {
         this.setState({
             allNotes: allNotes
@@ -301,9 +323,12 @@ class GetAllNotes extends Component {
         }
     }
 
+    /**
+     * props ends
+     **/
 
     /**
-     * Snackbar functions 
+     * Snackbar functions starts 
      */
     handleClickSnackbar = message => () => {
         this.queue.push({
@@ -343,11 +368,14 @@ class GetAllNotes extends Component {
      * snackbar ends here
      */
 
-
-    handleQuestionAnsAnswer(noteId){
-        console.log("note id",noteId);
-        this.props.history.push('/questionanswer',noteId)
+     /**
+      * Redirecting to Question and Answer page with NoteId
+      */
+    handleQuestionAnsAnswer(noteId) {
+        console.log("note id", noteId);
+        this.props.history.push('/questionanswer', noteId)
     }
+    
     render() {
         console.log(this.props.isNotes);
         var listgridvalue = this.props.listGridView;
@@ -369,7 +397,7 @@ class GetAllNotes extends Component {
                                 style={{ backgroundColor: key.color }}>
                                 <CardBody className="user-card-body-desc">
                                     <CardTitle>
-                                        <input
+                                        {/* <input
                                             type="text"
                                             className="take-note-input"
                                             placeholder="Title"
@@ -377,17 +405,46 @@ class GetAllNotes extends Component {
                                             onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
                                             readOnly
                                             style={{ backgroundColor: key.color }}
-                                        />
+                                        /> */}
+                                        <InputBase
+                                        id="outlined-dense-multiline"
+                                        value={key.title}
+                                        onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
+                                        // className={clsx(classes.textField, classes.dense)}
+                                        margin="dense"
+                                        variant="outlined"
+                                        readOnly
+                                        multiline
+                                        style={{ backgroundColor: key.color }}
+                                        
+                                    />
                                     </CardTitle>
-                                    <textarea
-                                        className="take-note-input note-description"
-                                        rows="auto"
-                                        placeholder="Take a note"
+                                    <InputBase
+                                        id="outlined-dense-multiline"
                                         value={key.description}
                                         onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
+                                        // className={clsx(classes.textField, classes.dense)}
+                                        margin="dense"
+                                        variant="outlined"
                                         readOnly
+                                        multiline
                                         style={{ backgroundColor: key.color }}
                                     />
+
+                                    {/* <TextField
+                                        // id="outlined-dense-multiline"
+                                        value={key.description}
+                                        onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
+                                        // className={clsx(classes.textField, classes.dense)}
+                                        margin="dense"
+                                        variant="outlined"
+                                        readOnly
+                                        multiline
+                                        style={{ backgroundColor: key.color }}
+                                    // maxrow="4"
+                                    /> */}
+
+                                    
 
                                     {(key.reminder.length > 0) &&
                                         <div>
@@ -469,29 +526,19 @@ class GetAllNotes extends Component {
                                     </div>
                                 </CardBody>
                                 {(key.questionAndAnswerNotes.length > 0) &&
-                                <Tooltip title="Reply">
-                                <div
-                                    className="q-a-asked"
-                                    style={{borderTop:"1px solid gray", borderBottom:"none", cursor:"pointer"}}
-                                    onClick={() =>this.handleQuestionAnsAnswer(key.id)}
-                                    >
-                                        <div>
-                                            <span><strong>Question Asked</strong></span>
+                                    <Tooltip title="Reply">
+                                        <div
+                                            className="q-a-asked"
+                                            style={{ borderTop: "1px solid gray", borderBottom: "none", cursor: "pointer" }}
+                                            onClick={() => this.handleQuestionAnsAnswer(key.id)}
+                                        >
+                                            <div>
+                                                <span><strong>Question Asked</strong></span>
+                                            </div>
+                                            <div>
+                                                {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message}
+                                            </div>
                                         </div>
-                                        
-                                            {/* <div style={{ display: "flex", justifyContent: "flex-start", flexFlow: "column" }}>{
-                                                key.questionAndAnswerNotes.map(questionAndAnswerNotes => {
-                                                    return (
-                                                        <div className="collab">
-                                                            <span>{questionAndAnswerNotes.message}</span>
-                                                        </div>
-                                                    )
-                                                })}
-                                            </div> */}
-                                    <div>
-                                        {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length-1].message}
-                                    </div>
-                                    </div>
                                     </Tooltip>
                                 }
                             </Card>
@@ -513,27 +560,27 @@ class GetAllNotes extends Component {
                                 >
                                     <CardBody className="user-card-body-desc">
                                         <CardTitle>
-                                            <textarea
-                                                style={{ backgroundColor: key.color }}
-                                                type="text"
-                                                className="take-note-input"
-                                                placeholder="Title"
-                                                name="title"
-                                                value={this.state.title}
-                                                onChange={this.handleChange}
-                                                rows="2"
-                                            />
-                                        </CardTitle>
-                                        <textarea
-                                            style={{ backgroundColor: key.color }}
-                                            className="take-note-input note-description"
-                                            rows="3"
-                                            placeholder="Take a note"
-                                            name="description"
-                                            value={this.state.description}
-                                            onChange={this.handleChange}
-                                        />
-
+                                        <InputBase
+                                        name="title"
+                                        value={this.state.title}
+                                        onChange={this.handleChange}
+                                        margin="dense"
+                                        variant="outlined"
+                                        multiline
+                                        style={{ backgroundColor: key.color }}
+                                        placeholder="Title"
+                                    />
+                                    </CardTitle>
+                                    <InputBase
+                                        name="description"
+                                        value={this.state.description}
+                                        onChange={this.handleChange}
+                                        margin="dense"
+                                        variant="outlined"
+                                        placeholder="Description"
+                                        multiline
+                                        style={{ backgroundColor: key.color }}
+                                    />
                                         {(key.reminder.length > 0) &&
                                             <div>
                                                 <Chip
@@ -608,7 +655,7 @@ class GetAllNotes extends Component {
                                             id="color-picker">
 
                                         </MoreOptions>
-                                       
+
                                         <CardLink ></CardLink>
                                         <Button
                                             className="close-btn"
@@ -616,34 +663,25 @@ class GetAllNotes extends Component {
                                         >
                                             Close
                                         </Button>
-                                        
+
                                     </div>
                                     {(key.questionAndAnswerNotes.length > 0) &&
-                                <Tooltip title="Reply">
-                                <div
-                                    className="q-a-asked"
-                                    style={{borderTop:"1px solid gray", borderBottom:"none", cursor:"pointer"}}
-                                    onClick={() =>this.handleQuestionAnsAnswer(key.id)}
-                                    >
-                                        <div>
-                                            <span><strong>Question Asked</strong></span>
-                                        </div>
-                                        
-                                            {/* <div style={{ display: "flex", justifyContent: "flex-start", flexFlow: "column" }}>{
-                                                key.questionAndAnswerNotes.map(questionAndAnswerNotes => {
-                                                    return (
-                                                        <div className="collab">
-                                                            <span>{questionAndAnswerNotes.message}</span>
-                                                        </div>
-                                                    )
-                                                })}
-                                            </div> */}
-                                    <div>
-                                        {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length-1].message}
-                                    </div>
-                                    </div>
-                                    </Tooltip>
-                                }
+                                        <Tooltip title="Reply">
+                                            <div
+                                                className="q-a-asked"
+                                                style={{ borderTop: "1px solid gray", borderBottom: "none", cursor: "pointer" }}
+                                                onClick={() => this.handleQuestionAnsAnswer(key.id)}
+                                            >
+                                                <div>
+                                                    <span><strong>Question Asked</strong></span>
+                                                </div>
+
+                                                <div className="innerHTML" dangerouslySetInnerHTML= {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message}>
+                                                {/* {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message} */}
+                                                </div>
+                                            </div>
+                                        </Tooltip>
+                                    }
                                 </Card>
                             </Dialog>
                         }
@@ -667,13 +705,11 @@ class GetAllNotes extends Component {
                                 ReminderComponentToAllNotes={this.ReminderComponentToAllNotes}
                                 searchNote={this.props.searchNote}
                                 handleArchive={this.handleArchive}
-
                             />
                         </div>
                         :
                         null
                             ||
-
                             (this.props.isTrash === true) ?
                             <div className="card-grid">
                                 <TrashComponent
@@ -732,7 +768,6 @@ class GetAllNotes extends Component {
                         </IconButton>
                     ]}
                 />
-
             </div>
         )
     }
