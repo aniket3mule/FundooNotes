@@ -195,6 +195,6 @@ class SignUp extends Component {
     }
 }
 export default 
-// withRouter(
+withRouter(
     SignUp
-    // )
+    )

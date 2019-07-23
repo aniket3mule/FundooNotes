@@ -4,6 +4,7 @@ import { MenuItem } from '@material-ui/core';
 import { Label } from 'reactstrap'
 import GetAllLabels from './GetAllLabels';
 import CreateLabel from './CreateLabel';
+import { withRouter } from "react-router-dom";
 // import LabelService from '../services/LabelServices';
 // const LabelServices = new LabelService();
 class DrawerMenu extends Component {
@@ -32,16 +33,20 @@ class DrawerMenu extends Component {
 
     handleReminder = ()=>{
         this.props.DrawerMenuToDashboard(true, false, false, false);
+        this.props.history.push('/reminder');
     }
 
     handleArchived = ()=>{
         this.props.DrawerMenuToDashboard(false, false, true, false);
+        this.props.history.push('/archive');
     }
 
     handleTrash = ()=>{
         this.props.DrawerMenuToDashboard(false, true, false, false);
+        this.props.history.push('/trash');
     }
     handleNotes = ()=>{
+        this.props.history.push('/dashboard');
         this.props.DrawerMenuToDashboard(false, false, false, true);
     }
 
@@ -86,7 +91,6 @@ class DrawerMenu extends Component {
                             <MenuItem
                             onClick={this.handleLabelOpen}
                             >
-                    
                             <CreateLabel
                             sidebarLabel = {this.state.open}
                             />
@@ -114,4 +118,4 @@ class DrawerMenu extends Component {
     }
 }
 
-export default DrawerMenu;
+export default withRouter(DrawerMenu);

@@ -106,6 +106,12 @@ class EditorQnAComponent extends Component {
             })
     }
 
+    decodeHtml(html) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }
+
     render() {
         const { editorState } = this.state;
         console.log("this.prosp", this.props.noteId);
@@ -135,18 +141,19 @@ class EditorQnAComponent extends Component {
                             </Button>
 
                         </div>
-                        {/* {(key.questionAndAnswerNotes.length > 0) &&
+                        {(key.questionAndAnswerNotes.length > 0) &&
                             <div className="q-a-asked" >
                                 <div>
                                     <span><strong>Question Asked</strong></span>
                                 </div>
 
-                                <div className="innerHTML" >
-                                    {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message}
+                                <div className="innerHTML" dangerouslySetInnerHTML= {{__html: key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message}}>
+                                    {/* {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message} */}
                                 </div>
+                                {/* {this.decodeHtml(key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message)} */}
                             </div>
-                        } */}
-                        {/* {(key.questionAndAnswerNotes.length > 0) &&
+                        }
+                        {(key.questionAndAnswerNotes.length > 0) &&
                             <div className="q-a-asked">
                                 <div style={{ display: "flex" }}>
                                     <div style={{ borderRadius: "50%", border: "1px solid lightgray", height: "50px", width: "50px" }}>
@@ -165,14 +172,13 @@ class EditorQnAComponent extends Component {
                                             <span style={{ fontSize: "0.7rem" }}>{key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].createdDate}</span>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div style={{ display: "flex", marginLeft: "10vh" }}>
-                                    <div className="innerHTML" >
-                                        {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message}
-                                    </div>
-                                    {
-                                        key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].like.map(likeDetails => {
+                                <div className="innerHTML" 
+                                dangerouslySetInnerHTML= {{__html: key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message}}>
+                                    {/* {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message} */}
+                                </div>
+                                    {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].like.map(likeDetails => {
                                             return (
                                                 (likeDetails.like === true) ?
                                                     <div style={{ paddingLeft: "5vh", cursor:"pointer" }}>
@@ -195,7 +201,7 @@ class EditorQnAComponent extends Component {
                                     </div>
                                 </div>
                             </div>
-                        } */}
+                        }
 
                     </div>
                     :
@@ -224,7 +230,6 @@ class EditorQnAComponent extends Component {
                         <span style={{ textTransform: "none" }}> Ask </span>
                     </Button>
                 </div>
-
             </div>
         )
     }

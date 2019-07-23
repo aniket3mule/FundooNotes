@@ -8,6 +8,7 @@ import ForgetPassword from './pages/ForgetPassword'
 import ResetPassword from './pages/ResetPassword'
 import UserDashboard from './pages/UserDashboard'
 import EditorQnAComponent from './pages/QnAEditor';
+import NewReminder from './pages/NewReminder';
 //import AppBar from './components/DashboardComponent'
 
 
@@ -22,6 +23,8 @@ class App extends React.Component {
           <Route path="/resetpassword" component = {ResetPassword}/>
           <Route path="/dashboard" component = {UserDashboard}/>
           <Route path="/questionanswer" component = {EditorQnAComponent}/>
+          <Route path="/reminder" component = {NewReminder}/>
+
         </Router>
     )
   }

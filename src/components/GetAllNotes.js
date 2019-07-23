@@ -168,7 +168,7 @@ class GetAllNotes extends Component {
 
         var note = {
             'noteIdList': [noteId],
-            'isArchived': this.state.isArchived
+            'isArchived': isArchive
         }
 
         //Update service
@@ -301,9 +301,9 @@ class GetAllNotes extends Component {
             modal: false
         })
     }
-/**
- * Props starts
- */
+    /**
+     * Props starts
+     */
     ReminderComponentToAllNotes = (allNotes) => {
         this.setState({
             allNotes: allNotes
@@ -368,14 +368,14 @@ class GetAllNotes extends Component {
      * snackbar ends here
      */
 
-     /**
-      * Redirecting to Question and Answer page with NoteId
-      */
+    /**
+     * Redirecting to Question and Answer page with NoteId
+     */
     handleQuestionAnsAnswer(noteId) {
         console.log("note id", noteId);
         this.props.history.push('/questionanswer', noteId)
     }
-    
+
     render() {
         console.log(this.props.isNotes);
         var listgridvalue = this.props.listGridView;
@@ -407,17 +407,17 @@ class GetAllNotes extends Component {
                                             style={{ backgroundColor: key.color }}
                                         /> */}
                                         <InputBase
-                                        id="outlined-dense-multiline"
-                                        value={key.title}
-                                        onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
-                                        // className={clsx(classes.textField, classes.dense)}
-                                        margin="dense"
-                                        variant="outlined"
-                                        readOnly
-                                        multiline
-                                        style={{ backgroundColor: key.color }}
-                                        
-                                    />
+                                            id="outlined-dense-multiline"
+                                            value={key.title}
+                                            onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
+                                            // className={clsx(classes.textField, classes.dense)}
+                                            margin="dense"
+                                            variant="outlined"
+                                            readOnly
+                                            multiline
+                                            style={{ backgroundColor: key.color }}
+
+                                        />
                                     </CardTitle>
                                     <InputBase
                                         id="outlined-dense-multiline"
@@ -444,7 +444,7 @@ class GetAllNotes extends Component {
                                     // maxrow="4"
                                     /> */}
 
-                                    
+
 
                                     {(key.reminder.length > 0) &&
                                         <div>
@@ -535,8 +535,9 @@ class GetAllNotes extends Component {
                                             <div>
                                                 <span><strong>Question Asked</strong></span>
                                             </div>
-                                            <div>
-                                                {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message}
+                                            <div className="innerHTML"
+                                                dangerouslySetInnerHTML={{ __html: key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message }}>
+                                                {/* {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message} */}
                                             </div>
                                         </div>
                                     </Tooltip>
@@ -560,27 +561,27 @@ class GetAllNotes extends Component {
                                 >
                                     <CardBody className="user-card-body-desc">
                                         <CardTitle>
+                                            <InputBase
+                                                name="title"
+                                                value={this.state.title}
+                                                onChange={this.handleChange}
+                                                margin="dense"
+                                                variant="outlined"
+                                                multiline
+                                                style={{ backgroundColor: key.color }}
+                                                placeholder="Title"
+                                            />
+                                        </CardTitle>
                                         <InputBase
-                                        name="title"
-                                        value={this.state.title}
-                                        onChange={this.handleChange}
-                                        margin="dense"
-                                        variant="outlined"
-                                        multiline
-                                        style={{ backgroundColor: key.color }}
-                                        placeholder="Title"
-                                    />
-                                    </CardTitle>
-                                    <InputBase
-                                        name="description"
-                                        value={this.state.description}
-                                        onChange={this.handleChange}
-                                        margin="dense"
-                                        variant="outlined"
-                                        placeholder="Description"
-                                        multiline
-                                        style={{ backgroundColor: key.color }}
-                                    />
+                                            name="description"
+                                            value={this.state.description}
+                                            onChange={this.handleChange}
+                                            margin="dense"
+                                            variant="outlined"
+                                            placeholder="Description"
+                                            multiline
+                                            style={{ backgroundColor: key.color }}
+                                        />
                                         {(key.reminder.length > 0) &&
                                             <div>
                                                 <Chip
@@ -676,8 +677,9 @@ class GetAllNotes extends Component {
                                                     <span><strong>Question Asked</strong></span>
                                                 </div>
 
-                                                <div className="innerHTML" dangerouslySetInnerHTML= {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message}>
-                                                {/* {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message} */}
+                                                <div className="innerHTML"
+                                                    dangerouslySetInnerHTML={{ __html: key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message }}>
+                                                    {/* {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message} */}
                                                 </div>
                                             </div>
                                         </Tooltip>

@@ -51,6 +51,9 @@ class RemindersDisplayComponent extends Component {
     }
     
     componentDidMount(){
+        this.getUpdatedNotes();
+    }
+    getUpdatedNotes(){
         NoteService.getReminderNotesList()
         .then(response => {
             console.log("trash notes ", response);
@@ -60,16 +63,6 @@ class RemindersDisplayComponent extends Component {
             
         })
     }
-    // getUpdatedNotes(){
-    //     NoteService.getReminderNotesList()
-    //     .then(response => {
-    //         console.log("trash notes ", response);
-    //         this.setState({
-    //             allNotes: response.data.data.data
-    //         })
-            
-    //     })
-    // }
 
     handleToggleOpen = (id, oldTitle, oldDescription) => {
         this.setState(prevState => ({
@@ -181,6 +174,7 @@ class RemindersDisplayComponent extends Component {
                 console.log("Eroorrrrrr....", err);
             })
     }
+
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
@@ -401,7 +395,7 @@ class RemindersDisplayComponent extends Component {
             )
         })
         return (
-            <div className="all-reminders">
+            <div className="card-grid all-reminders">
                 {allReminders}
             </div>
         )

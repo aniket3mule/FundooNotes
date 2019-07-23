@@ -529,8 +529,7 @@ input.input:focus {
 }
 
 .all-reminders {
-  display: flex;
-  flex-wrap: wrap;
+  /* margin-top: 15vh; */
 }
 
 .all-trash {
@@ -596,6 +595,7 @@ input.input:focus {
 
   .list-view-div {
     visibility: hidden;
+    cursor: pointer;
   }
 
   .card-grid {
