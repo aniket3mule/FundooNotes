@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import DashboardComponent from '../components/DashboardComponent';
-import NewReminderComponent from '../components/NewReminderComponent';
+import ReminderComponent from '../components/ReminderComponent';
 import CreateNote from '../components/CreateNote';
-
 
 export default class NewReminder extends Component {
 
@@ -36,7 +35,15 @@ export default class NewReminder extends Component {
         })
         console.log("dashboard page satte=>", this.state.isArchive, this.state.isTrash, this.state.isReminder, this.state.isNotes);
     }
+
+    listGridView = (listGridView) => {
+        this.setState({
+            listGridView: !listGridView
+        })
+        console.log("list grid reminder",this.state.listGridView);
+    }
     render() {
+        const slide = this.state.slidecards ? "afterslide" : "beforeslide";
         return (
             <div>
                 <div>
@@ -45,18 +52,20 @@ export default class NewReminder extends Component {
                         searchNote={this.searchNote}
                         listGridView={this.listGridView}
                         DashboardToPage={this.DashboardToPage}
+                        props ={this.props}
                     />
                 </div>
-                <div >
-                        <div>
+                <div className={slide}>
+                        <div  className="create-note-margin">
                             {(!this.state.isTrash && !this.state.isArchive) &&
                             <div>
                                 <CreateNote getNewNote={this.getNewNote} />
                             </div>
                             }
-                <div>
-                    <NewReminderComponent
+                <div className="container-allnotes">
+                    <ReminderComponent
                     searchNote={this.state.searchNote}
+                    listGridView={this.state.listGridView}
                     />
                 </div>
             </div>

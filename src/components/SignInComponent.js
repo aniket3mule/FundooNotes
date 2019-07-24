@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'
 import { Button, Label, Input, Card, CardImg, CardBody, CardTitle } from 'reactstrap';
@@ -103,11 +102,11 @@ class SignInComponent extends Component {
 
     signUpButton = (e => {
         e.preventDefault();
-        this.props.history.push("/signup")
+        this.props.props.history.push("/signup")
     })
     forgetPasswordButton = (e => {
         e.preventDefault();
-        this.props.history.push("/forgetpassword")
+        this.props.props.history.push("/forgetpassword")
     })
 
     render() {
@@ -191,7 +190,4 @@ class SignInComponent extends Component {
     }
 }
 
-export default
-    withRouter(
-        SignInComponent
-    );
+export default SignInComponent;

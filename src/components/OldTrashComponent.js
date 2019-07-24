@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardTitle, CardLink, Label, Container } from 'reactstrap';
+import { Card, CardBody, CardTitle, Container } from 'reactstrap';
 import 'react-toastify/dist/ReactToastify.min.css';
-import Reminder from './Reminder'
-import ColorPallete from './Color';
-import Tooltip from '@material-ui/core/Tooltip';
 import { Chip, Dialog } from '@material-ui/core';
-import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
 import GetNote from '../services/NoteServices';
 
@@ -20,17 +17,6 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1),
     },
 }));
-
-const thm = createMuiTheme({
-    overrides: {
-        MuiDialog:{
-            paperWidthSm:{
-                overflow: "visible",
-                borderRadius:"10px",
-            }
-        }
-    }
-});
 
 function searchingFor(search) {
     return function (x) {
@@ -47,16 +33,27 @@ class RemindersDisplayComponent extends Component {
             description: '',
             modal: false,
             allNotes: [],
+            isTrashed: true,
         }
     }
-    
+
+
+
     componentDidMount(){
-        this.getUpdatedNotes();
-    }
-    getUpdatedNotes(){
-        NoteService.getReminderNotesList()
+        NoteService.getTrashNotes()
         .then(response => {
-            console.log("trash notes ", response);
+            // console.log("trash notes ", response);
+            this.setState({
+                allNotes: response.data.data.data
+            })
+            
+        })
+    }
+
+    getUpdateNotes(){
+        NoteService.getTrashNotes()
+        .then(response => {
+            console.log("getALl notes in trash component ", response);
             this.setState({
                 allNotes: response.data.data.data
             })
@@ -93,13 +90,14 @@ class RemindersDisplayComponent extends Component {
                 NoteService.updateNote(data)
                     .then(response => {
                         console.log("uddate note function", response);
-                        this.getUpdatedNotes();
+                        this.getUpdateNotes();
                     })
                     .catch(err => {
                         console.log("Eroorrrrrr....", err);
                     })
             }
         } catch {
+
         }
     }
 
@@ -124,51 +122,38 @@ class RemindersDisplayComponent extends Component {
             })
     }
 
-    handleReminder = (reminderdate, noteId) => {
-        console.log(reminderdate);
-        this.setState({ reminder: reminderdate })
-        var note = {
-            'noteIdList': [noteId],
-            'reminder': reminderdate,
-        }
-        NoteService.updateReminderNotes(note)
-            .then(response => {
-                console.log("update reminder >>>", response);
-                this.getUpdatedNotes();
-            })
-            .catch(err => {
-                console.log("Eroorrrrrr....", err);
-            })
-    }
-
-    handleColorChanger = (value, noteId) => {
-        this.setState({ color: value })
-        var note = {
-            'noteIdList': [noteId],
-            'color': value,
-        }
-
-        NoteService.changesColorNotes(note)
-            .then(() => {
-                this.getUpdatedNotes();
-            })
-            .catch(err => {
-                console.log("Eroorrrrrr....", err);
-            })
-    }
-
-    handleDeleteNote = (noteId) => {
+    handleDelete = (noteId) => {
         var note = {
             'noteIdList': [noteId],
             'isDeleted': true
         }
 
+        NoteService.deleteForeverNote(note)
+            .then(response => {
+                this.getUpdateNotes();
+            })
+            .catch(err => {
+                console.log("Eroorrrrrr....", err);
+            })
+    }
+
+    handleRestore = (noteId) => {
+        var note = {
+            'noteIdList': [noteId],
+            'isDeleted': false
+        }
+
         NoteService.trashNote(note)
             .then(response => {
-                console.log(response);
-                let newArray = this.state.allNotes
-                console.log("new array", newArray);
-                this.getUpdatedNotes();
+               
+                NoteService.getAllNotes()
+                .then(response => {
+                    console.log("trash notes ", response);
+                    this.setState({
+                        allNotes: response.data.data.data
+                    })
+                    this.props.ReminderComponentToAllNotes(this.state.allNotes)
+                })
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
@@ -183,13 +168,11 @@ class RemindersDisplayComponent extends Component {
         var listgridvalue = this.props.listGridView;
         const listgridview = listgridvalue ? "list-view" : "default-view";
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
-
-        const allReminders = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map(key => {
-            // console.log("key data",key)
+        const allTrash = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map(key => {
             return (
-                    (key.reminder.length > 0 && key.isDeleted === false) &&
+                (key.isDeleted === true)&&
                     <div key={key.id} className={listgridview}>
-                         <MuiThemeProvider theme={thm}>
+                        <div>
                             <Container className="card-margin" >
                                 <Card className="take-note-user-card-description "
                                     onChange={() => this.handleColorChanger(key.color, key.id)}
@@ -231,56 +214,21 @@ class RemindersDisplayComponent extends Component {
                                     </CardBody>
                                     <CardBody >
                                         <div className={modalbottom}>
-                                            <Reminder
-                                                toolsPropsToReminder={this.handleReminder}
-                                                noteID={key.id}
-                                                id="color-picker"
-                                            >
-                                            </Reminder>
-
-                                            <CardLink>
-                                                <Tooltip title="Collaborator">
-                                                    <img className="img"
-                                                        src={require('../assets/img/colaborator.svg')}
-                                                        alt="color picker"
-                                                    />
-                                                </Tooltip>
-                                            </CardLink>
-
-                                            <ColorPallete
-                                                toolsPropsToColorpallete={this.handleColorChanger}
-                                                noteID={key.id}
-                                                id="color-picker"
-                                            >
-                                            </ColorPallete>
-
-                                            <CardLink
-                                                onClick={() => this.props.handleArchive(key.id, true)}
-                                            >
-                                                <Tooltip title="Archive">
-                                                    <img className="img"
-                                                        src={require('../assets/img/archived.svg')}
-                                                        alt="color picker"
-                                                    />
-                                                </Tooltip>
-                                            </CardLink>
-                                            <CardLink className="add-image">
-                                                <Tooltip title="add image">
-                                                    <img className="img"
-                                                        src={require('../assets/img/add_image.svg')}
-                                                        alt="color picker"
-                                                    />
-                                                </Tooltip>
-                                            </CardLink>
+                                            
                                             <MoreOptions
-                                                toolsPropsToMoreOptions={this.handleDeleteNote}
+                                                toolsPropsToMoreOptions={this.handleDelete}
+                                                moreOptionsToTrashNotes={this.handleRestore}
                                                 noteID={key.id}
-                                                id="color-picker">
+                                                id="color-picker"
+                                                isTrashed={true}
+                                                >
                                             </MoreOptions>
                                         </div>
                                     </CardBody>
                                 </Card>
                             </Container>
+                        </div>
+
                         {(this.state.noteId === key.id) &&
                             <div key={key.id} >
                                 <Dialog
@@ -303,7 +251,7 @@ class RemindersDisplayComponent extends Component {
                                                     placeholder="Title"
                                                     name="title"
                                                     value={this.state.title}
-                                                    onChange={this.handleChange}
+                                                    readOnly
                                                     rows="2"
                                                 />
                                             </CardTitle>
@@ -314,8 +262,7 @@ class RemindersDisplayComponent extends Component {
                                                 placeholder="Take a note"
                                                 name="description"
                                                 value={this.state.description}
-                                                onChange={this.handleChange}
-                                            />
+                                                readOnly                                            />
 
                                             {(key.reminder.length > 0) &&
                                                 <div>
@@ -333,70 +280,25 @@ class RemindersDisplayComponent extends Component {
                                             <div
                                                 className="modal-footer-note"
                                             >
-                                                <CardLink onClick={this.handleReminder}>
-                                                    <Reminder
-                                                        toolsPropsToReminder={this.handleReminder}
-                                                        noteID={key.id}
-                                                        id="color-picker"
-                                                    >
-                                                    </Reminder>
-                                                </CardLink>
-
-                                                <CardLink >
-                                                    <Tooltip title="Collaborator">
-                                                        <img className="img"
-                                                            src={require('../assets/img/colaborator.svg')}
-                                                            alt="color picker" />
-                                                    </Tooltip>
-                                                </CardLink>
-
-                                                <ColorPallete
-                                                    toolsPropsToColorpallete={this.handleColorChanger}
-                                                    noteID={key.id}
-                                                    id="color-picker"
-                                                >
-                                                </ColorPallete>
-
-                                                <CardLink
-                                                    onClick={() => this.props.handleArchive(key.id, true)}>
-                                                    <Tooltip title="Archive">
-                                                        <img className="img"
-                                                            src={require('../assets/img/archived.svg')}
-                                                            alt="color picker" />
-                                                    </Tooltip>
-                                                </CardLink>
-                                                <CardLink>
-                                                    <Tooltip title="add image">
-                                                        <img className="img"
-                                                            src={require('../assets/img/add_image.svg')}
-                                                            alt="color picker"
-                                                        />
-                                                    </Tooltip>
-                                                </CardLink>
+                                                
                                                 <MoreOptions
-                                                    // toolsPropsToColorpallete={this.handleMoreOptions}
-                                                    noteID={key.id}
-                                                    id="color-picker">
-
-                                                </MoreOptions>
-                                                <CardLink ></CardLink>
-                                                <CardLink
-                                                    className="close-btn"
-                                                    onClick={this.handleToggleOpen}
+                                                toolsPropsToMoreOptions={this.handleDelete}
+                                                moreOptionsToTrashNotes={this.handleRestore}
+                                                noteID={key.id}
+                                                id="color-picker"
+                                                isTrashed={true}
                                                 >
-                                                    <Label>Close</Label>
-                                                </CardLink>
+                                            </MoreOptions>
                                             </div>
                                     </Card>
                                 </Dialog>
                             </div>}
-                            </MuiThemeProvider>
                     </div>
             )
         })
         return (
-            <div className="card-grid all-reminders">
-                {allReminders}
+            <div className="all-trash">
+                {allTrash}
             </div>
         )
     }

@@ -10,9 +10,9 @@ import { Chip, Dialog, Avatar, Button, IconButton, TextField, InputBase } from '
 import Snackbar from '@material-ui/core/Snackbar'
 import { makeStyles } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
-import RemindersDisplayComponent from './ReminderComponent';
-import TrashComponent from './TrashComponent'
-import ArchivedComponent from './ArchivedComponent';
+import RemindersDisplayComponent from './OldReminderComponent';
+import TrashComponent from './OldTrashComponent'
+import ArchivedComponent from './OldArchivedComponent';
 import CollaboratorComponent from './CollaboratorComponent';
 import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
 import CloseIcon from "@material-ui/icons/Close";
@@ -381,6 +381,8 @@ class GetAllNotes extends Component {
         var listgridvalue = this.props.listGridView;
         const listgridview = listgridvalue ? "list-view" : "default-view";
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
+        const listView = listgridvalue ? null : "card-grid";
+        const containerAllnotes = listgridvalue ? null : "container-allnotes"
         // var doc;
         var notes = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map((key) => {
             return (
@@ -397,15 +399,6 @@ class GetAllNotes extends Component {
                                 style={{ backgroundColor: key.color }}>
                                 <CardBody className="user-card-body-desc">
                                     <CardTitle>
-                                        {/* <input
-                                            type="text"
-                                            className="take-note-input"
-                                            placeholder="Title"
-                                            value={key.title}
-                                            onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
-                                            readOnly
-                                            style={{ backgroundColor: key.color }}
-                                        /> */}
                                         <InputBase
                                             id="outlined-dense-multiline"
                                             value={key.title}
@@ -430,22 +423,6 @@ class GetAllNotes extends Component {
                                         multiline
                                         style={{ backgroundColor: key.color }}
                                     />
-
-                                    {/* <TextField
-                                        // id="outlined-dense-multiline"
-                                        value={key.description}
-                                        onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
-                                        // className={clsx(classes.textField, classes.dense)}
-                                        margin="dense"
-                                        variant="outlined"
-                                        readOnly
-                                        multiline
-                                        style={{ backgroundColor: key.color }}
-                                    // maxrow="4"
-                                    /> */}
-
-
-
                                     {(key.reminder.length > 0) &&
                                         <div>
                                             <Chip
@@ -535,9 +512,12 @@ class GetAllNotes extends Component {
                                             <div>
                                                 <span><strong>Question Asked</strong></span>
                                             </div>
+
+                                            
                                             <div className="innerHTML"
-                                                dangerouslySetInnerHTML={{ __html: key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message }}>
-                                                {/* {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message} */}
+                                                dangerouslySetInnerHTML={{ __html: key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message }}
+                                                style={{maxWidth:"200px"}}
+                                                >
                                             </div>
                                         </div>
                                     </Tooltip>
@@ -679,7 +659,6 @@ class GetAllNotes extends Component {
 
                                                 <div className="innerHTML"
                                                     dangerouslySetInnerHTML={{ __html: key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message }}>
-                                                    {/* {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message} */}
                                                 </div>
                                             </div>
                                         </Tooltip>
@@ -692,51 +671,10 @@ class GetAllNotes extends Component {
             )
         })
         return (
-            <div>{
-                (this.props.isNotes === true) ?
-                    <div className="card-grid">
+            <div className={containerAllnotes}>
+                    <div className={listView}>
                         {notes}
                     </div>
-                    :
-                    null
-                        ||
-                        (this.props.isReminder === true) ?
-                        <div className="card-grid">
-                            <RemindersDisplayComponent
-                                listGridView={this.props.listGridView}
-                                ReminderComponentToAllNotes={this.ReminderComponentToAllNotes}
-                                searchNote={this.props.searchNote}
-                                handleArchive={this.handleArchive}
-                            />
-                        </div>
-                        :
-                        null
-                            ||
-                            (this.props.isTrash === true) ?
-                            <div className="card-grid">
-                                <TrashComponent
-                                    listGridView={this.props.listGridView}
-                                    ReminderComponentToAllNotes={this.ReminderComponentToAllNotes}
-                                    searchNote={this.props.searchNote}
-                                />
-                            </div>
-                            :
-                            null
-                                ||
-
-                                (this.props.isArchive === true) ?
-                                <div className="card-grid">
-                                    <ArchivedComponent
-                                        listGridView={this.props.listGridView}
-                                        ReminderComponentToAllNotes={this.ReminderComponentToAllNotes}
-                                        searchNote={this.props.searchNote}
-                                        handleArchive={this.handleArchive}
-                                        handleDeleteNote={this.handleDeleteNote}
-                                    />
-                                </div>
-                                :
-                                null
-            }
                 <Snackbar
                     key={this.state.messageInfo}
                     anchorOrigin={{

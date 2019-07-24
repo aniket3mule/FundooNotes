@@ -6,7 +6,9 @@ export default class  ResetPassword extends Component{
     render(){
         return(
             <Container>
-                <ResetPasswordComponent/>
+                <ResetPasswordComponent
+                props={this.props}
+                />
             </Container>
         );
     }

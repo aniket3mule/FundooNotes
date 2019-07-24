@@ -47,6 +47,7 @@ export default class QnAEditor extends Component {
                     />
                     <EditorQnAComponent
                     noteId ={this.props.location.state}
+                    props={this.props}
                     />
                 </div>
             )

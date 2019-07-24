@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'
 import { Button, Label, Input, Card, CardImg, CardBody, CardTitle, FormGroup } from 'reactstrap';
@@ -33,7 +32,7 @@ class SignUp extends Component {
 
     signInButton = (e => {
         e.preventDefault();
-        this.props.history.push("/signin")
+        this.props.props.history.push("/signin")
     });
 
 
@@ -194,7 +193,4 @@ class SignUp extends Component {
         );
     }
 }
-export default 
-withRouter(
-    SignUp
-    )
+export default SignUp;

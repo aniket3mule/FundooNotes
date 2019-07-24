@@ -4,11 +4,10 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import Reminder from './Reminder'
 import ColorPallete from './Color';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Chip, Dialog, InputBase } from '@material-ui/core';
+import { Chip, Dialog } from '@material-ui/core';
 import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
 import GetNote from '../services/NoteServices';
-import CollaboratorComponent from './CollaboratorComponent';
 
 const NoteService = new GetNote();
 const useStyles = makeStyles(theme => ({
@@ -39,7 +38,7 @@ function searchingFor(search) {
     }
 }
 
-class TrashComponent extends Component {
+class RemindersDisplayComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -52,18 +51,26 @@ class TrashComponent extends Component {
     }
     
     componentDidMount(){
-        this.getUpdatedNotes();
-    }
-    getUpdatedNotes(){
-        NoteService.getTrashNotes()
+        NoteService.getReminderNotesList()
         .then(response => {
-            console.log("getALl notes in trash component ", response);
+            console.log("trash notes ", response);
             this.setState({
                 allNotes: response.data.data.data
             })
             
         })
     }
+    getUpdatedNotes(){
+        NoteService.getReminderNotesList()
+        .then(response => {
+            console.log("trash notes ", response);
+            this.setState({
+                allNotes: response.data.data.data
+            })
+            
+        })
+    }
+
     handleToggleOpen = (id, oldTitle, oldDescription) => {
         this.setState(prevState => ({
             modal: !prevState.modal,
@@ -174,33 +181,19 @@ class TrashComponent extends Component {
                 console.log("Eroorrrrrr....", err);
             })
     }
-
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    removeCollaborator = (value) => {
-        if (value) {
-            this.getUpdatedNotes();
-        }
-
-    }
-
-    saveCollaborator = (value) => {
-        if (value) {
-            this.getUpdatedNotes();
-        }
-    }
-
     render() {
         var listgridvalue = this.props.listGridView;
-        const listgridview = listgridvalue ? "list-view-archive" : "default-view";
+        const listgridview = listgridvalue ? "list-view" : "default-view";
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
-        const listView = listgridvalue ? null : "card-grid";
-        const allTrash = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map(key => {
+
+        const allReminders = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map(key => {
             // console.log("key data",key)
             return (
-                    ( key.isDeleted === true) &&
+                    (key.reminder.length > 0 && key.isDeleted === false) &&
                     <div key={key.id} className={listgridview}>
                          <MuiThemeProvider theme={thm}>
                             <Container className="card-margin" >
@@ -209,30 +202,25 @@ class TrashComponent extends Component {
                                     style={{ backgroundColor: key.color }}>
                                     <CardBody className="user-card-body-desc">
                                         <CardTitle>
-                                        <InputBase
-                                            id="outlined-dense-multiline"
-                                            value={key.title}
+                                            <input
+                                                type="text"
+                                                className="take-note-input"
+                                                placeholder="Title"
+                                                value={key.title}
+                                                onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
+                                                readOnly
+                                                style={{ backgroundColor: key.color }}
+                                            />
+                                        </CardTitle>
+                                        <textarea
+                                            className="take-note-input note-description"
+                                            rows="5"
+                                            placeholder="Take a note"
+                                            value={key.description}
                                             onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
-                                            // className={clsx(classes.textField, classes.dense)}
-                                            margin="dense"
-                                            variant="outlined"
                                             readOnly
-                                            multiline
                                             style={{ backgroundColor: key.color }}
-
                                         />
-                                    </CardTitle>
-                                    <InputBase
-                                        id="outlined-dense-multiline"
-                                        value={key.description}
-                                        onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
-                                        // className={clsx(classes.textField, classes.dense)}
-                                        margin="dense"
-                                        variant="outlined"
-                                        readOnly
-                                        multiline
-                                        style={{ backgroundColor: key.color }}
-                                    />
 
                                         {(key.reminder.length > 0) &&
                                             <div>
@@ -257,14 +245,13 @@ class TrashComponent extends Component {
                                             </Reminder>
 
                                             <CardLink>
-                                            <CollaboratorComponent
-                                                noteID={key.id}
-                                                collaborators={key.collaborators}
-                                                removeCollaborator={this.removeCollaborator}
-                                                saveCollaborator={this.saveCollaborator}
-                                            // updatedCollaborator= {this.state.collaborator}
-                                            />
-                                        </CardLink>
+                                                <Tooltip title="Collaborator">
+                                                    <img className="img"
+                                                        src={require('../assets/img/colaborator.svg')}
+                                                        alt="color picker"
+                                                    />
+                                                </Tooltip>
+                                            </CardLink>
 
                                             <ColorPallete
                                                 toolsPropsToColorpallete={this.handleColorChanger}
@@ -315,27 +302,27 @@ class TrashComponent extends Component {
                                         style={{ backgroundColor: key.color }}>
                                         <CardBody className="user-card-body-desc">
                                             <CardTitle>
-                                            <InputBase
-                                                name="title"
-                                                value={this.state.title}
-                                                onChange={this.handleChange}
-                                                margin="dense"
-                                                variant="outlined"
-                                                multiline
+                                                <textarea
+                                                    style={{ backgroundColor: key.color }}
+                                                    type="text"
+                                                    className="take-note-input"
+                                                    placeholder="Title"
+                                                    name="title"
+                                                    value={this.state.title}
+                                                    onChange={this.handleChange}
+                                                    rows="2"
+                                                />
+                                            </CardTitle>
+                                            <textarea
                                                 style={{ backgroundColor: key.color }}
-                                                placeholder="Title"
+                                                className="take-note-input note-description"
+                                                rows="5"
+                                                placeholder="Take a note"
+                                                name="description"
+                                                value={this.state.description}
+                                                onChange={this.handleChange}
                                             />
-                                        </CardTitle>
-                                        <InputBase
-                                            name="description"
-                                            value={this.state.description}
-                                            onChange={this.handleChange}
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Description"
-                                            multiline
-                                            style={{ backgroundColor: key.color }}
-                                        />
+
                                             {(key.reminder.length > 0) &&
                                                 <div>
                                                     <Chip
@@ -414,11 +401,11 @@ class TrashComponent extends Component {
             )
         })
         return (
-            <div className={listView}>
-                {allTrash}
+            <div className="all-reminders">
+                {allReminders}
             </div>
         )
     }
 }
 
-export default TrashComponent
+export default RemindersDisplayComponent

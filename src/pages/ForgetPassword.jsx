@@ -6,7 +6,9 @@ export default class  ForgetPassword extends Component{
     render(){
         return(
             <Container>
-                <ForgetPasswordComponent/>
+                <ForgetPasswordComponent
+                props={this.props}
+                />
             </Container>
         );
     }

@@ -6,7 +6,9 @@ export default class  SignUp extends Component{
     render(){
         return(
             <Container>
-                <SignUpComponent/>
+                <SignUpComponent
+                 props ={this.props}
+                />
             </Container>
         );
     }

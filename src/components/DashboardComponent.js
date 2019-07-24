@@ -44,7 +44,7 @@ class DashboardComponent extends Component {
             isReminder: false,
             isTrash: false,
             isArchive: false,
-            isNotes: true,
+            isNotes: true,  
         }
     }
 
@@ -72,7 +72,6 @@ class DashboardComponent extends Component {
         })
         this.props.DashboardToPage(isReminder, isTrash, isArchive, isNotes);
     }
-
 
     render() {
         return (
@@ -163,6 +162,7 @@ class DashboardComponent extends Component {
                         <DrawerMenu
                             appBarProps={this.state.open}
                             DrawerMenuToDashboard={this.DrawerMenuToDashboard}
+                            props={this.props.props}
                         />
                     </AppBar>
                 </MuiThemeProvider>

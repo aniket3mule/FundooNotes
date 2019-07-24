@@ -148,7 +148,7 @@ class CreateLabel extends Component {
                 </Dialog>
             </div>
             :
-            <div style={{width: "200px"}}>
+            <div style={{width: "200px", padding: "3vh"}}>
                     <div className="remind-heading">
                         Label note:
                     </div>

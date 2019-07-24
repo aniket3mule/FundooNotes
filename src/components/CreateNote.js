@@ -202,7 +202,6 @@ class CreateNote extends Component {
                         </div>
                     </CardBody>
                     <CardBody className="create-card-bottom">
-
                         <Reminder
                             toolsPropsToReminder={this.handleReminder}
                             id="color-picker"

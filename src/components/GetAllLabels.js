@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import LabelService from '../services/LabelServices';
-import { MenuItem } from '@material-ui/core';
+import { MenuItem, Checkbox, FormControlLabel } from '@material-ui/core';
 import Check from '@material-ui/icons/Check'
 import Edit from '@material-ui/icons/Edit'
 
@@ -10,7 +10,7 @@ export default class GetAllLabels extends Component {
         super(props);
         this.state = {
             allLabels: [],
-            mouseOver:false,
+            mouseOver: false,
         }
 
     }
@@ -34,41 +34,41 @@ export default class GetAllLabels extends Component {
             })
     }
 
-    handleMounseEvent = (labelId) =>{
+    handleMounseEvent = (labelId) => {
         this.setState({
-            mouseOver:!this.state.mouseOver,
-            labelId : labelId,
+            mouseOver: !this.state.mouseOver,
+            labelId: labelId,
         })
     }
 
-    handleDeleteLabel =(labelId)=>{
+    handleDeleteLabel = (labelId) => {
         this.setState({
-            labelId:labelId
+            labelId: labelId
         })
 
         var labelData = {
-            'id' : labelId,
+            'id': labelId,
         }
 
         LabelServices.deleteNoteLabel(labelData.id)
-        .then(() => {
-            LabelServices.getLabels()
-            .then(allLabels => {
-                this.setState({ allLabels: allLabels.data.data.details })
-                console.log("this data", this.state.allLabels);
-                this.setState({
-                    allLabel: [...this.state.allLabel, this.props.newLabel]
-                })
-                // this.props.GetAllLabelToDrawerMenu(this.state.allLabels)
+            .then(() => {
+                LabelServices.getLabels()
+                    .then(allLabels => {
+                        this.setState({ allLabels: allLabels.data.data.details })
+                        console.log("this data", this.state.allLabels);
+                        this.setState({
+                            allLabel: [...this.state.allLabel, this.props.newLabel]
+                        })
+                        // this.props.GetAllLabelToDrawerMenu(this.state.allLabels)
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
             })
-            .catch(err => {
-                console.log(err);
+            .catch(error => {
+                console.log(error);
+
             })
-        })
-        .catch(error =>{
-            console.log(error);
-            
-        })
     }
 
 
@@ -80,72 +80,86 @@ export default class GetAllLabels extends Component {
     }
 
     render() {
-        
+
         const labels = this.state.allLabels.map((key) => {
             return (
                 this.props.sidebarLabel ?
-                <MenuItem key={key.id}>
-                    <img className="update-card-img"
-                        src={require('../assets/img/label.svg')}
-                        alt="label"
-                        
-                    />
-                    <span className="fundoo-text-sidebar">{key.label}</span>
+                    <MenuItem key={key.id}>
+                        <img className="update-card-img"
+                            src={require('../assets/img/label.svg')}
+                            alt="label"
 
-                </MenuItem>
-                :
-                this.props.editLabels ?
-                <div className="edit-label-dialog" key={key.id}>
-                    {!this.state.mouseOver ?
-                    <div className="edit_label_gray">
-                    <img className="update-card-img"
-                        src={require('../assets/img/edit_label_gray.png')}
-                        alt="label"
-                        onMouseOver = {() => this.handleMounseEvent(key.id)}
-                    />
-                    </div>
-                    :
-                    (this.state.labelId === key.id) ?
-                    <div className="delete_label_gray" key={key.id}>
-                    <img className="update-card-img"
-                        src={require('../assets/img/delete_grey.png')}
-                        alt="label"
-                        onMouseLeave ={this.handleMounseEvent}
-                        onClick={() => this.handleDeleteLabel(key.id)}
-                    />
-                    </div>
-                    :
-                    <div className="edit_label_gray">
-                    <img className="update-card-img"
-                        src={require('../assets/img/edit_label_gray.png')}
-                        alt="label"
-                        onMouseOver = {() => this.handleMounseEvent(key.id)}
-                    />
-                    </div>
-                    }
-                    
-                    <div style ={{display:"flex"}}>
-                    <input
-                                placeholder="create new label"
-                                name="label"
-                                value={key.label}
-                                style={{ height: '65%', width: '100%', border:"none" }}
-                                onClick={() => this.handleCloseEdit(key.id)}
-                                readOnly
                         />
-                        <Edit
-                        onClick={() => this.handleCloseEdit(key.id)}
-                        />
-                        <Check
-                        onClick={this.addLabel}/>
+                        <span className="fundoo-text-sidebar">{key.label}</span>
+
+                    </MenuItem>
+                    :
+                    this.props.editLabels ?
+                        <div className="edit-label-dialog" key={key.id}>
+                            {!this.state.mouseOver ?
+                                <div className="edit_label_gray">
+                                    <img className="update-card-img"
+                                        src={require('../assets/img/edit_label_gray.png')}
+                                        alt="label"
+                                        onMouseOver={() => this.handleMounseEvent(key.id)}
+                                    />
+                                </div>
+                                :
+                                (this.state.labelId === key.id) ?
+                                    <div className="delete_label_gray" key={key.id}>
+                                        <img className="update-card-img"
+                                            src={require('../assets/img/delete_grey.png')}
+                                            alt="label"
+                                            onMouseLeave={this.handleMounseEvent}
+                                            onClick={() => this.handleDeleteLabel(key.id)}
+                                        />
+                                    </div>
+                                    :
+                                    <div className="edit_label_gray">
+                                        <img className="update-card-img"
+                                            src={require('../assets/img/edit_label_gray.png')}
+                                            alt="label"
+                                            onMouseOver={() => this.handleMounseEvent(key.id)}
+                                        />
+                                    </div>
+                            }
+
+                            <div style={{ display: "flex" }}>
+                                <input
+                                    placeholder="create new label"
+                                    name="label"
+                                    value={key.label}
+                                    style={{ height: '65%', width: '100%', border: "none" }}
+                                    onClick={() => this.handleCloseEdit(key.id)}
+                                    readOnly
+                                />
+                                <Edit
+                                    onClick={() => this.handleCloseEdit(key.id)}
+                                />
+                                <Check
+                                    onClick={this.addLabel} />
+                            </div>
                         </div>
-                </div>
-                
-                :
-                this.props.createLabelNoteCreate && 
-                <div key={key.id}>
-                <span>{key.label}</span>
-                </div>
+
+                        :
+                        this.props.createLabelNoteCreate &&
+                        <div key={key.id}>
+
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        // checked={}
+                                        onChange={this.handleChange}
+                                        value="checkedB"
+                                        color="primary"
+                                        style={{padding:"0"}}
+                                        size="small"
+                                    />
+                                }
+                                label={key.label}
+                            />
+                            {/* <span>{key.label}</span> */}
+                        </div>
             )
         })
         return (

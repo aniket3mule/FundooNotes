@@ -193,14 +193,14 @@ input.input:focus {
   flex-direction: column;
   align-items: center;
   min-width: 0;
-  max-width: 450px;
+  max-width: 575px;
   height: auto;
   word-wrap: break-word;
   background-color: #fff;
   background-clip: border-box;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgb(143, 143, 143);
-  margin-top: 7%;
+  /* margin-top: 7%; */
   width: 100%;
 }
 
@@ -235,7 +235,7 @@ input.input:focus {
   flex-direction: column;
   align-items: center;
   min-width: 0;
-  max-width: 450px;
+  max-width: 575px;
   height: auto;
   word-wrap: break-word;
   /* background-color: #fff; */
@@ -248,9 +248,10 @@ input.input:focus {
 }
 
 .take-note-div-desc {
-  /* margin-top: 10%; */
+  margin-top: -6.8%;
   display: flex;
   justify-content: center;
+
 }
 
 .card-bottom {
@@ -280,6 +281,7 @@ input.input:focus {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  cursor: pointer;
 }
 
 .take-note-user-card-description {
@@ -329,11 +331,16 @@ input.input:focus {
 .card-grid {
 
   display: flex;
-  width: 77%;
+  /* width: 77%; */
   flex-wrap: wrap;
   justify-content: flex-start;
-  margin-left: 20%;
+  /* margin-left: 20%; */
 
+}
+
+.container-allnotes{
+  padding-left: 18%;
+  padding-right: 12%;
 }
 
 .all-note-div {
@@ -345,6 +352,10 @@ input.input:focus {
 
 .card-margin {
   margin-top: 4%;
+}
+
+.create-note-margin{
+  margin-top: 12vh
 }
 
 
@@ -418,8 +429,12 @@ input.input:focus {
 }
 
 .list-view {
-  width: 75%;
   height: auto;
+  padding: 0% 26% 0 26%;
+}
+
+.list-view-archive{
+  padding: 0% 20% 0 12%;
 }
 
 .list-view-bottom {
@@ -458,6 +473,12 @@ input.input:focus {
 .user-icon {
   display: flex;
   justify-content: flex-end;
+}
+
+.list-view-allNotes{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 
@@ -527,10 +548,10 @@ input.input:focus {
   font-size: 0.7em;
   font-weight: 0px;
 }
-
+/* 
 .all-reminders {
-  /* margin-top: 15vh; */
-}
+  margin-top: 15vh;
+} */
 
 .all-trash {
   display: flex;
@@ -552,8 +573,7 @@ input.input:focus {
 
 .q-a-asked{
     border-bottom: 2px solid gray;
-    margin-bottom: 2%;
-    padding:  0.8rem
+    padding:  0.6rem
 }
 @media only screen and (max-width: 600px) {
   .list-view {
@@ -571,13 +591,13 @@ input.input:focus {
     width: 40px;
   }
 
-  .take-note-card {
+  /* .take-note-card {
     margin: 22% 5% 1% 5%;
-  }
+  } */
 
-  .take-note-card-description {
+  /* .take-note-card-description {
     margin: 22% 5% 1% 5%;
-  }
+  } */
 
   .all-note-div {
     display: flex;

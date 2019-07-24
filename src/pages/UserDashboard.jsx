@@ -72,7 +72,7 @@ class UserDashboard extends Component {
         }
         else {
             const slide = this.state.slidecards ? "afterslide" : "beforeslide";
-
+            const listView = this.state.listGridView ? "list-view-allNotes":"allDemo" 
             return (
                 <div>
                     <div>
@@ -81,17 +81,18 @@ class UserDashboard extends Component {
                             searchNote={this.searchNote}
                             listGridView={this.listGridView}
                             DashboardToPage={this.DashboardToPage}
+                            props={this.props}
                             
                         />
                     </div>
                     <div className={slide}>
-                        <div>
+                        <div className="create-note-margin">
                             {(!this.state.isTrash && !this.state.isArchive) &&
                             <div>
                                 <CreateNote getNewNote={this.getNewNote} />
                             </div>
                             }
-                            <div className="allDemo">
+                            <div className={listView}>
                                 <AllNotes
                                     ref={this.noteToCards}
                                     searchNote={this.state.searchNote}
