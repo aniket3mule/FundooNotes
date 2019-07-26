@@ -108,7 +108,7 @@ class RemindMe extends Component {
                     {this.state.open ?
                         <ClickAwayListener onClickAway={() => this.closePopper()}>
                             <Card className="remind-me">
-                                <div style={{width: "200px"}}>
+                                <div style={{width: "185px"}}>
                                     <div className="remind-heading">
                                         Reminder:
                                     </div>

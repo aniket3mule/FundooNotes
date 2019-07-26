@@ -44,6 +44,7 @@ export default class QnAEditor extends Component {
                         searchNote={this.searchNote}
                         listGridView={this.listGridView}
                         DashboardToPage={this.DashboardToPage}
+                        props={this.props}
                     />
                     <EditorQnAComponent
                     noteId ={this.props.location.state}

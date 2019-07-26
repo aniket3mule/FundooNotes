@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import DashboardComponent from '../components/DashboardComponent';
-import ArchivedComponent from '../components/ArchivedComponent';
-
-export default class NewReminder extends Component {
+import GetNotesListByLabelComponent from '../components/GetNotesListByLabelComponent'
+export default class GetNotesListByLabel extends Component {
 
     constructor(props) {
         super(props);
@@ -57,7 +56,7 @@ export default class NewReminder extends Component {
                 </div>
                 <div className={slide}>
                         <div  className="create-note-margin container-allnotes">
-                            <ArchivedComponent
+                            <GetNotesListByLabelComponent
                                 searchNote={this.state.searchNote}
                                 listGridView={this.state.listGridView}
                             />

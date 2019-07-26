@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import DashboardComponent from '../components/DashboardComponent';
-import CreateNote from '../components/CreateNote';
 import TrashComponent from '../components/TrashComponent';
 
 export default class Trash extends Component {

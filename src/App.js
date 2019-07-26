@@ -11,6 +11,7 @@ import EditorQnAComponent from './pages/QnAEditor';
 import Reminder from './pages/Reminder';
 import Archive from './pages/Archive';
 import Trash from './pages/Trash';
+import GetNotesListByLabel from './pages/GetNotesListByLabel';
 
 //import AppBar from './components/DashboardComponent'
 
@@ -29,6 +30,7 @@ class App extends React.Component {
           <Route path="/reminder" component = {Reminder}/>
           <Route path="/archive" component = {Archive}/>
           <Route path="/trash" component = {Trash}/>
+          <Route path="/usernote" component = {GetNotesListByLabel}/>
         </Router>
     )
   }

@@ -1,6 +1,6 @@
 import LabelService from '../services/LabelServices';
 import React, { Component } from 'react'
-import { Input, DialogActions } from '@material-ui/core'
+import { Input, DialogActions, InputBase, Button } from '@material-ui/core'
 import GetAllLabels from './GetAllLabels';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -17,7 +17,7 @@ class CreateLabel extends Component {
         this.state = {
             label: [],
             open: false,
-            closeEdit:false,
+            closeEdit: false,
             newLabel: [],
 
         }
@@ -47,9 +47,9 @@ class CreateLabel extends Component {
 
         LabelServices.addLabels(label)
             .then(response => {
-                
+
                 this.setState({
-                    newLabel : response.data
+                    newLabel: response.data
                 })
                 console.log("new label ", this.state.newLabel);
                 this.getNewLabel(response.data);
@@ -74,100 +74,110 @@ class CreateLabel extends Component {
         })
     }
 
-    handleCloseEdit = () =>{
+    handleCloseEdit = () => {
         this.setState({
-            closeEdit : !this.state.closeEdit
+            closeEdit: !this.state.closeEdit
         })
     }
+
     render() {
-      
+        // console.log("Createlable render ", this.props.noteID);
+
         return (
             !this.props.addLabelOpen ?
-            <div> 
-                <div onClick={this.handleClickOpen} style={{ cursor: 'pointer' }}>
-                <img className="update-card-img"
+                <div>
+                    <div onClick={this.handleClickOpen} style={{ cursor: 'pointer' }}>
+                        <img className="update-card-img"
                             src={require('../assets/img/edit_label.svg')}
                             alt="color picker" />
-                                <span className="fundoo-text-sidebar">Edit Labels</span>
-                </div>
-                <Dialog
-                    open={this.state.open}
-                    onClose={this.handleClose}
-                    aria-labelledby="responsive-dialog-title"
-                >
-                    <DialogTitle id="responsive-dialog-title">
-                    {"Edit Label"}
-                    </DialogTitle>
-                    <DialogContent>
-                        <div className="create-label-div">
-                            {this.state.closeEdit ?
-                            <div style ={{display:"flex"}}>
-                            <Close
-                            onClick={this.handleCloseEdit}
-                            style ={{marginLeft:"-4px"}}
-                            />
-                            <Input
-                                placeholder="create new label"
-                                name="label"
-                                value={this.state.label}
-                                color="black"
-                                style={{ height: '65%', width: '100%' }}
-                                onChange={this.handleChange}
-                        />
-                        <Check
-                        onClick={this.addLabel}
-                        />
-                        </div>
-                            :
-                            <div style={{display:"flex"}}>
-                            
-                            <Add 
-                            onClick={this.handleCloseEdit}
-                            style ={{marginLeft:"-4px"}}
-                            />
-                            <input
-                                placeholder="create new label"
-                                name="label"
-                                style={{ height: '65%', width: '100%', border:"none" }}
-                                onClick={this.handleCloseEdit}
-                                readOnly
-                        />
+                        <span className="fundoo-text-sidebar">Edit Labels</span>
+                    </div>
+                    <Dialog
+                        open={this.state.open}
+                        onClose={this.handleClose}
+                        aria-labelledby="responsive-dialog-title"
+                    >
+                        <DialogTitle id="responsive-dialog-title">
+                            {"Edit Label"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <div className="create-label-div">
+                                {this.state.closeEdit ?
+                                    <div style={{ display: "flex" }}>
+                                        <Close
+                                            onClick={this.handleCloseEdit}
+                                            style={{ marginLeft: "-4px" }}
+                                        />
+                                        <Input
+                                            placeholder="create new label"
+                                            name="label"
+                                            value={this.state.label}
+                                            color="black"
+                                            style={{ height: '65%', width: '100%' }}
+                                            onChange={this.handleChange}
+                                        />
+                                        <Check
+                                            onClick={this.addLabel}
+                                        />
+                                    </div>
+                                    :
+                                    <div style={{ display: "flex" }}>
+
+                                        <Add
+                                            onClick={this.handleCloseEdit}
+                                            style={{ marginLeft: "-4px" }}
+                                        />
+                                        <input
+                                            placeholder="create new label"
+                                            name="label"
+                                            style={{ height: '65%', width: '100%', border: "none" }}
+                                            onClick={this.handleCloseEdit}
+                                            readOnly
+                                        />
+                                    </div>
+                                }
+
                             </div>
-                            }
-                        
-                        </div>
-                            <GetAllLabels 
-                            editLabels = {this.state.open}
-                            newLabel = {this.state.newLabel}
-                            ref= {this.labelToCards}
+                            <GetAllLabels
+                                editLabels={this.state.open}
+                                newLabel={this.state.newLabel}
+                                ref={this.labelToCards}
+                                noteId={this.props.noteID}
                             />
-                    </DialogContent>
-                    <DialogActions>
-                        <span>Close</span>
-                    </DialogActions>
-                </Dialog>
-            </div>
-            :
-            <div style={{width: "200px", padding: "3vh"}}>
-                    <div className="remind-heading">
+                        </DialogContent>
+                        <DialogActions>
+                            <Button
+                                className="close-btn"
+                                onClick={this.handleClose}
+                            >
+                                Close
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
+                :
+                <div style={{ width: "200px", paddingLeft: "8%" }}>
+                    <div>
                         Label note:
                     </div>
                     <div onClick={this.handleRemindToday}>
                         <div>
-                            <Input
-                                placeholder="create Label name"
-                                name="label"
+                            <InputBase
+                                id="outlined-dense-multiline"
                                 value={this.state.label}
-                                color="black"
-                                style={{ height: '50%', width: '100%' }}
                                 onChange={this.handleChange}
+                                margin="dense"
+                                variant="outlined"
+                                placeholder="create Label name"
+                                multiline
                             />
                         </div>
                         <div>
-                                <GetAllLabels
-                                createLabelNoteCreate = {true}
-                                ref= {this.labelToCards}
-                                />
+                            <GetAllLabels
+                                createLabelNoteCreate={true}
+                                ref={this.labelToCards}
+                                noteId={this.props.noteID}
+                            />
                         </div>
                         <div onClick={this.addLabel} style={{ cursor: 'pointer' }}>
                             <img

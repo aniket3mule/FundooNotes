@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Popover from "@material-ui/core/Popover";
 import { IconButton, Tooltip, Button } from "@material-ui/core";
-import { withRouter } from 'react-router-dom';
 import Services from "../services/UserServices";
 
 const profile = new Services();
@@ -32,7 +31,7 @@ class UploadProfile extends React.Component {
 
   handleLogout = () => {
     localStorage.clear();
-    this.props.history.push('/signin');
+    this.props.props.history.push('/signin');
   };
 
   handleClick = event => {
@@ -165,4 +164,4 @@ UploadProfile.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withRouter(withStyles(styles)(UploadProfile));
+export default withStyles(styles)(UploadProfile);

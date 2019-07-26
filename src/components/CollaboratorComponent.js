@@ -137,7 +137,7 @@ class CollaboratorComponent extends Component {
             return null
         }
         return (
-            <Paper >
+            <Paper>
                 <List>
                     {suggetions.map((users) =>
                         users !== localStorage.getItem('email') &&
@@ -172,9 +172,9 @@ class CollaboratorComponent extends Component {
     }
 
     handleSaveCollaborator = () => {
+        // this.props.SaveCollaboratorToCreateNote(this.state.searchText)
         const { userDetails } = this.state;
         const user = userDetails.map(key => { return key })
-
         NoteServices.addcollaboratorsNotes(user[0], this.props.noteID)
             .then((response) => {
                 console.log("collab added successfully", response);
@@ -182,38 +182,39 @@ class CollaboratorComponent extends Component {
                     open: false,
                     searchText: ''      
                 })
+                
                 this.props.SaveCollaborator(true);
             })
             .catch(error => {
                 console.log("err in collab", error);
             })
-
-            
     }
 
     render() {
         console.log("user list data", this.state.searchText);
-        const collaboratorUser = this.state.collaborators.map(user => {
-            return (
-                <div className="user-profile-info" key={user.userId}>
-                    <Avatar>
-                        <span>{user.firstName.toString().substring(0, 1)}</span>
-                    </Avatar>
-
-                    <div className="collab-owner">
-                        <div><strong>{user.email}</strong></div>
+        var collaboratorUser = ''
+        if (!this.props.CreateNoteToCollaborator) {
+            collaboratorUser = this.state.collaborators.map(user => {
+                return (
+                    <div className="user-profile-info" key={user.userId}>
+                        <Avatar>
+                            <span>{user.firstName.toString().substring(0, 1)}</span>
+                        </Avatar>
+    
+                        <div className="collab-owner">
+                            <div><strong>{user.email}</strong></div>
+                        </div>
+                        <div style={{alignSelf:"center", cursor: "pointer"}}>
+                            <Tooltip title="Delete">
+                            <Close
+                            onClick={() => this.removeCollaboratorsNotes(user.userId)}
+                            />
+                            </Tooltip>
+                        </div>
                     </div>
-                    <div style={{alignSelf:"center", cursor: "pointer"}}>
-                        <Tooltip title="Delete">
-                        <Close
-                        onClick={() => this.removeCollaboratorsNotes(user.userId)}
-                        />
-                        </Tooltip>
-                    </div>
-                </div>
-            )
-        })
-
+                )
+            })
+        }
 
         const { searchText } = this.state;
         return (

@@ -157,7 +157,9 @@ class DashboardComponent extends Component {
 
                             </div>
 
-                            <UserProfile />
+                            <UserProfile 
+                              props={this.props.props}
+                            />
                         </Toolbar>
                         <DrawerMenu
                             appBarProps={this.state.open}

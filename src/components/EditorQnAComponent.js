@@ -2,14 +2,11 @@ import { Editor } from 'react-draft-wysiwyg';
 import React, { Component } from 'react'
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-// import htmlToDraft from 'draftjs-to-html';
-import { Button, Tooltip } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import QAService from '../services/QuestionAndAnswerServices'
-import { withRouter } from 'react-router-dom'
 import NoteService from '../services/NoteServices';
 import ThumbUpOutlined from '@material-ui/icons/ThumbUpAltOutlined'
 import ThumbUp from '@material-ui/icons/ThumbUp'
-import QuestionAndAnswerServices from '../services/QuestionAndAnswerServices';
 
 
 const QASevices = new QAService();
@@ -50,7 +47,7 @@ class EditorQnAComponent extends Component {
     };
 
     handleClose() {
-        this.props.history.push('/dashboard');
+        this.props.props.history.push('/dashboard');
     }
 
     handleAddQuestion() {
@@ -100,9 +97,6 @@ class EditorQnAComponent extends Component {
             .then(response => {
                 console.log("like response", response);
                 this.getAllNotes();
-                // this.setState({
-                //     likeCount: response.data.data.count
-                // })
             })
     }
 
@@ -112,12 +106,17 @@ class EditorQnAComponent extends Component {
         return txt.value;
     }
 
+    countLikes(likeValue) {
+        var count = 0
+        if (likeValue === true) {
+            count++;
+        }
+        return count;
+    }
+
     render() {
         const { editorState } = this.state;
         console.log("this.prosp", this.props.noteId);
-        // var date;
-        // date = new Date();
-        var questionDate;
 
         const titleDescription = this.state.allNotes.map(key => {
             return (
@@ -139,79 +138,109 @@ class EditorQnAComponent extends Component {
                             >
                                 <span style={{ textTransform: "none" }}> Close </span>
                             </Button>
-
                         </div>
-                        {(key.questionAndAnswerNotes.length > 0) &&
-                            <div className="q-a-asked" >
-                                <div>
-                                    <span><strong>Question Asked</strong></span>
-                                </div>
-
-                                <div className="innerHTML" dangerouslySetInnerHTML= {{__html: key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message}}>
-                                    {/* {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message} */}
-                                </div>
-                                {/* {this.decodeHtml(key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message)} */}
-                            </div>
-                        }
-                        {(key.questionAndAnswerNotes.length > 0) &&
-                            <div className="q-a-asked">
-                                <div style={{ display: "flex" }}>
-                                    <div style={{ borderRadius: "50%", border: "1px solid lightgray", height: "50px", width: "50px" }}>
-                                        <img
-                                            src={localStorage.getItem('ProfileImage')}
-                                            alt="profile pic"
-                                            style={{ borderRadius: "50%", margin: "10%" }}
-                                            className="profile-pic"
-                                        />
-                                    </div>
-                                    <div style={{ display: "flex", marginLeft: "2.3vh"}}>
-                                        <div style={{ padding: "5px" }}>
-                                            <strong>{localStorage.getItem('firstName')} {localStorage.getItem('lastName')} </strong>
-                                        </div>
-                                        <div style={{ padding: "4px" }}>
-                                            <span style={{ fontSize: "0.7rem" }}>{key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].createdDate}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style={{ display: "flex", marginLeft: "10vh" }}>
-                                <div className="innerHTML" 
-                                dangerouslySetInnerHTML= {{__html: key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message}}>
-                                    {/* {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message} */}
-                                </div>
-                                    {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].like.map(likeDetails => {
-                                            return (
-                                                (likeDetails.like === true) ?
-                                                    <div style={{ paddingLeft: "5vh", cursor:"pointer" }}>
-                                                        <ThumbUp
-                                                            onClick={() => this.handleUnlike(key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].id)}
-                                                        />
-                                                    </div>
-                                                    :
-                                                    <div style={{ paddingLeft: "5vh", cursor:"pointer" }}>
-                                                        <ThumbUpOutlined
-                                                            onClick={() => this.handleLike(key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].id)} />
-                                                    </div>
-                                                    )
-                                        })
-                                    }
-                                    <div>
-                                        <span>
-                                        {key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].like.length} </span>
-                                        <span> Likes</span>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
                     </div>
                     :
                     null
             )
         });
 
+        const AskedQuetionsList = this.state.allNotes.map(key => {
+            return (
+                (this.props.noteId === key.id) &&
+                key.questionAndAnswerNotes.map(questionsListKey => {
+                    return (
+                        <div key={questionsListKey.id}>
+                            <div className="innerHTML"
+                                dangerouslySetInnerHTML={{ __html: questionsListKey.message }}>
+                            </div>
+                        </div>
+                    )
+                })
+            )
+        })
+
+        const ReplyQuestion = this.state.allNotes.map(key => {
+            return (
+                (this.props.noteId === key.id) &&
+                key.questionAndAnswerNotes.map(questionsListKey => {
+                    return (
+                        <div key={questionsListKey.id}>
+                            <div style={{ display: "flex" }}>
+                                <div style={{ borderRadius: "50%", border: "1px solid lightgray", height: "50px", width: "50px" }}>
+                                    <img
+                                        src={localStorage.getItem('ProfileImage')}
+                                        alt="profile pic"
+                                        style={{ borderRadius: "50%", margin: "10%" }}
+                                        className="profile-pic"
+                                    />
+                                </div>
+                                <div style={{ display: "flex" }}>
+                                    <div style={{ padding: "5px" }}>
+                                        <strong style={{ fontSize: "0.7rem" }}>{localStorage.getItem('firstName')} {localStorage.getItem('lastName')} </strong>
+                                    </div>
+                                    <div style={{ padding: "4px" }}>
+                                        <span style={{ fontSize: "0.7rem" }}>{questionsListKey.createdDate}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="like-reply-rate">
+                                <div className="innerHTML"
+                                    dangerouslySetInnerHTML={{ __html: questionsListKey.message }}>
+                                </div>
+                                {(questionsListKey.like.length > 0) ?
+                                    questionsListKey.like.map(likeKey => {
+                                        return (
+                                            (likeKey.like === true) ?
+                                                <div>
+                                                    <div>
+                                                        <ThumbUp
+                                                            onClick={() => this.handleUnlike(questionsListKey.id)}
+                                                        />
+                                                        <span>{this.countLikes(likeKey.like)} Likes</span>
+                                                    </div>
+                                                </div>
+                                                :
+                                                <div>
+                                                    <div>
+                                                        <ThumbUpOutlined
+                                                            onClick={() => this.handleLike(questionsListKey.id)}
+                                                        />
+                                                        <span>{this.countLikes(likeKey.like)} Likes</span>
+                                                    </div>
+                                                </div>
+                                        )
+                                    })
+                                    :
+                                    <div>
+                                        <ThumbUpOutlined
+                                            onClick={() => this.handleLike(questionsListKey.id)}
+                                        />
+                                        <span> {"0"} Likes</span>
+                                    </div>
+                                }
+                                <div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })
+            )
+        })
+
         return (
             <div className="main-q-a-div">
                 {titleDescription}
+                <div className="q-a-asked" >
+                    <div>
+                        <span><strong>Question Asked</strong></span>
+                    </div>
+                    {AskedQuetionsList}
+                </div>
+                <div className="q-a-asked" >
+                    {ReplyQuestion}
+                </div>
                 <div>
                     <Editor
                         editorState={editorState}
@@ -235,7 +264,7 @@ class EditorQnAComponent extends Component {
     }
 }
 
-export default withRouter(EditorQnAComponent)
+export default EditorQnAComponent
 
 
 

@@ -125,7 +125,36 @@ class NoteServices {
             }
         })
     }
-    
+
+    addLabelToNotes(data){
+        // console.log(localStorage.getItem("token"));
+        return axios
+        .post(`${BaseURL}/${data.noteId}/addLabelToNotes/${data.labelId}/add`,data.data,{
+            headers:{
+                'Authorization' : token
+            }
+        })
+        
+    }
+
+    removeLabelToNotes(data){
+        return axios
+        .post(`${BaseURL}/${data.noteId}/addLabelToNotes/${data.labelId}/remove`,data.data, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+        
+    }
+
+    getNotesListByLabel(data){
+        return axios
+        .post(`${BaseURL}/getNotesListByLabel/${data.labelName}`,data, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+    }
 }
 
 export default NoteServices;

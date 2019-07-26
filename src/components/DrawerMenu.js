@@ -84,6 +84,7 @@ class DrawerMenu extends Component {
                         <div>
                             <GetAllLabels
                             sidebarLabel = {true}
+                            props={this.props.props}
                             />
                             <MenuItem
                             onClick={this.handleLabelOpen}

@@ -3,8 +3,10 @@ import LabelService from '../services/LabelServices';
 import { MenuItem, Checkbox, FormControlLabel } from '@material-ui/core';
 import Check from '@material-ui/icons/Check'
 import Edit from '@material-ui/icons/Edit'
+import NoteService from '../services/NoteServices';
 
 const LabelServices = new LabelService();
+const NoteServices = new NoteService();
 export default class GetAllLabels extends Component {
     constructor(props) {
         super(props);
@@ -12,7 +14,8 @@ export default class GetAllLabels extends Component {
             allLabels: [],
             mouseOver: false,
         }
-
+        this.handleChange = this.handleChange.bind(this);
+        this.handleUserLabel=this.handleUserLabel.bind(this);
     }
 
     displayCard(newLabel) {
@@ -59,7 +62,6 @@ export default class GetAllLabels extends Component {
                         this.setState({
                             allLabel: [...this.state.allLabel, this.props.newLabel]
                         })
-                        // this.props.GetAllLabelToDrawerMenu(this.state.allLabels)
                     })
                     .catch(err => {
                         console.log(err);
@@ -67,31 +69,71 @@ export default class GetAllLabels extends Component {
             })
             .catch(error => {
                 console.log(error);
-
             })
     }
 
-
     getNewNote = (newNote) => {
         console.log("newnote==>", newNote);
-
         this.labelToCards.current.displayCard(newNote);
         // this.props.getNewNote(newNote);
     }
 
-    render() {
+    handleUserLabel(labelName){
+        this.props.props.history.push('/usernote', labelName)
+    }
 
+    handleChange(e, labelId) {
+        let isChecked = e.target.checked;
+        let checkedValue = e.target.value
+        // do whatever you want with isChecked value
+        console.log("checkbox value", isChecked, labelId, this.props.noteId);
+
+        if (isChecked) {
+            var addData = {
+                'noteId': this.props.noteId,
+                'labelId': labelId,
+                data : {
+                    'noteIdList' : this.props.noteId,
+                    'label': checkedValue
+                }
+            }
+            NoteServices.addLabelToNotes(addData)
+            .then(() =>{
+                // this.props.getAllLabelsToCreateLabels(isChecked);
+                console.log("updated successfully");
+                
+            })
+            .catch((err) =>{
+                console.log("error in addlabeltonote", err);
+            })
+        }
+        if (!isChecked) {
+            var removeData = {
+                'noteId': this.props.noteId,
+                'labelId': labelId
+            }
+            NoteServices.removeLabelToNotes(removeData)
+            .then(() =>{
+                this.props.getAllLabelsToCreateLabels(isChecked);
+            })
+            .catch((err) =>{
+                console.log("error in addlabeltonote", err);
+            })
+        }
+    }
+
+
+    render() {
+        // console.log("getall labels render() ", this.props.noteId);
         const labels = this.state.allLabels.map((key) => {
             return (
                 this.props.sidebarLabel ?
-                    <MenuItem key={key.id}>
+                    <MenuItem key={key.id} onClick={() => this.handleUserLabel(key.label)}>
                         <img className="update-card-img"
                             src={require('../assets/img/label.svg')}
                             alt="label"
-
                         />
                         <span className="fundoo-text-sidebar">{key.label}</span>
-
                     </MenuItem>
                     :
                     this.props.editLabels ?
@@ -123,7 +165,6 @@ export default class GetAllLabels extends Component {
                                         />
                                     </div>
                             }
-
                             <div style={{ display: "flex" }}>
                                 <input
                                     placeholder="create new label"
@@ -140,17 +181,14 @@ export default class GetAllLabels extends Component {
                                     onClick={this.addLabel} />
                             </div>
                         </div>
-
                         :
                         this.props.createLabelNoteCreate &&
-                        <div key={key.id}>
-
+                        <div key={key.id} style = {{marginLeft: "5%"}}>
                             <FormControlLabel
                                 control={
                                     <Checkbox
-                                        // checked={}
-                                        onChange={this.handleChange}
-                                        value="checkedB"
+                                        onChange={(e) => this.handleChange(e, key.id)}
+                                        value={key.label}
                                         color="primary"
                                         style={{padding:"0"}}
                                         size="small"
@@ -158,7 +196,6 @@ export default class GetAllLabels extends Component {
                                 }
                                 label={key.label}
                             />
-                            {/* <span>{key.label}</span> */}
                         </div>
             )
         })

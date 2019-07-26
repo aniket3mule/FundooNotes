@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import Reminder from './Reminder'
 import ColorPallete from './Color';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Chip, Dialog, InputBase } from '@material-ui/core';
+import { Chip, Dialog, InputBase, Avatar } from '@material-ui/core';
 import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
 import GetNote from '../services/NoteServices';
@@ -24,6 +24,11 @@ const useStyles = makeStyles(theme => ({
 
 const thm = createMuiTheme({
     overrides: {
+        MuiAvatar: {
+            colorDefault: {
+                border: "3px solid"
+            }
+        },
         MuiDialog: {
             paperWidthSm: {
                 overflow: "visible",
@@ -231,7 +236,7 @@ class ArchivedComponent extends Component {
                                 style={{ backgroundColor: key.color }}>
                                 <CardBody className="user-card-body-desc">
                                     <CardTitle>
-                                    <InputBase
+                                        <InputBase
                                             id="outlined-dense-multiline"
                                             value={key.title}
                                             onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
@@ -268,6 +273,38 @@ class ArchivedComponent extends Component {
                                             />
                                         </div>
                                     }
+                                    {(key.noteLabels.length > 0) &&
+                                        <div style={{ display: "flex", flexWrap: "wrap", width: "218px" }}>{
+                                            key.noteLabels.map(labelskey => {
+                                                return (
+                                                    <div>
+                                                        <Chip
+                                                            label={labelskey.label}
+                                                            onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
+                                                            className={useStyles.chip}
+                                                            variant="outlined"
+                                                            size="small"
+                                                        />
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    }
+                                    {(key.collaborators.length > 0) &&
+                                        <div style={{ display: "flex" }}>{
+                                            key.collaborators.map(collaborator => {
+                                                return (
+                                                    <div className="collab">
+                                                        <Tooltip title={collaborator.email}>
+                                                            <Avatar>
+                                                                <span>{collaborator.firstName.toString().substring(0, 1)}</span>
+                                                            </Avatar>
+                                                        </Tooltip>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    }
                                 </CardBody>
                                 <CardBody >
                                     <div className={modalbottom}>
@@ -298,11 +335,11 @@ class ArchivedComponent extends Component {
                                         <CardLink
                                             onClick={() => this.handleUnArchive(key.id)}
                                         >
-                                             <Tooltip title="Unarchive">
-                                                    <img className="img"
-                                                        src={require('../assets/img/unarchive.svg')}
-                                                        alt="color picker" />
-                                                </Tooltip>
+                                            <Tooltip title="Unarchive">
+                                                <img className="img"
+                                                    src={require('../assets/img/unarchive.svg')}
+                                                    alt="color picker" />
+                                            </Tooltip>
                                         </CardLink>
                                         <CardLink className="add-image">
                                             <Tooltip title="add image">
@@ -335,28 +372,31 @@ class ArchivedComponent extends Component {
                                         onChange={() => this.handleColorChanger(key.color, key.id)}
                                         style={{ backgroundColor: key.color }}>
                                         <CardBody className="user-card-body-desc">
-                                            <CardTitle>
-                                            <InputBase
-                                                name="title"
-                                                value={this.state.title}
-                                                onChange={this.handleChange}
-                                                margin="dense"
-                                                variant="outlined"
-                                                multiline
-                                                style={{ backgroundColor: key.color }}
-                                                placeholder="Title"
-                                            />
-                                        </CardTitle>
-                                        <InputBase
-                                            name="description"
-                                            value={this.state.description}
-                                            onChange={this.handleChange}
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Description"
-                                            multiline
-                                            style={{ backgroundColor: key.color }}
-                                        />
+                                            <div>
+                                                <InputBase
+                                                    name="title"
+                                                    value={this.state.title}
+                                                    onChange={this.handleChange}
+                                                    margin="dense"
+                                                    variant="outlined"
+                                                    multiline
+                                                    style={{ backgroundColor: key.color }}
+                                                    placeholder="Title"
+                                                    className="dialog-input"
+                                                />
+
+                                                <InputBase
+                                                    name="description"
+                                                    value={this.state.description}
+                                                    onChange={this.handleChange}
+                                                    margin="dense"
+                                                    variant="outlined"
+                                                    placeholder="Description"
+                                                    multiline
+                                                    style={{ backgroundColor: key.color }}
+                                                    className="dialog-input"
+                                                />
+                                            </div>
 
                                             {(key.reminder.length > 0) &&
                                                 <div>
@@ -368,6 +408,38 @@ class ArchivedComponent extends Component {
                                                         variant="outlined"
                                                         size="small"
                                                     />
+                                                </div>
+                                            }
+                                            {(key.noteLabels.length > 0) &&
+                                                <div style={{ display: "flex", flexWrap: "wrap", width: "218px" }}>{
+                                                    key.noteLabels.map(labelskey => {
+                                                        return (
+                                                            <div>
+                                                                <Chip
+                                                                    label={labelskey.label}
+                                                                    onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
+                                                                    className={useStyles.chip}
+                                                                    variant="outlined"
+                                                                    size="small"
+                                                                />
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                            }
+                                            {(key.collaborators.length > 0) &&
+                                                <div style={{ display: "flex" }}>{
+                                                    key.collaborators.map(collaborator => {
+                                                        return (
+                                                            <div className="collab">
+                                                                <Tooltip title={collaborator.email}>
+                                                                    <Avatar>
+                                                                        <span>{collaborator.firstName.toString().substring(0, 1)}</span>
+                                                                    </Avatar>
+                                                                </Tooltip>
+                                                            </div>
+                                                        )
+                                                    })}
                                                 </div>
                                             }
                                         </CardBody>
@@ -400,8 +472,8 @@ class ArchivedComponent extends Component {
 
                                             <CardLink
                                                 onClick={() => this.handleUnArchive(key.id)}
-                                                >
-                                                 <Tooltip title="Unarchive">
+                                            >
+                                                <Tooltip title="Unarchive">
                                                     <img className="img"
                                                         src={require('../assets/img/unarchive.svg')}
                                                         alt="color picker" />
