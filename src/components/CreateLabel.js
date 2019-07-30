@@ -1,6 +1,6 @@
 import LabelService from '../services/LabelServices';
 import React, { Component } from 'react'
-import { Input, DialogActions, InputBase, Button } from '@material-ui/core'
+import { Input, DialogActions, InputBase, Button, Tooltip } from '@material-ui/core'
 import GetAllLabels from './GetAllLabels';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -80,6 +80,10 @@ class CreateLabel extends Component {
         })
     }
 
+    getAllLabelsToCreateLabels = (isChecked) => {
+        this.props.createLabelToMoreOptions(isChecked)
+    }
+
     render() {
         // console.log("Createlable render ", this.props.noteID);
 
@@ -104,10 +108,29 @@ class CreateLabel extends Component {
                             <div className="create-label-div">
                                 {this.state.closeEdit ?
                                     <div style={{ display: "flex" }}>
-                                        <Close
+                                        <Tooltip title="Create label">
+                                            <Add
+                                                onClick={this.handleCloseEdit}
+                                                style={{ marginLeft: "-4px" }}
+                                            />
+                                        </Tooltip>
+                                        <InputBase
+                                            placeholder="create new label"
+                                            name="label"
+                                            style={{ height: '65%', width: '100%', border: "none" }}
                                             onClick={this.handleCloseEdit}
-                                            style={{ marginLeft: "-4px" }}
+                                            readOnly
                                         />
+                                    </div>
+
+                                    :
+                                    <div style={{ display: "flex" }}>
+                                        <Tooltip title="Cancel">
+                                            <Close
+                                                onClick={this.handleCloseEdit}
+                                                style={{ marginLeft: "-4px" }}
+                                            />
+                                        </Tooltip>
                                         <Input
                                             placeholder="create new label"
                                             name="label"
@@ -115,25 +138,14 @@ class CreateLabel extends Component {
                                             color="black"
                                             style={{ height: '65%', width: '100%' }}
                                             onChange={this.handleChange}
+                                            autoFocus="true"
                                         />
-                                        <Check
-                                            onClick={this.addLabel}
-                                        />
-                                    </div>
-                                    :
-                                    <div style={{ display: "flex" }}>
-
-                                        <Add
-                                            onClick={this.handleCloseEdit}
-                                            style={{ marginLeft: "-4px" }}
-                                        />
-                                        <input
-                                            placeholder="create new label"
-                                            name="label"
-                                            style={{ height: '65%', width: '100%', border: "none" }}
-                                            onClick={this.handleCloseEdit}
-                                            readOnly
-                                        />
+                                        <Tooltip title="Create label">
+                                            <Check
+                                                onClick={this.addLabel}
+                                                style={{ cursor: "pointer" }}
+                                            />
+                                        </Tooltip>
                                     </div>
                                 }
 
@@ -170,6 +182,7 @@ class CreateLabel extends Component {
                                 variant="outlined"
                                 placeholder="create Label name"
                                 multiline
+                                autoFocus="true"
                             />
                         </div>
                         <div>
@@ -177,6 +190,7 @@ class CreateLabel extends Component {
                                 createLabelNoteCreate={true}
                                 ref={this.labelToCards}
                                 noteId={this.props.noteID}
+                                getAllLabelsToCreateLabels={this.getAllLabelsToCreateLabels}
                             />
                         </div>
                         <div onClick={this.addLabel} style={{ cursor: 'pointer' }}>

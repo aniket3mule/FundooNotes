@@ -66,8 +66,10 @@ class UserDashboard extends Component {
 
         if (localStorage.getItem('token1') !== "true") {
             return (
-                // this.props.history.push('signin')
-                window.location.href = 'signin'
+                
+                <div>
+                    {this.props.history.push('/signin')}
+                </div>
             )
         }
         else {
@@ -94,13 +96,15 @@ class UserDashboard extends Component {
                             }
                             <div className={listView}>
                                 <AllNotes
-                                    ref={this.noteToCards}
+                                    wrappedComponentRef={this.noteToCards}
                                     searchNote={this.state.searchNote}
                                     listGridView={this.state.listGridView}
                                     isReminder ={this.state.isReminder}
                                     isArchive = {this.state.isArchive}
                                     isTrash = {this.state.isTrash}
                                     isNotes = {this.state.isNotes}
+                                    props={this.props}
+                                    
                                 />
                             </div>
                             {/* <div>

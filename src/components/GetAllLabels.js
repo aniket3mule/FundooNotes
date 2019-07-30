@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import LabelService from '../services/LabelServices';
-import { MenuItem, Checkbox, FormControlLabel } from '@material-ui/core';
+import { MenuItem, Checkbox, FormControlLabel, InputBase } from '@material-ui/core';
 import Check from '@material-ui/icons/Check'
-import Edit from '@material-ui/icons/Edit'
+import Edit from '@material-ui/icons/EditOutlined'
 import NoteService from '../services/NoteServices';
 
 const LabelServices = new LabelService();
@@ -13,9 +13,11 @@ export default class GetAllLabels extends Component {
         this.state = {
             allLabels: [],
             mouseOver: false,
+            isChecked: [],
+            NoteLabels: []
         }
         this.handleChange = this.handleChange.bind(this);
-        this.handleUserLabel=this.handleUserLabel.bind(this);
+        this.handleUserLabel = this.handleUserLabel.bind(this);
     }
 
     displayCard(newLabel) {
@@ -26,8 +28,14 @@ export default class GetAllLabels extends Component {
         })
     }
 
-    componentDidMount() {
-        LabelServices.getLabels()
+    async componentDidMount() {
+        await this.getAllLabels();
+        await this.getNotesLabelDetails();
+        await this.compareNoteDetailsWithLabels();
+    }
+
+    getAllLabels = async () => {
+        await LabelServices.getLabels()
             .then(allLabels => {
                 this.setState({ allLabels: allLabels.data.data.details })
                 console.log("this data", this.state.allLabels);
@@ -35,6 +43,65 @@ export default class GetAllLabels extends Component {
             .catch(err => {
                 console.log(err);
             })
+    }
+
+    getNotesLabelDetails = async () => {
+        await NoteServices.getNotesLabelDetails(this.props.noteId)
+            .then(response => {
+                console.log("note labels==>", response.data);
+                this.setState({
+                    NoteLabels: response.data
+                })
+            })
+    }
+
+    compareNoteDetailsWithLabels = () => {
+        // e.preventDefault();
+        let labelDetails = [];
+        labelDetails = this.state.allLabels.map(key => {
+            return (
+                key.label
+            )
+        })
+
+        let noteLabels = []
+        noteLabels = this.state.NoteLabels.map(noteLabels => { return noteLabels.label });
+
+        console.log("note details array", labelDetails, "note labels array", noteLabels);
+        var count = 0;
+        for (let i = 0; i < labelDetails.length; i++) {
+            for (let j = 0; j < noteLabels.length; j++) {
+                console.log(labelDetails[i], noteLabels[j]);
+
+                if (labelDetails[i] === noteLabels[j]) {
+                    this.setState({
+                        isChecked: [...this.state.isChecked, true]
+                    })
+                    break;
+                }
+                // else{
+                //     break;
+                // }
+                else {
+                    count++;
+                    // this.countFalse(count);
+                    if (count === noteLabels.length - 1) {
+                        this.setState({
+                            isChecked: [...this.state.isChecked, false]
+                        })
+                    }
+                }
+            }
+        }
+        console.log("this.ischeched", this.state.isChecked);
+    }
+
+    countFalse = (count) => {
+        if (count > 1) {
+            this.setState({
+                isChecked: [...this.state.isChecked, false]
+            })
+        }
     }
 
     handleMounseEvent = (labelId) => {
@@ -78,8 +145,8 @@ export default class GetAllLabels extends Component {
         // this.props.getNewNote(newNote);
     }
 
-    handleUserLabel(labelName){
-        this.props.props.history.push('/usernote', labelName)
+    handleUserLabel(labelName) {
+        this.props.props.history.push(`/usernote/${labelName}`)
     }
 
     handleChange(e, labelId) {
@@ -92,20 +159,20 @@ export default class GetAllLabels extends Component {
             var addData = {
                 'noteId': this.props.noteId,
                 'labelId': labelId,
-                data : {
-                    'noteIdList' : this.props.noteId,
+                data: {
+                    'noteIdList': this.props.noteId,
                     'label': checkedValue
                 }
             }
             NoteServices.addLabelToNotes(addData)
-            .then(() =>{
-                // this.props.getAllLabelsToCreateLabels(isChecked);
-                console.log("updated successfully");
-                
-            })
-            .catch((err) =>{
-                console.log("error in addlabeltonote", err);
-            })
+                .then(() => {
+                    // this.props.getAllLabelsToCreateLabels(isChecked);
+                    console.log("updated successfully");
+
+                })
+                .catch((err) => {
+                    console.log("error in addlabeltonote", err);
+                })
         }
         if (!isChecked) {
             var removeData = {
@@ -113,18 +180,38 @@ export default class GetAllLabels extends Component {
                 'labelId': labelId
             }
             NoteServices.removeLabelToNotes(removeData)
-            .then(() =>{
-                this.props.getAllLabelsToCreateLabels(isChecked);
-            })
-            .catch((err) =>{
-                console.log("error in addlabeltonote", err);
-            })
+                .then(() => {
+                    this.props.getAllLabelsToCreateLabels(isChecked);
+                })
+                .catch((err) => {
+                    console.log("error in addlabeltonote", err);
+                })
         }
     }
 
+    // mapChecked =  () =>{
+    //     var value= []
+    //     for (let i = 0; i < this.state.allLabels.length; i++) {
+    //         value = this.state.isChecked.map(isChecked => {return isChecked})
+    //         console.log("value",value);
+            
+    //         if( i > 0){
+    //             return value.splice(i,1)
+    //         } else{
+    //             return value 
+    //         }
+    //     }
+           
+        
+    // }
+
 
     render() {
+        // console.log("map",this.mapChecked());
+        
+        // console.log(this.state.isChecked.length);
         // console.log("getall labels render() ", this.props.noteId);
+        // console.log("this.ischeched", this.state.isChecked);
         const labels = this.state.allLabels.map((key) => {
             return (
                 this.props.sidebarLabel ?
@@ -166,38 +253,55 @@ export default class GetAllLabels extends Component {
                                     </div>
                             }
                             <div style={{ display: "flex" }}>
-                                <input
+                                <InputBase
                                     placeholder="create new label"
                                     name="label"
                                     value={key.label}
-                                    style={{ height: '65%', width: '100%', border: "none" }}
                                     onClick={() => this.handleCloseEdit(key.id)}
                                     readOnly
+
                                 />
                                 <Edit
                                     onClick={() => this.handleCloseEdit(key.id)}
                                 />
-                                <Check
-                                    onClick={this.addLabel} />
+                                {/* <Check
+                                onClick={this.addLabel}
+                                /> */}
                             </div>
                         </div>
                         :
                         this.props.createLabelNoteCreate &&
-                        <div key={key.id} style = {{marginLeft: "5%"}}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        onChange={(e) => this.handleChange(e, key.id)}
-                                        value={key.label}
-                                        color="primary"
-                                        style={{padding:"0"}}
-                                        size="small"
+                        // this.state.isChecked.length === this.state.allLabels.length &&
+//                         this.state.isChecked.map(checkedCheckbox => {
+//                             console.log(checkedCheckbox);
+//                         var i = 0; 
+//                             if(this.state.allLabels.length > i){
+// i++;
+//                         console.log(i);
+
+                            // this.state.allLabels.length > isChecked
+                            // return (
+                                <div key={key.id} style={{ marginLeft: "5%" }}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                onChange={(e) => this.handleChange(e, key.id)}
+                                                value={key.label}
+                                                color="primary"
+                                                style={{ padding: "0" }}
+                                                size="small"
+                                                // {this.state.isChecked.map(checked => {}) }
+                                                // checked={}
+                                            />
+                                        }
+                                        label={key.label}
                                     />
-                                }
-                                label={key.label}
-                            />
-                        </div>
-            )
+                                </div>
+                            // )
+                        //     }
+                        // })
+
+           )
         })
         return (
             <div>

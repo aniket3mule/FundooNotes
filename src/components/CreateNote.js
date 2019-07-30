@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, CardText, CardBody, CardTitle, CardLink, Label } from 'reactstrap'
+import { Card, CardText, CardBody, CardLink } from 'reactstrap'
 import NoteServices from '../services/NoteServices';
 import ColorPallete from './Color';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -8,6 +8,7 @@ import Reminder from './Reminder';
 import { makeStyles } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions'
 import CollaboratorComponent from './CollaboratorComponent';
+import AddImage from './AddImage';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -34,7 +35,11 @@ class CreateNote extends Component {
             isArchived: false,
             labelIdList: '',
             label: '',
-            collaboratorId: '',
+            collabUserFirstName : '',
+            collabUserEmail:'',
+            collaboratorArrray :  [],
+            file:''
+            
         }
     }
 
@@ -52,6 +57,7 @@ class CreateNote extends Component {
             isArchived: false,
             labelIdList: '',
             label: '',
+            file:''
         })
     }
 
@@ -70,10 +76,12 @@ class CreateNote extends Component {
 
     }
 
-    handleToggle = () => {
+    handleToggle = (e) => {
+        e.preventDefault();
         this.setState({ open: !this.state.open });
         try {
-            if (this.state.description !== '' && this.state.title !== '') {
+            
+            if (this.state.description !== '' || this.state.title !== '') {
                 var data = {
                     'title': this.state.title,
                     'description': this.state.description,
@@ -81,6 +89,8 @@ class CreateNote extends Component {
                     'labelIdList': [this.state.labelIdList],
                     'color': this.state.color,
                     'isArchived': this.state.isArchived,
+                    'collaborators' : [this.state.collaboratorArrray],
+                    'imageUrl': this.state.file
                 }
                 let formData = new FormData();    //formdata object
                 formData.append('title', this.state.title);   //append the values with key, value pair
@@ -89,15 +99,16 @@ class CreateNote extends Component {
                 formData.append('labelIdList', this.state.labelIdList);
                 formData.append('color', this.state.color);
                 formData.append('isArchived', this.state.isArchived);
-
-                console.log("create note 78", data);
-                console.log("label 80", this.state.labelIdList, this.state.label);
+                formData.append('collaborators', this.state.collaboratorArrray);
+                formData.append('imageUrl', this.state.file);
+                console.log("create note 104", data);
+                console.log("label 105", this.state.labelIdList, this.state.label);
 
                 addNotes(data)
                     .then(response => {
-                        console.log("create note 83 ", response);
+                        console.log("create note 109 ", response);
                         this.setState({ newNote: response.data.status.details })
-                        console.log("create note 85", this.state.newNote);
+                        console.log("create note 111", this.state.newNote);
                         this.props.getNewNote(this.state.newNote);
                     })
                     .catch(err => {
@@ -111,7 +122,6 @@ class CreateNote extends Component {
 
     addLabelToCreateNote = (labelIdList, label) => {
         console.log("labelidlist >>>>", labelIdList);
-
         this.setState({
             labelIdList: labelIdList,
             label: label
@@ -129,24 +139,33 @@ class CreateNote extends Component {
         })
     }
 
-    SaveCollaboratorToCreateNote = (collaboratorId) => {
+    SaveCollaboratorToCreateNote = (collaboratorArrray) => {
+        console.log("collab ", collaboratorArrray);
         this.setState({
-            collaboratorId: collaboratorId
+            collabUserFirstName: collaboratorArrray.firstName,
+            collabUserEmail:collaboratorArrray.email,
+            collaboratorArrray:collaboratorArrray
         })
     }
+
+    AddImageToCreateNote = async (file) => {
+    await this.setState({
+         file : file
+     })
+         console.log("create note",this.state.file);
+     }
+     
     render() {
         return (!this.state.open ?
             <div className="take-note-div">
                 <Card className="take-note-card " >
                     <CardBody className="card-body-text">
-                        <CardText>
                             <input
-                                type="text"
                                 className="take-note-input"
-                                placeholder="Take a note..."
+                                value="Take a note..."
                                 onClick={this.handleToggleOpen}
+                                readOnly
                             />
-                        </CardText>
                         <CardText className="create-note-icons">
                             <CardLink ><i className="fa fa-pencil fa-fw fa-lg " aria-hidden="true"></i></CardLink>
                             <CardLink ><i className="fa fa-check-square-o fa-fw fa-lg " aria-hidden="true"></i></CardLink>
@@ -160,8 +179,7 @@ class CreateNote extends Component {
 
                     style={{ backgroundColor: this.state.color }}>
                     <CardBody className="card-body-desc">
-                        <CardTitle>
-
+                    <div>
                             <InputBase
                                 id="outlined-dense-multiline"
                                 margin="dense"
@@ -173,10 +191,8 @@ class CreateNote extends Component {
                                 value={this.state.title}
                                 onChange={this.handleChange}
                                 style={{ backgroundColor: this.state.color }}
-
+                                autoFocus="true"
                             />
-                        </CardTitle>
-                        <div>
                             <InputBase
                                 id="outlined-dense-multiline"
                                 margin="dense"
@@ -216,14 +232,16 @@ class CreateNote extends Component {
                                         />
                                     </div>
                                 }
-                                {(this.state.collaboratorId !== '') &&
-                                    <div className="collab">
-                                        <Tooltip title={this.state.collaboratorId}>
-                                            <Avatar>
-                                                <span>{this.state.collaboratorId.toString().substring(0, 1)}</span>
-                                            </Avatar>
-                                        </Tooltip>
-                                    </div>
+            
+                                {
+                                 (this.state.collabUserFirstName !== '')&&
+                                <div className="collab">
+                                    <Tooltip title={this.state.collabUserEmail}>
+                                        <Avatar>
+                                            <span>{this.state.collabUserFirstName.toString().substring(0,1)}</span>
+                                        </Avatar>
+                                    </Tooltip>
+                                </div>
                                 }
                             </div>
                         </div>
@@ -245,7 +263,7 @@ class CreateNote extends Component {
 
                         <ColorPallete
                             toolsPropsToColorpallete={this.handleColorChanger}
-                            />
+                        />
 
                         <CardLink
                             onClick={this.handleArchive}
@@ -258,14 +276,9 @@ class CreateNote extends Component {
                             </Tooltip>
                         </CardLink>
 
-                        <CardLink>
-                            <Tooltip title="add image">
-                                <img className="img"
-                                    src={require('../assets/img/add_image.svg')}
-                                    alt="color picker"
-                                />
-                            </Tooltip>
-                        </CardLink>
+                       <AddImage
+                       AddImageToCreateNote = {this.AddImageToCreateNote}
+                       />
 
                         <MoreOptions
                             addLabelToCreateNote={this.addLabelToCreateNote}
@@ -278,7 +291,7 @@ class CreateNote extends Component {
                             className="close-btn"
                             onClick={this.handleToggle}
                         >
-                            <Label>Close</Label>
+                            {"Close"}
                         </CardLink>
                     </CardBody>
                 </Card>

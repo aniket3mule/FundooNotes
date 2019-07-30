@@ -1,3 +1,13 @@
+/* .drawer-links{
+
+}
+
+.active, .drawer-links:hover {
+  background-color: #666;
+  color: white;
+} */
+
+
 .Header-color {
   background-color: wheat;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -310,7 +320,7 @@ input.input:focus {
   border-radius: 8px;
   box-shadow: 0 4px 6px rgb(143, 143, 143);
   /* visibility: hidden; */
-  width: 500px;
+  /* width: 500px; */
   height: auto;
 }
 
@@ -357,6 +367,10 @@ width: 100%;
 
 .card-margin {
   margin-top: 4%;
+  padding-right: 15px;
+    padding-left: 9px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .create-note-margin{
@@ -597,10 +611,21 @@ width: 100%;
     /* height: auto; */
     margin-left: 1%;
   }
+  .container-allnotes{
+    padding-left: 0%;
+      padding-right: 0%;
+  }
 
   .take-note-user-card-dialog{
     width: 100%
   }
+
+  .take-note-div {
+    display: flex;
+    justify-content: center;
+    /* margin-top: 10%; */
+    padding: 2%;
+}
 
   .profile-pic {
     height: 40px;

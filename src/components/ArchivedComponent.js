@@ -218,6 +218,22 @@ class ArchivedComponent extends Component {
             })
     }
 
+    handleDeletelabel = (noteId, labelId, label) => {
+        var removeData = {
+            'noteId':noteId,
+            'labelId':labelId,
+            data : {
+                'noteIdList' : noteId,
+                'label': label
+            }
+        }
+
+        NoteService.removeLabelToNotes(removeData)
+        .then(res => {
+            console.log("removed lable");
+            this.getUpdatedNotes();
+        })
+    }
 
     render() {
         var listgridvalue = this.props.listGridView;
@@ -277,7 +293,7 @@ class ArchivedComponent extends Component {
                                         <div style={{ display: "flex", flexWrap: "wrap", width: "218px" }}>{
                                             key.noteLabels.map(labelskey => {
                                                 return (
-                                                    <div>
+                                                    <div key={labelskey.id}>
                                                         <Chip
                                                             label={labelskey.label}
                                                             onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
@@ -294,7 +310,7 @@ class ArchivedComponent extends Component {
                                         <div style={{ display: "flex" }}>{
                                             key.collaborators.map(collaborator => {
                                                 return (
-                                                    <div className="collab">
+                                                    <div className="collab" key={collaborator.userId}>
                                                         <Tooltip title={collaborator.email}>
                                                             <Avatar>
                                                                 <span>{collaborator.firstName.toString().substring(0, 1)}</span>

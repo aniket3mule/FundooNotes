@@ -32,6 +32,8 @@ class LabelServices {
             }
         })
     }
+
+    
 }
 
 export default LabelServices;

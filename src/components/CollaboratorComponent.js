@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Button, List, ListItem, ListItemText, Paper, Avatar } from '@material-ui/core';
+import { Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Button, List, ListItem, ListItemText, Paper, Avatar, InputBase } from '@material-ui/core';
 import UserService from '../services/UserServices'
 import NoteService from '../services/NoteServices'
 import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
@@ -38,8 +38,22 @@ const thm = createMuiTheme({
                 fontSize: "12px"
             }
         },
+        // MuiInputBase : {
+        //     root:{
+        //         fontSize:'0.8rem'
+        //     }
+        // }
     }
 });
+
+// const useStyles = makeStyles(theme => ({
+//     root: {
+//         fontSize:'0.6rem'
+//     },
+//     chip: {
+//         margin: theme.spacing(1),
+//     },
+// }));
 
 class CollaboratorComponent extends Component {
 
@@ -57,6 +71,8 @@ class CollaboratorComponent extends Component {
         }
         this.handleClickOpen = this.handleClickOpen.bind(this)
         this.handleClose = this.handleClose.bind(this);
+        this.handleSaveCollaborator = this.handleSaveCollaborator.bind(this);
+        this.suggetionSelected = this.suggetionSelected.bind(this);
     }
 
     componentDidMount() {
@@ -70,7 +86,7 @@ class CollaboratorComponent extends Component {
                 this.setState({
                     userList: userArray
                 })
-                console.log("conponent did mount ", this.state.userList);
+                // console.log("conponent did mount ", this.state.userList);
 
             })
             .catch(err => {
@@ -108,8 +124,8 @@ class CollaboratorComponent extends Component {
         })
     }
 
-    removeCollaboratorsNotes= (collaboratorUserId) =>{
-        NoteServices.removeCollaboratorsNotes( this.props.noteID, collaboratorUserId)
+    removeCollaboratorsNotes= async (collaboratorUserId) =>{
+        await NoteServices.removeCollaboratorsNotes( this.props.noteID, collaboratorUserId)
         .then((response) => {
             console.log("delete response", response);
             this.props.removeCollaborator(true);
@@ -137,7 +153,7 @@ class CollaboratorComponent extends Component {
             return null
         }
         return (
-            <Paper>
+            <Paper style={{height:"auto",maxHeight: "125px", overflow:"auto"}}>
                 <List>
                     {suggetions.map((users) =>
                         users !== localStorage.getItem('email') &&
@@ -149,7 +165,7 @@ class CollaboratorComponent extends Component {
         )
     }
 
-    suggetionSelected = (value) => {
+    async suggetionSelected(value){
         this.setState(() => ({
             searchText: value,
             suggetions: [],
@@ -159,7 +175,7 @@ class CollaboratorComponent extends Component {
             "searchWord": value
         }
 
-        UserServices.searchUserList(data)
+        await UserServices.searchUserList(data)
             .then(response => {
                 console.log("user details", response);
                 this.setState({
@@ -171,27 +187,37 @@ class CollaboratorComponent extends Component {
             })
     }
 
-    handleSaveCollaborator = () => {
+    async handleSaveCollaborator (){
         // this.props.SaveCollaboratorToCreateNote(this.state.searchText)
         const { userDetails } = this.state;
-        const user = userDetails.map(key => { return key })
-        NoteServices.addcollaboratorsNotes(user[0], this.props.noteID)
+        const user = await userDetails.map(key => { 
+            return key })
+
+            if (this.props.CreateNoteToCollaborator) {
+                this.props.SaveCollaboratorToCreateNote(user[0])
+                this.setState({
+                    open: false,
+                    searchText: ''      
+                })
+            }else{
+                NoteServices.addcollaboratorsNotes(user[0], this.props.noteID)
+        
             .then((response) => {
                 console.log("collab added successfully", response);
                 this.setState({
                     open: false,
                     searchText: ''      
                 })
-                
                 this.props.SaveCollaborator(true);
             })
             .catch(error => {
                 console.log("err in collab", error);
             })
+            }
     }
 
     render() {
-        console.log("user list data", this.state.searchText);
+        // console.log("user list data", this.state.searchText);
         var collaboratorUser = ''
         if (!this.props.CreateNoteToCollaborator) {
             collaboratorUser = this.state.collaborators.map(user => {
@@ -207,7 +233,7 @@ class CollaboratorComponent extends Component {
                         <div style={{alignSelf:"center", cursor: "pointer"}}>
                             <Tooltip title="Delete">
                             <Close
-                            onClick={() => this.removeCollaboratorsNotes(user.userId)}
+                            onClick={async() => await this.removeCollaboratorsNotes(user.userId)}
                             />
                             </Tooltip>
                         </div>
@@ -270,13 +296,12 @@ class CollaboratorComponent extends Component {
                                     </div>
                                     <div style={{ display: "flex", flexDirection: "column", width:"100%" }}>
                                         <div className="collab-input-search-div">
-                                            <input
-                                                className="collab-input"
+                                            <InputBase
                                                 placeholder="Person or email to share with"
-                                                type="text"
                                                 name="collabSearch"
                                                 value={searchText}
                                                 onChange={this.handleOnchange}
+                                                style={{fontSize:'0.8rem', width:"100%"}}
                                             />
                                         </div>
                                     </div>

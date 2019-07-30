@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardTitle, CardLink, Container } from 'reactstrap';
+import { Card, CardBody, CardLink, Container } from 'reactstrap';
 import GetNote from '../services/NoteServices';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -13,6 +13,7 @@ import MoreOptions from './MoreOptions';
 import CollaboratorComponent from './CollaboratorComponent';
 import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
 import CloseIcon from "@material-ui/icons/Close";
+import Pin from "@material-ui/icons/PinDropOutlined";
 import { withRouter } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
@@ -81,7 +82,7 @@ class GetAllNotes extends Component {
         this.handleQuestionAnsAnswer = this.handleQuestionAnsAnswer.bind(this);
     }
 
-    async getUpdateNotes() {
+    getUpdateNotes = async () => {
         await NoteService.getAllNotes()
             .then(allNotes => {
                 this.setState({ allNotes: allNotes.data.data.data })
@@ -116,12 +117,14 @@ class GetAllNotes extends Component {
         }));
         console.log("id ......", id);
         console.log("note id ......", this.state.noteId);
+        this.props.history.push(`/dashboard/${id}`)
     }
 
     /**
      * Update existing note
      */
     handleToggleClose = () => {
+
         try {
             this.setState(prevState => ({
                 modal: !prevState.modal,
@@ -137,7 +140,7 @@ class GetAllNotes extends Component {
                 formData.append('title', this.state.title);   //append the values with key, value pair
                 formData.append('description', this.state.description);
 
-                console.log("get all note data", data);
+                console.log("get all note data", formData);
 
                 NoteService.updateNote(data)
                     .then(response => {
@@ -268,6 +271,12 @@ class GetAllNotes extends Component {
                 console.log("Eroorrrrrr....", err);
             })
     }
+
+    moreOptionLabelToAllNote = (isChecked) => {
+        if (!isChecked) {
+            this.getUpdateNotes();
+        }
+    }
     /**
      * Getting ref from child component
      */
@@ -284,6 +293,7 @@ class GetAllNotes extends Component {
         this.setState({
             modal: false
         })
+        this.props.history.push(`/dashboard`)
     }
     /**
      * Props starts
@@ -293,16 +303,16 @@ class GetAllNotes extends Component {
             allNotes: allNotes
         })
     }
-    
-    removeCollaborator = (value) => {
+
+    removeCollaborator = async (value) => {
         if (value) {
-            this.getUpdateNotes();
+            await this.getUpdateNotes();
         }
     }
 
-    saveCollaborator = (value) => {
+    saveCollaborator = async (value) => {
         if (value) {
-            this.getUpdateNotes();
+            await this.getUpdateNotes();
         }
     }
     /**
@@ -354,27 +364,28 @@ class GetAllNotes extends Component {
      */
     handleQuestionAnsAnswer(noteId) {
         console.log("note id", noteId);
-        this.props.history.push('/questionanswer', noteId)
+        this.props.history.push(`/questionanswer/${noteId}`, noteId)
     }
 
     handleDeletelabel = (noteId, labelId, label) => {
         var removeData = {
-            'noteId':noteId,
-            'labelId':labelId,
-            data : {
-                'noteIdList' : noteId,
+            'noteId': noteId,
+            'labelId': labelId,
+            data: {
+                'noteIdList': noteId,
                 'label': label
             }
         }
 
         NoteService.removeLabelToNotes(removeData)
-        .then(res => {
-            console.log("removed lable");
-        })
+            .then(res => {
+                console.log("removed lable");
+                this.getUpdateNotes();
+            })
     }
 
     render() {
-        console.log(this.props.isNotes);
+        // console.log(this.props.isNotes);
         var listgridvalue = this.props.listGridView;
         const listgridview = listgridvalue ? "list-view" : "default-view";
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
@@ -395,7 +406,8 @@ class GetAllNotes extends Component {
                                 onChange={() => this.handleColorChanger(key.color, key.id)}
                                 style={{ backgroundColor: key.color }}>
                                 <CardBody className="user-card-body-desc">
-                                    <CardTitle>
+
+                                    <div >
                                         <InputBase
                                             id="outlined-dense-multiline"
                                             value={key.title}
@@ -405,9 +417,16 @@ class GetAllNotes extends Component {
                                             readOnly
                                             multiline
                                             style={{ backgroundColor: key.color }}
-
+                                            placeholder="Title"
                                         />
-                                    </CardTitle>
+                                    </div>
+                                    <Tooltip title="Pin note">
+                                        <img src={require('../assets/img/unPin.svg')}
+                                            alt="pin"
+                                        />
+                                        {/* <Pin/> */}
+                                    </Tooltip>
+
                                     <InputBase
                                         id="outlined-dense-multiline"
                                         value={key.description}
@@ -417,6 +436,7 @@ class GetAllNotes extends Component {
                                         readOnly
                                         multiline
                                         style={{ backgroundColor: key.color }}
+                                        placeholder="Description"
                                     />
                                     {(key.reminder.length > 0) &&
                                         <div>
@@ -429,20 +449,20 @@ class GetAllNotes extends Component {
                                             />
                                         </div>
                                     }
-                                    
+
                                     {(key.noteLabels.length > 0) &&
-                                        <div style={{ display: "flex", flexWrap:"wrap", width:"218px" }}>{
+                                        <div style={{ display: "flex", flexWrap: "wrap", width: "218px" }}>{
                                             key.noteLabels.map(labelskey => {
                                                 return (
-                                                    <div>
-                                                    <Chip
-                                                        label={labelskey.label}
-                                                        onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
-                                                        className={useStyles.chip}
-                                                        variant="outlined"
-                                                        size="small"
-                                                    />
-                                                </div>
+                                                    <div key={labelskey.id}>
+                                                        <Chip
+                                                            label={labelskey.label}
+                                                            onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
+                                                            className={useStyles.chip}
+                                                            variant="outlined"
+                                                            size="small"
+                                                        />
+                                                    </div>
                                                 )
                                             })}
                                         </div>
@@ -452,7 +472,7 @@ class GetAllNotes extends Component {
                                         <div style={{ display: "flex" }}>{
                                             key.collaborators.map(collaborator => {
                                                 return (
-                                                    <div className="collab">
+                                                    <div className="collab" key={collaborator.userId}>
                                                         <Tooltip title={collaborator.email}>
                                                             <Avatar>
                                                                 <span>{collaborator.firstName.toString().substring(0, 1)}</span>
@@ -510,7 +530,10 @@ class GetAllNotes extends Component {
                                         <MoreOptions
                                             toolsPropsToMoreOptions={this.handleDeleteNote}
                                             noteID={key.id}
-                                            id="color-picker">
+                                            id="color-picker"
+                                            moreOptionLabelToAllNote={this.moreOptionLabelToAllNote}
+                                            props={this.props.props}
+                                        >
                                         </MoreOptions>
                                     </div>
                                 </CardBody>
@@ -526,8 +549,8 @@ class GetAllNotes extends Component {
                                             </div>
                                             <div className="innerHTML"
                                                 dangerouslySetInnerHTML={{ __html: key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message }}
-                                                style={{maxWidth:"200px"}}
-                                                >
+                                                style={{ maxWidth: "200px" }}
+                                            >
                                             </div>
                                         </div>
                                     </Tooltip>
@@ -560,18 +583,18 @@ class GetAllNotes extends Component {
                                                 placeholder="Title"
                                                 className="dialog-input"
                                             />
-                                        
-                                        <InputBase
-                                            name="description"
-                                            value={this.state.description}
-                                            onChange={this.handleChange}
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Description"
-                                            multiline
-                                            style={{ backgroundColor: key.color }}
-                                            className="dialog-input"
-                                        />
+
+                                            <InputBase
+                                                name="description"
+                                                value={this.state.description}
+                                                onChange={this.handleChange}
+                                                margin="dense"
+                                                variant="outlined"
+                                                placeholder="Description"
+                                                multiline
+                                                style={{ backgroundColor: key.color }}
+                                                className="dialog-input"
+                                            />
                                         </div>
                                         {(key.reminder.length > 0) &&
                                             <div>
@@ -584,30 +607,36 @@ class GetAllNotes extends Component {
                                                 />
                                             </div>
                                         }
-                                         {(key.noteLabels.length > 0) &&
-                                        <div style={{ display: "flex", flexWrap:"wrap", width:"218px" }}>{
-                                            key.noteLabels.map(labelskey => {
-                                                return (
-                                                    <div>
-                                                    <Chip
-                                                        label={labelskey.label}
-                                                        onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
-                                                        className={useStyles.chip}
-                                                        variant="outlined"
-                                                        size="small"
-                                                    />
-                                                </div>
-                                                )
-                                            })}
-                                        </div>
-                                    }
+                                        {(key.noteLabels.length > 0) &&
+                                            <div style={{ display: "flex", flexWrap: "wrap", width: "100%" }}>{
+                                                key.noteLabels.map(labelskey => {
+                                                    return (
+                                                        <div>
+                                                            <Chip
+                                                                label={labelskey.label}
+                                                                onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
+                                                                className={useStyles.chip}
+                                                                variant="outlined"
+                                                                size="small"
+                                                            />
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        }
                                         {(key.collaborators.length > 0) &&
-                                            <div>
-                                                <Tooltip title={key.collaborators[0].email}>
-                                                    <Avatar style={{ border: "border: 2px solid" }}>
-                                                        <span>{key.collaborators[0].firstName.toString().substring(0, 1)}</span>
-                                                    </Avatar>
-                                                </Tooltip>
+                                            <div style={{ display: "flex" }}>{
+                                                key.collaborators.map(collaborator => {
+                                                    return (
+                                                        <div className="collab" key={collaborator.userId}>
+                                                            <Tooltip title={collaborator.email}>
+                                                                <Avatar>
+                                                                    <span>{collaborator.firstName.toString().substring(0, 1)}</span>
+                                                                </Avatar>
+                                                            </Tooltip>
+                                                        </div>
+                                                    )
+                                                })}
                                             </div>
                                         }
                                     </CardBody>
@@ -656,8 +685,12 @@ class GetAllNotes extends Component {
                                             </Tooltip>
                                         </CardLink>
                                         <MoreOptions
+                                            toolsPropsToMoreOptions={this.handleDeleteNote}
                                             noteID={key.id}
-                                            id="color-picker">
+                                            id="color-picker"
+                                            moreOptionLabelToAllNote={this.moreOptionLabelToAllNote}
+                                            props={this.props.props}
+                                        >
                                         </MoreOptions>
 
                                         <CardLink ></CardLink>
@@ -694,9 +727,10 @@ class GetAllNotes extends Component {
         })
         return (
             <div className={containerAllnotes}>
-                    <div className={listView}>
-                        {notes}
-                    </div>
+                <div className={listView}>
+                    {notes}
+                </div>
+                
                 <Snackbar
                     key={this.state.messageInfo}
                     anchorOrigin={{

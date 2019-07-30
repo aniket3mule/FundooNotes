@@ -57,8 +57,7 @@ export default class GetNotesListByLabel extends Component {
                 <div className={slide}>
                         <div  className="create-note-margin container-allnotes">
                             <GetNotesListByLabelComponent
-                                searchNote={this.state.searchNote}
-                                listGridView={this.state.listGridView}
+                                 props={this.props}
                             />
                         </div>
                 </div>

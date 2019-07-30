@@ -214,6 +214,23 @@ class RemindersDisplayComponent extends Component {
             })
     }
 
+    handleDeletelabel = (noteId, labelId, label) => {
+        var removeData = {
+            'noteId':noteId,
+            'labelId':labelId,
+            data : {
+                'noteIdList' : noteId,
+                'label': label
+            }
+        }
+
+        NoteService.removeLabelToNotes(removeData)
+        .then(res => {
+            console.log("removed lable");
+            this.getUpdatedNotes();
+        })
+    }
+
     render() {
         var listgridvalue = this.props.listGridView;
         const listgridview = listgridvalue ? "list-view-archive" : "default-view";

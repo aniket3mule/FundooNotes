@@ -12,6 +12,7 @@ import Reminder from './pages/Reminder';
 import Archive from './pages/Archive';
 import Trash from './pages/Trash';
 import GetNotesListByLabel from './pages/GetNotesListByLabel';
+import NewNoteDemo from './pages/NewNoteDemo';
 
 //import AppBar from './components/DashboardComponent'
 
@@ -31,6 +32,7 @@ class App extends React.Component {
           <Route path="/archive" component = {Archive}/>
           <Route path="/trash" component = {Trash}/>
           <Route path="/usernote" component = {GetNotesListByLabel}/>
+          <Route path="/notes" component = {NewNoteDemo}/>
         </Router>
     )
   }

@@ -114,6 +114,17 @@ class EditorQnAComponent extends Component {
         return count;
     }
 
+    handleRepliedQuestions = (questionArray) =>{
+        for (let i = 0; i < questionArray.length-1; i++) {
+            for (let j = i+1; j < questionArray.length; j++) {
+                if (questionArray[i].threadId === questionArray[j].threadId) {
+                    return questionArray[i].message
+                }
+                else return null;
+            }
+        }
+    }
+
     render() {
         const { editorState } = this.state;
         console.log("this.prosp", this.props.noteId);
@@ -154,6 +165,9 @@ class EditorQnAComponent extends Component {
                             <div className="innerHTML"
                                 dangerouslySetInnerHTML={{ __html: questionsListKey.message }}>
                             </div>
+                            <div className="innerHTML"
+                                dangerouslySetInnerHTML={{ __html: this.handleRepliedQuestions(key.questionAndAnswerNotes) }}>
+                            </div>
                         </div>
                     )
                 })
@@ -188,6 +202,9 @@ class EditorQnAComponent extends Component {
                                 <div className="innerHTML"
                                     dangerouslySetInnerHTML={{ __html: questionsListKey.message }}>
                                 </div>
+                                {
+                                    
+                                }
                                 {(questionsListKey.like.length > 0) ?
                                     questionsListKey.like.map(likeKey => {
                                         return (
@@ -219,6 +236,7 @@ class EditorQnAComponent extends Component {
                                         <span> {"0"} Likes</span>
                                     </div>
                                 }
+                                
                                 <div>
                                     
                                 </div>

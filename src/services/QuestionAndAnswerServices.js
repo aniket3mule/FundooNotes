@@ -21,7 +21,15 @@ class QuestionAndAnswerServices {
             }
         })
     }
-    
+
+    replyQuestion(data){
+        // console.log(localStorage.getItem("token"));
+        return axios.post(`${BaseURL}/questionAndAnswerNotes/reply/${data.parentId}`, data.data, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+    }
 }
 
 export default QuestionAndAnswerServices

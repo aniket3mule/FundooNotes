@@ -38,13 +38,13 @@ const thm = createMuiTheme({
     }
 });
 
-function searchingFor(search) {
-    return function (x) {
-        return x.title.includes(search) || x.description.includes(search)
-    }
-}
+// function searchingFor(search) {
+//     return function (x) {
+//         return x.title.includes(search) || x.description.includes(search)
+//     }
+// }
 
-class GetNotesListByLabel extends Component {
+class DisplayCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -53,33 +53,21 @@ class GetNotesListByLabel extends Component {
             description: '',
             modal: false,
             allNotes: [],
-            labelName:''
         }
-        this.getUpdatedNotes = this.getUpdatedNotes.bind(this);
     }
-
-    componentDidMount() {
-        // console.log("label Response", this.props.props.location.pathname.toString().substring(10));
+    
+    componentDidMount(){
         this.getUpdatedNotes();
     }
-    getUpdatedNotes() {
-        var labelName = this.props.props.location.pathname.toString().substring(10);
-        var data = {
-            'labelName': labelName
-        }
-        NoteService.getNotesListByLabel(data)
-            .then(response => {
-                console.log("label Response", response.data.data.data);
-                
-                this.setState({
-                    allNotes: response.data.data.data
-                })
-                this.getUpdatedNotes();
-                // this.render();
+    getUpdatedNotes(){
+        NoteService.getReminderNotesList()
+        .then(response => {
+            console.log("trash notes ", response);
+            this.setState({
+                allNotes: response.data.data.data
             })
-            .catch(err => {
-                console.log("error in usernot", err);
-            })
+            
+        })
     }
 
     handleToggleOpen = (id, oldTitle, oldDescription) => {
@@ -92,7 +80,6 @@ class GetNotesListByLabel extends Component {
 
         console.log("id ......", id);
         console.log("note id ......", this.state.noteId);
-
         //update existing Note
         try {
             if (this.state.modal && (this.state.description !== oldTitle || this.state.title !== oldDescription)) {
@@ -210,15 +197,10 @@ class GetNotesListByLabel extends Component {
         }
     }
 
-    handleUnArchive = (noteId) => {
-        console.log(noteId);
-        // this.setState({ isArchived: isArchive });
-        console.log(this.state.isArchived);
-
-
+    handleArchive = (noteId) => {
         var note = {
             'noteIdList': [noteId],
-            'isArchived': false
+            'isArchived': true
         }
 
         //Update service
@@ -232,24 +214,40 @@ class GetNotesListByLabel extends Component {
             })
     }
 
+    handleDeletelabel = (noteId, labelId, label) => {
+        var removeData = {
+            'noteId':noteId,
+            'labelId':labelId,
+            data : {
+                'noteIdList' : noteId,
+                'label': label
+            }
+        }
+
+        NoteService.removeLabelToNotes(removeData)
+        .then(res => {
+            console.log("removed lable");
+            this.getUpdatedNotes();
+        })
+    }
+
     render() {
         var listgridvalue = this.props.listGridView;
         const listgridview = listgridvalue ? "list-view-archive" : "default-view";
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
         const listView = listgridvalue ? null : "card-grid";
-        const AllArchived = this.state.allNotes.map(key => {
+        const allReminders = this.props.allNotes.map(key => {
             // console.log("key data",key)
             return (
-                (key.isDeleted === false) &&
-                <div key={key.id} className={listgridview}>
-                    <MuiThemeProvider theme={thm}>
-                        <Container className="card-margin" >
-                            <Card className="take-note-user-card-description "
-                                onChange={() => this.handleColorChanger(key.color, key.id)}
-                                style={{ backgroundColor: key.color }}>
-                                <CardBody className="user-card-body-desc">
-                                    <CardTitle>
-                                    <InputBase
+                    <div key={key.id} className={listgridview}>
+                         <MuiThemeProvider theme={thm}>
+                            <Container className="card-margin" >
+                                <Card className="take-note-user-card-description "
+                                    onChange={() => this.handleColorChanger(key.color, key.id)}
+                                    style={{ backgroundColor: key.color }}>
+                                    <CardBody className="user-card-body-desc">
+                                        <CardTitle>
+                                        <InputBase
                                             id="outlined-dense-multiline"
                                             value={key.title}
                                             onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
@@ -259,7 +257,6 @@ class GetNotesListByLabel extends Component {
                                             readOnly
                                             multiline
                                             style={{ backgroundColor: key.color }}
-
                                         />
                                     </CardTitle>
                                     <InputBase
@@ -274,36 +271,36 @@ class GetNotesListByLabel extends Component {
                                         style={{ backgroundColor: key.color }}
                                     />
 
-                                    {(key.reminder.length > 0) &&
-                                        <div>
-                                            <Chip
-                                                // avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
-                                                label={key.reminder.toString().substring(0, 24)}
-                                                onDelete={() => this.handleDeleteChip(key.id)}
-                                                className={useStyles.chip}
-                                                variant="outlined"
-                                                size="small"
-                                            />
-                                        </div>
-                                    }
-                                    {(key.noteLabels.length > 0) &&
-                                        <div style={{ display: "flex", flexWrap: "wrap", width: "218px" }}>{
+                                        {(key.reminder.length > 0) &&
+                                            <div>
+                                                <Chip
+                                                    // avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
+                                                    label={key.reminder.toString().substring(0, 24)}
+                                                    onDelete={() => this.handleDeleteChip(key.id)}
+                                                    className={useStyles.chip}
+                                                    variant="outlined"
+                                                    size="small"
+                                                />
+                                            </div>
+                                        }
+                                        {(key.noteLabels.length > 0) &&
+                                        <div style={{ display: "flex", flexWrap:"wrap", width:"218px" }}>{
                                             key.noteLabels.map(labelskey => {
                                                 return (
-                                                    <div key={labelskey.id}>
-                                                        <Chip
-                                                            label={labelskey.label}
-                                                            onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
-                                                            className={useStyles.chip}
-                                                            variant="outlined"
-                                                            size="small"
-                                                        />
-                                                    </div>
+                                                    <div>
+                                                    <Chip
+                                                        label={labelskey.label}
+                                                        onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
+                                                        className={useStyles.chip}
+                                                        variant="outlined"
+                                                        size="small"
+                                                    />
+                                                </div>
                                                 )
                                             })}
                                         </div>
                                     }
-                                    {(key.collaborators.length > 0) &&
+                                        {(key.collaborators.length > 0) &&
                                         <div style={{ display: "flex" }}>{
                                             key.collaborators.map(collaborator => {
                                                 return (
@@ -318,17 +315,17 @@ class GetNotesListByLabel extends Component {
                                             })}
                                         </div>
                                     }
-                                </CardBody>
-                                <CardBody >
-                                    <div className={modalbottom}>
-                                        <Reminder
-                                            toolsPropsToReminder={this.handleReminder}
-                                            noteID={key.id}
-                                            id="color-picker"
-                                        >
-                                        </Reminder>
+                                    </CardBody>
+                                    <CardBody >
+                                        <div className={modalbottom}>
+                                            <Reminder
+                                                toolsPropsToReminder={this.handleReminder}
+                                                noteID={key.id}
+                                                id="color-picker"
+                                            >
+                                            </Reminder>
 
-                                        <CardLink>
+                                            <CardLink>
                                             <CollaboratorComponent
                                                 noteID={key.id}
                                                 collaborators={key.collaborators}
@@ -338,39 +335,40 @@ class GetNotesListByLabel extends Component {
                                             />
                                         </CardLink>
 
-                                        <ColorPallete
-                                            toolsPropsToColorpallete={this.handleColorChanger}
-                                            noteID={key.id}
-                                            id="color-picker"
-                                        >
-                                        </ColorPallete>
+                                            <ColorPallete
+                                                toolsPropsToColorpallete={this.handleColorChanger}
+                                                noteID={key.id}
+                                                id="color-picker"
+                                            >
+                                            </ColorPallete>
 
-                                        <CardLink
-                                            onClick={() => this.handleUnArchive(key.id)}
-                                        >
-                                             <Tooltip title="Unarchive">
+                                            <CardLink
+                                                onClick={() => this.handleArchive(key.id)}
+                                            >
+                                                <Tooltip title="Archive">
                                                     <img className="img"
-                                                        src={require('../assets/img/unarchive.svg')}
-                                                        alt="color picker" />
+                                                        src={require('../assets/img/archived.svg')}
+                                                        alt="color picker"
+                                                    />
                                                 </Tooltip>
-                                        </CardLink>
-                                        <CardLink className="add-image">
-                                            <Tooltip title="add image">
-                                                <img className="img"
-                                                    src={require('../assets/img/add_image.svg')}
-                                                    alt="color picker"
-                                                />
-                                            </Tooltip>
-                                        </CardLink>
-                                        <MoreOptions
-                                            toolsPropsToMoreOptions={this.handleDeleteNote}
-                                            noteID={key.id}
-                                            id="color-picker">
-                                        </MoreOptions>
-                                    </div>
-                                </CardBody>
-                            </Card>
-                        </Container>
+                                            </CardLink>
+                                            <CardLink className="add-image">
+                                                <Tooltip title="add image">
+                                                    <img className="img"
+                                                        src={require('../assets/img/add_image.svg')}
+                                                        alt="color picker"
+                                                    />
+                                                </Tooltip>
+                                            </CardLink>
+                                            <MoreOptions
+                                                toolsPropsToMoreOptions={this.handleDeleteNote}
+                                                noteID={key.id}
+                                                id="color-picker">
+                                            </MoreOptions>
+                                        </div>
+                                    </CardBody>
+                                </Card>
+                            </Container>
                         {(this.state.noteId === key.id) &&
                             <div key={key.id} >
                                 <Dialog
@@ -397,7 +395,6 @@ class GetNotesListByLabel extends Component {
                                                 placeholder="Title"
                                                 className="dialog-input"
                                             />
-                                       
                                         <InputBase
                                             name="description"
                                             value={this.state.description}
@@ -410,37 +407,35 @@ class GetNotesListByLabel extends Component {
                                             className="dialog-input"
                                         />
                                         </div>
-
-                                            {(key.reminder.length > 0) &&
-                                                <div>
+                                        {(key.reminder.length > 0) &&
+                                        <div>
+                                            <Chip
+                                                label={key.reminder.toString().substring(0, 24)}
+                                                onDelete={() => this.handleDeleteChip(key.id)}
+                                                className={useStyles.chip}
+                                                variant="outlined"
+                                                size="small"
+                                            />
+                                        </div>
+                                    }
+                                    {(key.noteLabels.length > 0) &&
+                                        <div style={{ display: "flex", flexWrap:"wrap", width:"218px" }}>{
+                                            key.noteLabels.map(labelskey => {
+                                                return (
+                                                    <div>
                                                     <Chip
-                                                        // avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
-                                                        label={key.reminder.toString().substring(0, 24)}
-                                                        onDelete={() => this.handleDeleteChip(key.id)}
+                                                        label={labelskey.label}
+                                                        onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
                                                         className={useStyles.chip}
                                                         variant="outlined"
                                                         size="small"
                                                     />
                                                 </div>
-                                            }
-                                            {(key.noteLabels.length > 0) &&
-                                        <div style={{ display: "flex", flexWrap: "wrap", width: "218px" }}>{
-                                            key.noteLabels.map(labelskey => {
-                                                return (
-                                                    <div key={labelskey.id}>
-                                                        <Chip
-                                                            label={labelskey.label}
-                                                            onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
-                                                            className={useStyles.chip}
-                                                            variant="outlined"
-                                                            size="small"
-                                                        />
-                                                    </div>
                                                 )
                                             })}
                                         </div>
                                     }
-                                            {(key.collaborators.length > 0) &&
+                                    {(key.collaborators.length > 0) &&
                                         <div style={{ display: "flex" }}>{
                                             key.collaborators.map(collaborator => {
                                                 return (
@@ -456,79 +451,76 @@ class GetNotesListByLabel extends Component {
                                         </div>
                                     }
                                         </CardBody>
-                                        <div
-                                            className="modal-footer-note"
-                                        >
-                                            <CardLink onClick={this.handleReminder}>
-                                                <Reminder
-                                                    toolsPropsToReminder={this.handleReminder}
+                                            <div
+                                                className="modal-footer-note"
+                                            >
+                                                <CardLink onClick={this.handleReminder}>
+                                                    <Reminder
+                                                        toolsPropsToReminder={this.handleReminder}
+                                                        noteID={key.id}
+                                                        id="color-picker"
+                                                    >
+                                                    </Reminder>
+                                                </CardLink>
+
+                                                <CardLink >
+                                                    <Tooltip title="Collaborator">
+                                                        <img className="img"
+                                                            src={require('../assets/img/colaborator.svg')}
+                                                            alt="color picker" />
+                                                    </Tooltip>
+                                                </CardLink>
+
+                                                <ColorPallete
+                                                    toolsPropsToColorpallete={this.handleColorChanger}
                                                     noteID={key.id}
                                                     id="color-picker"
                                                 >
-                                                </Reminder>
-                                            </CardLink>
+                                                </ColorPallete>
 
-                                            <CardLink >
-                                                <Tooltip title="Collaborator">
-                                                    <img className="img"
-                                                        src={require('../assets/img/colaborator.svg')}
-                                                        alt="color picker" />
-                                                </Tooltip>
-                                            </CardLink>
+                                                <CardLink
+                                                    onClick={() => this.props.handleArchive(key.id, true)}>
+                                                    <Tooltip title="Archive">
+                                                        <img className="img"
+                                                            src={require('../assets/img/archived.svg')}
+                                                            alt="color picker" />
+                                                    </Tooltip>
+                                                </CardLink>
+                                                <CardLink>
+                                                    <Tooltip title="add image">
+                                                        <img className="img"
+                                                            src={require('../assets/img/add_image.svg')}
+                                                            alt="color picker"
+                                                        />
+                                                    </Tooltip>
+                                                </CardLink>
+                                                <MoreOptions
+                                                    // toolsPropsToColorpallete={this.handleMoreOptions}
+                                                    noteID={key.id}
+                                                    id="color-picker">
 
-                                            <ColorPallete
-                                                toolsPropsToColorpallete={this.handleColorChanger}
-                                                noteID={key.id}
-                                                id="color-picker"
-                                            >
-                                            </ColorPallete>
-
-                                            <CardLink
-                                                onClick={() => this.handleUnArchive(key.id)}
+                                                </MoreOptions>
+                                                <CardLink ></CardLink>
+                                                <CardLink
+                                                    className="close-btn"
+                                                    onClick={this.handleToggleOpen}
                                                 >
-                                                 <Tooltip title="Unarchive">
-                                                    <img className="img"
-                                                        src={require('../assets/img/unarchive.svg')}
-                                                        alt="color picker" />
-                                                </Tooltip>
-                                            </CardLink>
-                                            <CardLink>
-                                                <Tooltip title="add image">
-                                                    <img className="img"
-                                                        src={require('../assets/img/add_image.svg')}
-                                                        alt="color picker"
-                                                    />
-                                                </Tooltip>
-                                            </CardLink>
-                                            <MoreOptions
-                                                // toolsPropsToColorpallete={this.handleMoreOptions}
-                                                noteID={key.id}
-                                                id="color-picker">
-
-                                            </MoreOptions>
-                                            <CardLink ></CardLink>
-                                            <CardLink
-                                                className="close-btn"
-                                                onClick={this.handleToggleOpen}
-                                            >
-                                                <Label className="close-btn">Close</Label>
-                                            </CardLink>
-                                        </div>
+                                                    <Label>Close</Label>
+                                                </CardLink>
+                                            </div>
                                     </Card>
                                 </Dialog>
                             </div>}
-                    </MuiThemeProvider>
-                </div>
+                            </MuiThemeProvider>
+                    </div>
             )
         })
         return (
-            // <div className={containerAllnotes}>
             <div className={listView}>
-                {AllArchived}
+                {allReminders}
             </div>
-            // </div>
         )
     }
 }
 
-export default GetNotesListByLabel
+export default DisplayCard

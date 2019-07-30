@@ -155,6 +155,14 @@ class NoteServices {
             }
         })
     }
+
+    getNotesLabelDetails(noteid){
+        return axios.get(`${BaseURL}/${noteid}/noteLabels`, {
+            headers:{
+                'Authorization' :token
+            }
+        })
+    }
 }
 
 export default NoteServices;

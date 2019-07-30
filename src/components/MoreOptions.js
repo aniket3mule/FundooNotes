@@ -52,8 +52,10 @@ class MoreOptions extends Component {
 
     handleAskQuestion(e) {
         // this.setState({ askQuestion: true });
-        e.preventDefault();
-        this.props.history.push("/questionanswer", this.props.noteID)
+        // e.preventDefault();
+        console.log(this.props);
+        
+        this.props.props.history.push(`/questionanswer/${this.props.noteID}`, this.props.noteID)
     }
 
 
@@ -61,6 +63,10 @@ class MoreOptions extends Component {
         this.setState({
             askQuestion: value
         })
+    }
+
+    createLabelToMoreOptions = (isChecked) =>{
+        this.props.moreOptionLabelToAllNote(isChecked)
     }
     render() {
         return (
@@ -83,9 +89,10 @@ class MoreOptions extends Component {
                                         addLabelOpen={this.state.addLabel}
                                         style={{ width: "100%" }}
                                         noteID = {this.props.noteID}
+                                        createLabelToMoreOptions = {this.createLabelToMoreOptions}
                                     />
                                     :
-                                    <div style = {{width: "100px"}}>
+                                    <div style = {{width: "115px"}}>
                                         {
                                             this.props.noteID === ''
                                                 ?
@@ -138,4 +145,4 @@ class MoreOptions extends Component {
         )
     }
 }
-export default withRouter(MoreOptions);
+export default MoreOptions

@@ -63,14 +63,14 @@ class DrawerMenu extends Component {
                     width={200}
                    
                 >
-                    <MenuItem onClick={this.handleNotes}>
+                    <MenuItem onClick={this.handleNotes} className="links">
                     <img className="update-card-img"
                             src={require('../assets/img/notes.svg')}
                             alt="color picker" />
                     <span className="fundoo-text-sidebar">Notes</span>
                     </MenuItem>
 
-                    <MenuItem onClick={this.handleReminder}>
+                    <MenuItem onClick={this.handleReminder} className="links">
                     <img className="update-card-img"
                             src={require('../assets/img/reminder.svg')}
                             alt="reminder" />
@@ -88,6 +88,7 @@ class DrawerMenu extends Component {
                             />
                             <MenuItem
                             onClick={this.handleLabelOpen}
+                            className="links"
                             >
                             <CreateLabel
                             sidebarLabel = {this.state.open}
@@ -96,14 +97,16 @@ class DrawerMenu extends Component {
                         </div>
                     </div>
 
-                    <MenuItem onClick={this.handleArchived}>
+                    <MenuItem onClick={this.handleArchived}
+                    className="links">
                         <img className="update-card-img"
                             src={require('../assets/img/archived.svg')}
                             alt="color picker" />
                             <span className="fundoo-text-sidebar">Archive</span>
                     </MenuItem>
 
-                    <MenuItem onClick={this.handleTrash}>
+                    <MenuItem onClick={this.handleTrash}
+                    className="links">
                     <img className="update-card-img"
                     src={require('../assets/img/trash.svg')}
                     alt="trash notes"
