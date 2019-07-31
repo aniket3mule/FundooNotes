@@ -146,7 +146,7 @@ export default class GetAllLabels extends Component {
     }
 
     handleUserLabel(labelName) {
-        this.props.props.history.push(`/usernote/${labelName}`)
+        this.props.props.history.push(`/usernote/${labelName}`,labelName)
     }
 
     handleChange(e, labelId) {

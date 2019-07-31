@@ -63,18 +63,25 @@ class GetNotesListByLabel extends Component {
         this.getUpdatedNotes();
     }
     getUpdatedNotes() {
-        var labelName = this.props.props.location.pathname.toString().substring(10);
+        var labelName = this.props.labelName
+        console.log("this.state.props", this.props.labelName);
+        
+        // this.setState({
+        //     labelName:this.props.labelName
+        // })
         var data = {
-            'labelName': labelName
+            'labelName': this.props.labelName
         }
         NoteService.getNotesListByLabel(data)
             .then(response => {
                 console.log("label Response", response.data.data.data);
-                
                 this.setState({
                     allNotes: response.data.data.data
                 })
-                this.getUpdatedNotes();
+                // if (labelName !== this.props.labelName) {
+                    // this.getUpdatedNotes();
+                // }
+                // 
                 // this.render();
             })
             .catch(err => {
@@ -237,7 +244,7 @@ class GetNotesListByLabel extends Component {
         const listgridview = listgridvalue ? "list-view-archive" : "default-view";
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
         const listView = listgridvalue ? null : "card-grid";
-        const AllArchived = this.state.allNotes.map(key => {
+        const AllArchived = this.state.allNotes.filter(searchingFor(this.props.searchNote)).map(key => {
             // console.log("key data",key)
             return (
                 (key.isDeleted === false) &&

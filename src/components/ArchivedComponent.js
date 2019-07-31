@@ -59,13 +59,19 @@ class ArchivedComponent extends Component {
     componentDidMount() {
         this.getUpdatedNotes();
     }
-    getUpdatedNotes() {
+    getUpdatedNotes() { 
+        var allNotesArray =[];
         NoteService.getArchiveNotesList()
-            .then(response => {
-                this.setState({
-                    allNotes: response.data.data.data
-                })
-            })
+        .then(allNotes => {
+            for (let i = allNotes.data.data.data.length-1; i >=0 ; i--) {
+                allNotesArray.push(allNotes.data.data.data[i])
+            }
+            this.setState({ allNotes: allNotesArray})
+            // console.log("this data", this.state.allNotes);
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
 
     handleToggleOpen = (id, oldTitle, oldDescription) => {
@@ -187,7 +193,6 @@ class ArchivedComponent extends Component {
         if (value) {
             this.getUpdatedNotes();
         }
-
     }
 
     saveCollaborator = (value) => {

@@ -163,6 +163,15 @@ class NoteServices {
             }
         })
     }
+
+    pinUnpinNotes(data){
+        return axios
+        .post(`${BaseURL}/pinUnpinNotes`,data, {
+            headers:{
+                'Authorization' : token
+            }
+        })
+    }
 }
 
 export default NoteServices;

@@ -191,7 +191,7 @@ class CreateNote extends Component {
                                 value={this.state.title}
                                 onChange={this.handleChange}
                                 style={{ backgroundColor: this.state.color }}
-                                autoFocus="true"
+                                autoFocus
                             />
                             <InputBase
                                 id="outlined-dense-multiline"

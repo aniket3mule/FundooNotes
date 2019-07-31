@@ -42,6 +42,8 @@ export default class GetNotesListByLabel extends Component {
         console.log("list grid reminder", this.state.listGridView);
     }
     render() {
+        console.log("getnote list by label page", this.props.location.state);
+        
         const slide = this.state.slidecards ? "afterslide" : "beforeslide";
         return (
             <div>
@@ -58,6 +60,8 @@ export default class GetNotesListByLabel extends Component {
                         <div  className="create-note-margin container-allnotes">
                             <GetNotesListByLabelComponent
                                  props={this.props}
+                                 searchNote={this.state.searchNote}
+                                 labelName ={this.props.location.state}
                             />
                         </div>
                 </div>

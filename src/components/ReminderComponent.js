@@ -60,13 +60,17 @@ class RemindersDisplayComponent extends Component {
         this.getUpdatedNotes();
     }
     getUpdatedNotes(){
+        var allNotesArray =[];
         NoteService.getReminderNotesList()
-        .then(response => {
-            console.log("trash notes ", response);
-            this.setState({
-                allNotes: response.data.data.data
-            })
-            
+        .then(allNotes => {
+            for (let i = allNotes.data.data.data.length-1; i >=0 ; i--) {
+                allNotesArray.push(allNotes.data.data.data[i])
+            }
+            this.setState({ allNotes: allNotesArray})
+            // console.log("this data", this.state.allNotes);
+        })
+        .catch(err => {
+            console.log(err);
         })
     }
 

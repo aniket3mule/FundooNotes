@@ -511,6 +511,15 @@ width: 100%;
   visibility: visible;
 }
 
+.is-pin{
+  visibility: hidden;
+}
+
+.card:hover .is-pin,
+.is-pin:hover {
+  visibility: visible;
+}
+
 .edit-label-dialog {
   display: flex;
 }
@@ -521,7 +530,6 @@ width: 100%;
 
 .create-label-div {
   display: flex;
-
 }
 
 .card-title{

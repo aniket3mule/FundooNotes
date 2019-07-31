@@ -60,10 +60,8 @@ class UserDashboard extends Component {
     //     console.log("newnote==>", newLabel);
     //     this.labelToCards.current.displayCard(newLabel);
     // }
-    
 
     render() {
-
         if (localStorage.getItem('token1') !== "true") {
             return (
                 
@@ -104,7 +102,6 @@ class UserDashboard extends Component {
                                     isTrash = {this.state.isTrash}
                                     isNotes = {this.state.isNotes}
                                     props={this.props}
-                                    
                                 />
                             </div>
                             {/* <div>

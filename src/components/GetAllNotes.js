@@ -13,7 +13,6 @@ import MoreOptions from './MoreOptions';
 import CollaboratorComponent from './CollaboratorComponent';
 import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
 import CloseIcon from "@material-ui/icons/Close";
-import Pin from "@material-ui/icons/PinDropOutlined";
 import { withRouter } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
@@ -83,9 +82,13 @@ class GetAllNotes extends Component {
     }
 
     getUpdateNotes = async () => {
+        var allNotesArray =[];
         await NoteService.getAllNotes()
             .then(allNotes => {
-                this.setState({ allNotes: allNotes.data.data.data })
+                for (let i = allNotes.data.data.data.length-1; i >=0 ; i--) {
+                    allNotesArray.push(allNotes.data.data.data[i])
+                }
+                this.setState({ allNotes: allNotesArray})
                 // console.log("this data", this.state.allNotes);
             })
             .catch(err => {
@@ -282,8 +285,11 @@ class GetAllNotes extends Component {
      */
     displayCard(newNote) {
         console.log("display card==>", newNote);
+        var allNotesArray = [];
+        allNotesArray = this.state.allNotes;
+        allNotesArray.unshift(newNote);
         this.setState({
-            allNotes: [...this.state.allNotes, newNote]
+            allNotes: allNotesArray
         })
     }
     /**
@@ -321,40 +327,40 @@ class GetAllNotes extends Component {
     /**
      * Snackbar functions starts 
      */
-    handleClickSnackbar = message => () => {
-        this.queue.push({
-            message,
-            //   key: new Date().getTime()
-        });
+    // handleClickSnackbar = message => () => {
+    //     this.queue.push({
+    //         message,
+    //         //   key: new Date().getTime()
+    //     });
 
-        if (this.state.open) {
-            // immediately begin dismissing current message
-            // to start showing new one
-            this.setState({ open: false });
-        } else {
-            this.processQueue();
-        }
-    };
+    //     if (this.state.open) {
+    //         // immediately begin dismissing current message
+    //         // to start showing new one
+    //         this.setState({ open: false });
+    //     } else {
+    //         this.processQueue();
+    //     }
+    // };
 
-    processQueue = () => {
-        if (this.queue.length > 0) {
-            this.setState({
-                messageInfo: this.queue.shift(),
-                open: true
-            });
-        }
-    };
+    // // processQueue = () => {
+    // //     if (this.queue.length > 0) {
+    // //         this.setState({
+    // //             messageInfo: this.queue.shift(),
+    // //             open: true
+    // //         });
+    // //     }
+    // // };
 
-    handleCloseSnackbar = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-        this.setState({ open: false });
-    };
+    // handleCloseSnackbar = (event, reason) => {
+    //     if (reason === "clickaway") {
+    //         return;
+    //     }
+    //     this.setState({ open: false });
+    // };
 
-    handleExitedSnackbar = () => {
-        this.processQueue();
-    };
+    // handleExitedSnackbar = () => {
+    //     this.processQueue();
+    // };
     /**
      * snackbar ends here
      */
@@ -384,6 +390,34 @@ class GetAllNotes extends Component {
             })
     }
 
+    handlePinNote = (noteId) => {
+        var data = {
+            'noteIdList': [noteId],
+            'isPined' : true
+        }
+
+        NoteService.pinUnpinNotes(data)
+        .then(res => {
+            console.log("Note pinned successfully");
+            this.setState({
+                            openSnackbar: true,
+                            messageInfo: 'Note pinned successfully'
+                        });
+            this.getUpdateNotes();
+        })
+    }
+    handleUnpinNote = (noteId) => {
+        var data = {
+            'noteIdList': [noteId],
+            'isPined' : false
+        }
+
+        NoteService.pinUnpinNotes(data)
+        .then(res => {
+            console.log("Note Unpinned successfully");
+            this.getUpdateNotes();
+        })
+    }
     render() {
         // console.log(this.props.isNotes);
         var listgridvalue = this.props.listGridView;
@@ -407,25 +441,44 @@ class GetAllNotes extends Component {
                                 style={{ backgroundColor: key.color }}>
                                 <CardBody className="user-card-body-desc">
 
-                                    <div >
-                                        <InputBase
-                                            id="outlined-dense-multiline"
-                                            value={key.title}
-                                            onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
-                                            margin="dense"
-                                            variant="outlined"
-                                            readOnly
-                                            multiline
-                                            style={{ backgroundColor: key.color }}
-                                            placeholder="Title"
-                                        />
+                                    <div style={{ display: "flex" }}>
+                                        <div style={{ width: "98%" }}>
+                                            <InputBase
+                                                id="outlined-dense-multiline"
+                                                value={key.title}
+                                                onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
+                                                margin="dense"
+                                                variant="outlined"
+                                                readOnly
+                                                multiline
+                                                style={{ backgroundColor: key.color, width: "98%" }}
+                                                placeholder="Title"
+                                            />
+                                        </div>
+                                        {(key.isPined===true)?
+                                        <div style={{ height: "24px" }}>
+                                        <Tooltip title="Unpin note">
+                                            <img src={require('../assets/img/pin.svg')}
+                                                alt="pin" className="is-pin"
+                                                onClick={() => this.handleUnpinNote(key.id)}
+                                            />
+
+                                            {/* <Pin/> */}
+                                        </Tooltip>
                                     </div>
-                                    <Tooltip title="Pin note">
-                                        <img src={require('../assets/img/unPin.svg')}
-                                            alt="pin"
-                                        />
-                                        {/* <Pin/> */}
-                                    </Tooltip>
+                                            :<div style={{ height: "24px" }}>
+                                                <Tooltip title="Pin note">
+                                                    <img src={require('../assets/img/unPin.svg')}
+                                                        alt="pin" className="is-pin"
+                                                        onClick={() => this.handlePinNote(key.id)}
+                                                    />
+
+                                                    {/* <Pin/> */}
+                                                </Tooltip>
+                                            </div>
+                                        }
+                                    </div>
+
 
                                     <InputBase
                                         id="outlined-dense-multiline"
@@ -493,14 +546,12 @@ class GetAllNotes extends Component {
                                         >
                                         </Reminder>
 
-                                        <CardLink>
                                             <CollaboratorComponent
                                                 noteID={key.id}
                                                 collaborators={key.collaborators}
                                                 removeCollaborator={this.removeCollaborator}
                                                 saveCollaborator={this.saveCollaborator}
                                             />
-                                        </CardLink>
 
                                         <ColorPallete
                                             toolsPropsToColorpallete={this.handleColorChanger}
@@ -509,16 +560,13 @@ class GetAllNotes extends Component {
                                         >
                                         </ColorPallete>
 
-                                        <CardLink
-                                            onClick={() => this.handleArchive(key.id, true)}
-                                        >
                                             <Tooltip title="Archive">
                                                 <img className="img"
                                                     src={require('../assets/img/archived.svg')}
                                                     alt="color picker"
+                                                    onClick={() => this.handleArchive(key.id, true)}
                                                 />
                                             </Tooltip>
-                                        </CardLink>
                                         <CardLink className="add-image">
                                             <Tooltip title="add image">
                                                 <img className="img"
@@ -643,31 +691,25 @@ class GetAllNotes extends Component {
                                     <div
                                         className="modal-footer-note"
                                     >
-                                        <CardLink onClick={this.handleReminder}>
                                             <Reminder
                                                 toolsPropsToReminder={this.handleReminder}
                                                 noteID={key.id}
                                                 id="color-picker"
                                             >
                                             </Reminder>
-                                        </CardLink>
 
-                                        <CardLink >
                                             <CollaboratorComponent
                                                 noteID={key.id}
                                                 collaborators={key.collaborators}
                                                 removeCollaborator={this.removeCollaborator}
                                                 saveCollaborator={this.saveCollaborator}
                                             />
-                                        </CardLink>
-                                        <CardLink >
                                             <ColorPallete
                                                 toolsPropsToColorpallete={this.handleColorChanger}
                                                 noteID={key.id}
                                                 id="color-picker"
                                             >
                                             </ColorPallete>
-                                        </CardLink>
                                         <CardLink
                                             onClick={() => this.handleArchive(key.id, true)}>
                                             <Tooltip title="Archive">
@@ -676,14 +718,12 @@ class GetAllNotes extends Component {
                                                     alt="color picker" />
                                             </Tooltip>
                                         </CardLink>
-                                        <CardLink>
                                             <Tooltip title="add image">
                                                 <img className="img"
                                                     src={require('../assets/img/add_image.svg')}
                                                     alt="color picker"
                                                 />
                                             </Tooltip>
-                                        </CardLink>
                                         <MoreOptions
                                             toolsPropsToMoreOptions={this.handleDeleteNote}
                                             noteID={key.id}
@@ -730,17 +770,17 @@ class GetAllNotes extends Component {
                 <div className={listView}>
                     {notes}
                 </div>
-                
+
                 <Snackbar
-                    key={this.state.messageInfo}
+                    // key={this.state.messageInfo}
                     anchorOrigin={{
                         vertical: "bottom",
                         horizontal: "center"
                     }}
                     open={this.state.openSnackbar}
-                    autoHideDuration={1500}
+                    autoHideDuration={1000}
                     onClose={this.handleCloseSnackbar}
-                    onExited={this.handleExitedSnackbar}
+                    // onExited={this.handleExitedSnackbar}
                     ContentProps={{
                         "aria-describedby": "message-id"
                     }}
