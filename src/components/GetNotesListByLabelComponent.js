@@ -63,12 +63,9 @@ class GetNotesListByLabel extends Component {
         this.getUpdatedNotes();
     }
     getUpdatedNotes() {
-        var labelName = this.props.labelName
+        // var labelName = this.props.labelName
         console.log("this.state.props", this.props.labelName);
         
-        // this.setState({
-        //     labelName:this.props.labelName
-        // })
         var data = {
             'labelName': this.props.labelName
         }
@@ -239,6 +236,23 @@ class GetNotesListByLabel extends Component {
             })
     }
 
+    handleDeletelabel = (noteId, labelId, label) => {
+        var removeData = {
+            'noteId': noteId,
+            'labelId': labelId,
+            data: {
+                'noteIdList': noteId,
+                'label': label
+            }
+        }
+
+        NoteService.removeLabelToNotes(removeData)
+            .then(res => {
+                console.log("removed lable");
+                this.getUpdateNotes();
+            })
+    }
+
     render() {
         var listgridvalue = this.props.listGridView;
         const listgridview = listgridvalue ? "list-view-archive" : "default-view";
@@ -297,6 +311,7 @@ class GetNotesListByLabel extends Component {
                                         <div style={{ display: "flex", flexWrap: "wrap", width: "218px" }}>{
                                             key.noteLabels.map(labelskey => {
                                                 return (
+                                                    (labelskey.isDeleted === true)&&
                                                     <div key={labelskey.id}>
                                                         <Chip
                                                             label={labelskey.label}
@@ -434,6 +449,7 @@ class GetNotesListByLabel extends Component {
                                         <div style={{ display: "flex", flexWrap: "wrap", width: "218px" }}>{
                                             key.noteLabels.map(labelskey => {
                                                 return (
+                                                    (labelskey.isDeleted === false)&&
                                                     <div key={labelskey.id}>
                                                         <Chip
                                                             label={labelskey.label}

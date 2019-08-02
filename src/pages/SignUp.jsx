@@ -1,15 +1,19 @@
 import React, {Component} from 'react';
-import SignUpComponent from '../components/SignUpComponent'
-import {Container} from 'reactstrap'
+import RegistrationComponent from '../components/RegistrationComponent';
 
 export default class  SignUp extends Component{
     render(){
         return(
-            <Container>
-                <SignUpComponent
-                 props ={this.props}
+            // <Container>
+            //     <SignUpComponent
+            //      props ={this.props}
+            //     />
+            // </Container>
+            <div>
+                <RegistrationComponent
+                props ={this.props}
                 />
-            </Container>
+            </div>
         );
     }
 }

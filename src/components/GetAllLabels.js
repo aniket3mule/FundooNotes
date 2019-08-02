@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import LabelService from '../services/LabelServices';
 import { MenuItem, Checkbox, FormControlLabel, InputBase } from '@material-ui/core';
-import Check from '@material-ui/icons/Check'
+// import Check from '@material-ui/icons/Check'
 import Edit from '@material-ui/icons/EditOutlined'
 import NoteService from '../services/NoteServices';
 
@@ -155,6 +155,7 @@ export default class GetAllLabels extends Component {
         // do whatever you want with isChecked value
         console.log("checkbox value", isChecked, labelId, this.props.noteId);
 
+        
         if (isChecked) {
             var addData = {
                 'noteId': this.props.noteId,
@@ -259,7 +260,6 @@ export default class GetAllLabels extends Component {
                                     value={key.label}
                                     onClick={() => this.handleCloseEdit(key.id)}
                                     readOnly
-
                                 />
                                 <Edit
                                     onClick={() => this.handleCloseEdit(key.id)}

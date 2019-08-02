@@ -28,8 +28,8 @@ const thm = createMuiTheme({
             root: {
                 left: 'auto',
             }
-        }
-    }
+        },
+}
 });
 
 class DashboardComponent extends Component {
@@ -44,7 +44,7 @@ class DashboardComponent extends Component {
             isReminder: false,
             isTrash: false,
             isArchive: false,
-            isNotes: true,  
+            isNotes: true,
         }
     }
 
@@ -130,35 +130,48 @@ class DashboardComponent extends Component {
                                         value={this.state.searchValue}
                                         onChange={this.handleChange} />
                                 </div>
+                                <div style={{display:"flex", paddingLeft:'10vh'}}>
+                                <div>
                                 {!this.props.QnAEditor ?
 
                                     !this.state.view ?
-                                    <Tooltip title="List view">
-                                        <div onClick={this.handleToggleView}
-                                            className="list-view-div">
-                                            <img className="img"
-                                                src={require('../assets/img/list_view.svg')}
-                                                alt="list icon"
-                                            />
-                                        </div>
-                                    </Tooltip> :
-                                    <Tooltip title="Grid view">
-                                        <div onClick={this.handleToggleView}
-                                            className="list-view-div">
-                                            <img className="img"
-                                                src={require('../assets/img/grid_view.svg')}
-                                                alt="list icon"
-                                            />
-                                        </div>
-                                    </Tooltip>
+                                        <Tooltip title="List view">
+                                            <div onClick={this.handleToggleView}
+                                                className="list-view-div">
+                                                <img className="img"
+                                                    src={require('../assets/img/list_view.svg')}
+                                                    alt="list icon"
+                                                />
+                                            </div>
+                                        </Tooltip> :
+                                        <Tooltip title="Grid view">
+                                            <div onClick={this.handleToggleView}
+                                                className="list-view-div">
+                                                <img className="img"
+                                                    src={require('../assets/img/grid_view.svg')}
+                                                    alt="list icon"
+                                                />
+                                            </div>
+                                        </Tooltip>
                                     :
                                     null
                                 }
-
+                                </div>
+                                <div>
+                                <Tooltip title="Cart">
+                                    <div onClick={this.handleToggleCart}>
+                                        <img style={{padding:"1.5vh", justifyItems:'center'}}
+                                            src={require('../assets/img/cart.svg')}
+                                            alt="cart"
+                                        />
+                                    </div>
+                                </Tooltip>
+                                </div>
+                                </div>
                             </div>
 
-                            <UserProfile 
-                              props={this.props.props}
+                            <UserProfile
+                                props={this.props.props}
                             />
                         </Toolbar>
                         <DrawerMenu

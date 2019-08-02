@@ -258,6 +258,24 @@ class TrashComponent extends Component {
                                                 />
                                             </div>
                                         }
+                                        {(key.noteLabels.length > 0) &&
+                                        <div style={{ display: "flex", flexWrap: "wrap", width: "218px" }}>{
+                                            key.noteLabels.map(labelskey => {
+                                                return (
+                                                    (labelskey.isDeleted === false)&&
+                                                    <div key={labelskey.id}>
+                                                        <Chip
+                                                            label={labelskey.label}
+                                                            onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
+                                                            className={useStyles.chip}
+                                                            variant="outlined"
+                                                            size="small"
+                                                        />
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    }
                                         {(key.collaborators.length > 0) &&
                                         <div style={{ display: "flex" }}>{
                                             key.collaborators.map(collaborator => {
@@ -337,6 +355,24 @@ class TrashComponent extends Component {
                                                     />
                                                 </div>
                                             }
+                                            {(key.noteLabels.length > 0) &&
+                                        <div style={{ display: "flex", flexWrap: "wrap", width: "218px" }}>{
+                                            key.noteLabels.map(labelskey => {
+                                                return (
+                                                    (labelskey.isDeleted === false)&&
+                                                    <div key={labelskey.id}>
+                                                        <Chip
+                                                            label={labelskey.label}
+                                                            onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
+                                                            className={useStyles.chip}
+                                                            variant="outlined"
+                                                            size="small"
+                                                        />
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    }
                                             {(key.collaborators.length > 0) &&
                                         <div style={{ display: "flex" }}>{
                                             key.collaborators.map(collaborator => {

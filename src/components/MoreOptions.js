@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Tooltip, Card } from '@material-ui/core';
 import CreateLabel from './CreateLabel';
 // import EditorQnAComponent from './EditorQnAComponent'
-import { withRouter } from 'react-router-dom';
 
 class MoreOptions extends Component {
     constructor(props) {
@@ -68,6 +67,9 @@ class MoreOptions extends Component {
     createLabelToMoreOptions = (isChecked) =>{
         this.props.moreOptionLabelToAllNote(isChecked)
     }
+    createLabelToMoreOptionForCreateNote = (labelId) => {
+        this.props.moreOptionsToCreateNoteforCreateNote(labelId);
+    }
     render() {
         return (
             <div className="remind-me-icon">
@@ -90,6 +92,8 @@ class MoreOptions extends Component {
                                         style={{ width: "100%" }}
                                         noteID = {this.props.noteID}
                                         createLabelToMoreOptions = {this.createLabelToMoreOptions}
+                                        createLabelToMoreOptionForCreateNote = {this.createLabelToMoreOptionForCreateNote}
+                                        createNoteLabel = {this.props.createNoteLabel}
                                     />
                                     :
                                     <div style = {{width: "115px"}}>

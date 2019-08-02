@@ -292,6 +292,7 @@ class RemindersDisplayComponent extends Component {
                                         <div style={{ display: "flex", flexWrap:"wrap", width:"218px" }}>{
                                             key.noteLabels.map(labelskey => {
                                                 return (
+                                                    (labelskey.isDeleted === false)&&
                                                     <div>
                                                     <Chip
                                                         label={labelskey.label}
@@ -427,6 +428,7 @@ class RemindersDisplayComponent extends Component {
                                         <div style={{ display: "flex", flexWrap:"wrap", width:"218px" }}>{
                                             key.noteLabels.map(labelskey => {
                                                 return (
+                                                    (labelskey.isDeleted === false)&&
                                                     <div>
                                                     <Chip
                                                         label={labelskey.label}

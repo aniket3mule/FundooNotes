@@ -3,35 +3,35 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'
 import { Button, Label, Input, Card, CardImg, CardBody, CardTitle } from 'reactstrap';
 import Services from '../services/UserServices';
-import { Container, TextField, makeStyles } from '@material-ui/core';
+// import { Container, TextField, makeStyles } from '@material-ui/core';
 const loginService = new Services().loginService;
 
 const url = "http://34.213.106.173/";
 
-const useStyles = makeStyles(theme => ({
+// const useStyles = makeStyles(theme => ({
     
-    MuiContainer: {
-        root:{
-            display: 'flex',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-        }
+//     MuiContainer: {
+//         root:{
+//             display: 'flex',
+//             justifyContent: 'center',
+//             flexWrap: 'wrap',
+//         }
        
-    },
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent:'center'
-      },
-      textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-      },
-      dense: {
-        marginTop: theme.spacing(2),
-      },
-    }
-));
+//     },
+//     container: {
+//         display: 'flex',
+//         flexWrap: 'wrap',
+//         justifyContent:'center'
+//       },
+//       textField: {
+//         marginLeft: theme.spacing(1),
+//         marginRight: theme.spacing(1),
+//       },
+//       dense: {
+//         marginTop: theme.spacing(2),
+//       },
+//     }
+// ));
 
 
 class SignInComponent extends Component {

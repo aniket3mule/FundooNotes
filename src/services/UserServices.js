@@ -15,19 +15,7 @@ class Services {
     }
 
     userRegister(data){
-        axios.post(`${BaseURL}/userSignUp`,data)
-        .then(response => {
-            console.log(response);
-            toast.success("Registration successfull.... Please click login", {
-                position: toast.POSITION.TOP_CENTER
-            });
-        })
-        .catch(err => {
-            console.log("Eroorrrrrr....",err);
-            toast.info("Email ID already registered", {
-                position: toast.POSITION.TOP_CENTER
-            });
-        })
+        return axios.post(`${BaseURL}/userSignUp`,data)
     }
 
     forgetPassService(data){
@@ -85,6 +73,15 @@ class Services {
             }
         })
     }
+
+    shoppingServiceDetails(){
+        return axios.get(`${BaseURL}/service`, {
+            headers:{
+                'Authorization' : localStorage.getItem('token')
+            }
+        })
+    }
+    
 }
 
 export default Services;

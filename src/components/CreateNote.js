@@ -38,7 +38,7 @@ class CreateNote extends Component {
             collabUserFirstName : '',
             collabUserEmail:'',
             collaboratorArrray :  [],
-            file:''
+            file:'',
             
         }
     }
@@ -91,6 +91,7 @@ class CreateNote extends Component {
                     'isArchived': this.state.isArchived,
                     'collaborators' : [this.state.collaboratorArrray],
                     'imageUrl': this.state.file
+                    
                 }
                 let formData = new FormData();    //formdata object
                 formData.append('title', this.state.title);   //append the values with key, value pair
@@ -155,6 +156,11 @@ class CreateNote extends Component {
          console.log("create note",this.state.file);
      }
      
+     moreOptionsToCreateNoteforCreateNote = (labelId) =>{
+         this.setState({
+            labelIdList: labelId
+         })
+     }
     render() {
         return (!this.state.open ?
             <div className="take-note-div">
@@ -283,6 +289,8 @@ class CreateNote extends Component {
                         <MoreOptions
                             addLabelToCreateNote={this.addLabelToCreateNote}
                             noteID={''}
+                            moreOptionsToCreateNoteforCreateNote = {this.moreOptionsToCreateNoteforCreateNote}
+                            createNoteLabel = {"true"}
                         >
                         </MoreOptions>
                         <CardLink ></CardLink>

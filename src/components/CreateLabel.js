@@ -8,8 +8,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Check from '@material-ui/icons/Check'
 import Close from '@material-ui/icons/Close'
 import Add from '@material-ui/icons/Add'
+import NoteService from '../services/NoteServices';
 
 const LabelServices = new LabelService();
+const NoteServices = new NoteService();
 
 class CreateLabel extends Component {
     constructor(props) {
@@ -19,6 +21,7 @@ class CreateLabel extends Component {
             open: false,
             closeEdit: false,
             newLabel: [],
+            labelId:'',
 
         }
         this.handleChange = this.handleChange.bind(this);
@@ -37,7 +40,7 @@ class CreateLabel extends Component {
         this.setState({ label: e.target.value })
         console.log("label state more option", this.state.label);
     }
-    addLabel = () => {
+    addLabel = async() => {
         const userId = localStorage.getItem('userid');
         var label = {
             'label': this.state.label,
@@ -45,14 +48,40 @@ class CreateLabel extends Component {
             'userId': userId,
         }
 
-        LabelServices.addLabels(label)
+        await LabelServices.addLabels(label)
             .then(response => {
 
                 this.setState({
-                    newLabel: response.data
+                    newLabel: response.data,
+                    labelId:  response.data.id
                 })
-                console.log("new label ", this.state.newLabel);
+                console.log("new label ",  response.data.id);
                 this.getNewLabel(response.data);
+                if(this.props.createNoteLabel){
+                this.props.createLabelToMoreOptionForCreateNote(this.state.labelId)
+            }
+                /**function chip diplay on create label */
+                this.addLabelToNote(this.props.noteID, this.state.newLabel)
+            })
+    }
+
+    addLabelToNote = (noteId,labelName) => {
+        var addData = {
+            'noteId': noteId,
+            'labelId': this.state.labelId,
+            data: {
+                'noteIdList': noteId,
+                'label': labelName
+            }
+        }
+        NoteServices.addLabelToNotes(addData)
+            .then(() => {
+                // this.props.getAllLabelsToCreateLabels(isChecked);
+                console.log("updated successfully");
+
+            })
+            .catch((err) => {
+                console.log("error in addlabeltonote", err);
             })
     }
 
@@ -86,7 +115,6 @@ class CreateLabel extends Component {
 
     render() {
         // console.log("Createlable render ", this.props.noteID);
-
         return (
             !this.props.addLabelOpen ?
                 <div>

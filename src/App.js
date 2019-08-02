@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-// import Home from './pages/Home';
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import ForgetPassword from './pages/ForgetPassword'
@@ -13,6 +12,9 @@ import Archive from './pages/Archive';
 import Trash from './pages/Trash';
 import GetNotesListByLabel from './pages/GetNotesListByLabel';
 import NewNoteDemo from './pages/NewNoteDemo';
+import RegistrationComponent from './components/RegistrationComponent';
+import ShoppingComponent from './components/ShoppingComponent';
+import Home from './pages/Home';
 
 //import AppBar from './components/DashboardComponent'
 
@@ -21,7 +23,7 @@ class App extends React.Component {
   render() {
     return (
         <Router>
-          {/* <Route path="/" component = {Home}/> */}
+          <Route exact path="/" component = {Home}/>
           <Route path="/signin" component = {SignIn}/>
           <Route path="/signup" component = {SignUp}/>
           <Route path="/forgetpassword" component = {ForgetPassword}/>
@@ -33,6 +35,9 @@ class App extends React.Component {
           <Route path="/trash" component = {Trash}/>
           <Route path="/usernote" component = {GetNotesListByLabel}/>
           <Route path="/notes" component = {NewNoteDemo}/>
+          <Route path="/register" component= {RegistrationComponent}/>
+          <Route path="/shoppingcart" component= {ShoppingComponent}/>
+
         </Router>
     )
   }

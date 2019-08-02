@@ -507,6 +507,7 @@ class GetAllNotes extends Component {
                                         <div style={{ display: "flex", flexWrap: "wrap", width: "218px" }}>{
                                             key.noteLabels.map(labelskey => {
                                                 return (
+                                                    (labelskey.isDeleted === false)&&
                                                     <div key={labelskey.id}>
                                                         <Chip
                                                             label={labelskey.label}
@@ -659,6 +660,7 @@ class GetAllNotes extends Component {
                                             <div style={{ display: "flex", flexWrap: "wrap", width: "100%" }}>{
                                                 key.noteLabels.map(labelskey => {
                                                     return (
+                                                        (labelskey.isDeleted === false)&&
                                                         <div>
                                                             <Chip
                                                                 label={labelskey.label}

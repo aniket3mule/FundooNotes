@@ -72,7 +72,7 @@
 
 .input {
   /* margin-left: 2%; */
-  width: 60%;
+  width: 100%;
   /* border-radius: 5px; */
   border: none
     /* box-shadow: 0 4px 6px rgb(143, 143, 143); */
@@ -133,9 +133,9 @@ input.input:focus {
 
 .collab-input {
   border: none;
-  width:100%;
+  width: 100%;
   font-size: 12px;
-  padding-left:2px; 
+  padding-left: 2px;
   outline-width: 0px;
 }
 
@@ -152,12 +152,12 @@ input.input:focus {
   margin: 1px;
 }
 
-.collab{
+.collab {
   height: 20px;
   font-size: 0.8rem
 }
 
-.card-body{
+.card-body {
   padding: 0.8rem;
 }
 
@@ -348,13 +348,13 @@ input.input:focus {
 
 }
 
-.container-allnotes{
+.container-allnotes {
   padding-left: 17%;
-    padding-right: 5%;
+  padding-right: 5%;
 }
 
-.dialog-input{
-width: 100%;
+.dialog-input {
+  width: 100%;
 }
 
 
@@ -368,12 +368,12 @@ width: 100%;
 .card-margin {
   margin-top: 4%;
   padding-right: 15px;
-    padding-left: 9px;
-    margin-right: auto;
-    margin-left: auto;
+  padding-left: 9px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
-.create-note-margin{
+.create-note-margin {
   margin-top: 12vh
 }
 
@@ -419,7 +419,7 @@ width: 100%;
   /* width: 180px; */
   cursor: pointer;
   padding: 0 8% 10%;
-      margin: 0 0 0 4%
+  margin: 0 0 0 4%
 }
 
 .more-options {
@@ -443,7 +443,7 @@ width: 100%;
   background: transparent;
 }
 
-.user-profile{
+.user-profile {
   margin-left: 15%;
 }
 
@@ -452,7 +452,7 @@ width: 100%;
   padding: 0% 26% 0 26%;
 }
 
-.list-view-archive{
+.list-view-archive {
   padding: 0% 20% 0 12%;
 }
 
@@ -486,7 +486,8 @@ width: 100%;
 }
 
 .list-view-div {
-  padding: 1.5%
+  align-self: center;
+  padding: 1.5vh;
 }
 
 .user-icon {
@@ -494,7 +495,7 @@ width: 100%;
   justify-content: flex-end;
 }
 
-.list-view-allNotes{
+.list-view-allNotes {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -511,7 +512,7 @@ width: 100%;
   visibility: visible;
 }
 
-.is-pin{
+.is-pin {
   visibility: hidden;
 }
 
@@ -532,7 +533,7 @@ width: 100%;
   display: flex;
 }
 
-.card-title{
+.card-title {
   width: 218px;
 }
 
@@ -579,6 +580,7 @@ width: 100%;
   font-size: 0.7em;
   font-weight: 0px;
 }
+
 /* 
 .all-reminders {
   margin-top: 15vh;
@@ -590,41 +592,77 @@ width: 100%;
   margin-top: 15%
 }
 
-.main-q-a-div{
+.main-q-a-div {
   padding: 6% 21% 0%;
 }
 
-.q-a-title-desc{
-    border-bottom: 2px solid lightgray;
-    padding: 0.8rem;
-    display: flex;
-    justify-content: space-between
+.q-a-title-desc {
+  border-bottom: 2px solid lightgray;
+  padding: 0.8rem;
+  display: flex;
+  justify-content: space-between
 }
 
-.q-a-asked{
-    border-bottom: 2px solid gray;
-    padding:  0.6rem;
-    max-height: 200px;
-    overflow: auto;
+.q-a-asked {
+  border-bottom: 2px solid gray;
+  padding: 0.6rem;
+  max-height: 200px;
+  overflow: auto;
 }
 
-.like-reply-rate{
+.like-reply-rate {
   display: flex;
   justify-content: space-between;
   margin-left: 8%;
 }
-@media only screen and (max-width: 600px) {
+
+.new-register {
+  border: 1px solid lightgray;
+  width: 50%;
+  box-shadow: 0 1px 2px rgb(143, 143, 143);
+  border-radius: 10px;
+}
+
+.new-login {
+  border: 1px solid lightgray;
+  width: 35%;
+  box-shadow: 0 1px 2px rgb(143, 143, 143);
+  border-radius: 10px;
+
+}
+
+.cartSelected {
+  background-color: orange
+}
+
+.new-register-email {
+  width: 78.5%
+}
+
+.new-register-bottom {
+  margin: 19px;
+  display: flex;
+  justify-content: space-between;
+  width: 78.5%;
+}
+
+.new-login-input {
+  width: 90%;
+}
+
+@media only screen and (max-width: 700px) {
   .list-view {
     width: 100%;
     /* height: auto; */
     margin-left: 1%;
   }
-  .container-allnotes{
+
+  .container-allnotes {
     padding-left: 0%;
-      padding-right: 0%;
+    padding-right: 0%;
   }
 
-  .take-note-user-card-dialog{
+  .take-note-user-card-dialog {
     width: 100%
   }
 
@@ -633,7 +671,7 @@ width: 100%;
     justify-content: center;
     /* margin-top: 10%; */
     padding: 2%;
-}
+  }
 
   .profile-pic {
     height: 40px;
@@ -699,5 +737,43 @@ width: 100%;
     width: 37.1%;
     margin: 0 0 0 -25%;
   }
+
+  .new-register {
+    width: 100%;
+    border: 1px solid lightgray;
+    box-shadow: 0 1px 2px rgb(143, 143, 143);
+    border-radius: 10px;
+  }
+
+  .new-login {
+    width: 100%;
+    border: 1px solid lightgray;
+    box-shadow: 0 1px 2px rgb(143, 143, 143);
+    border-radius: 10px;
+
+  }
+
+  .new-register-input {
+    width: 91%;
+  }
+
+  .new-register-bottom {
+    margin: 19px;
+    display: flex;
+    justify-content: space-between;
+    width: 91%;
+  }
+
+  .new-login-input {
+    width: 91%;
+  }
+
+  .new-login-bottom {
+    margin: 19px;
+    display: flex;
+    justify-content: space-between;
+    width: 91%;
+  }
+
 
 }
