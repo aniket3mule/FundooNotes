@@ -13,7 +13,6 @@ import MoreOptions from './MoreOptions';
 import CollaboratorComponent from './CollaboratorComponent';
 import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
 import CloseIcon from "@material-ui/icons/Close";
-import { withRouter } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -81,10 +80,16 @@ class GetAllNotes extends Component {
         this.handleQuestionAnsAnswer = this.handleQuestionAnsAnswer.bind(this);
     }
 
+    componentDidMount() {
+        //Print All notes
+        this.getUpdateNotes();
+    }
+
     getUpdateNotes = async () => {
-        var allNotesArray =[];
+        
         await NoteService.getAllNotes()
             .then(allNotes => {
+                var allNotesArray =[];
                 for (let i = allNotes.data.data.data.length-1; i >=0 ; i--) {
                     allNotesArray.push(allNotes.data.data.data[i])
                 }
@@ -96,10 +101,7 @@ class GetAllNotes extends Component {
             })
     }
 
-    componentDidMount() {
-        //Print All notes
-        this.getUpdateNotes();
-    }
+    
 
     handleToggle = (e) => {
         this.setState({ open: !this.state.open });
@@ -120,7 +122,7 @@ class GetAllNotes extends Component {
         }));
         console.log("id ......", id);
         console.log("note id ......", this.state.noteId);
-        this.props.history.push(`/dashboard/${id}`)
+        this.props.props.history.push(`/dashboard/${id}`)
     }
 
     /**
@@ -299,7 +301,7 @@ class GetAllNotes extends Component {
         this.setState({
             modal: false
         })
-        this.props.history.push(`/dashboard`)
+        this.props.props.history.push(`/dashboard`)
     }
     /**
      * Props starts
@@ -324,53 +326,13 @@ class GetAllNotes extends Component {
     /**
      * props ends
      **/
-    /**
-     * Snackbar functions starts 
-     */
-    // handleClickSnackbar = message => () => {
-    //     this.queue.push({
-    //         message,
-    //         //   key: new Date().getTime()
-    //     });
-
-    //     if (this.state.open) {
-    //         // immediately begin dismissing current message
-    //         // to start showing new one
-    //         this.setState({ open: false });
-    //     } else {
-    //         this.processQueue();
-    //     }
-    // };
-
-    // // processQueue = () => {
-    // //     if (this.queue.length > 0) {
-    // //         this.setState({
-    // //             messageInfo: this.queue.shift(),
-    // //             open: true
-    // //         });
-    // //     }
-    // // };
-
-    // handleCloseSnackbar = (event, reason) => {
-    //     if (reason === "clickaway") {
-    //         return;
-    //     }
-    //     this.setState({ open: false });
-    // };
-
-    // handleExitedSnackbar = () => {
-    //     this.processQueue();
-    // };
-    /**
-     * snackbar ends here
-     */
-
+    
     /**
      * Redirecting to Question and Answer page with NoteId
      */
     handleQuestionAnsAnswer(noteId) {
         console.log("note id", noteId);
-        this.props.history.push(`/questionanswer/${noteId}`, noteId)
+        this.props.props.history.push(`/questionanswer/${noteId}`, noteId)
     }
 
     handleDeletelabel = (noteId, labelId, label) => {
@@ -811,4 +773,4 @@ class GetAllNotes extends Component {
     }
 }
 
-export default withRouter(GetAllNotes)
+export default GetAllNotes

@@ -25,16 +25,7 @@ export default class Trash extends Component {
         this.setState({ searchNote: value })
     }
 
-    DashboardToPage = (isReminder, isTrash, isArchive, isNotes) => {
-        this.setState({
-            isReminder: isReminder,
-            isTrash: isTrash,
-            isArchive: isArchive,
-            isNotes: isNotes
-        })
-        console.log("dashboard page satte=>", this.state.isArchive, this.state.isTrash, this.state.isReminder, this.state.isNotes);
-    }
-
+   
     listGridView = (listGridView) => {
         this.setState({
             listGridView: !listGridView
@@ -50,8 +41,8 @@ export default class Trash extends Component {
                         slidecard={this.slidecard}
                         searchNote={this.searchNote}
                         listGridView={this.listGridView}
-                        DashboardToPage={this.DashboardToPage}
                         props ={this.props}
+                        isTrash={true}
                     />
                 </div>
                 <div className={slide}>

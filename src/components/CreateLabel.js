@@ -50,11 +50,11 @@ class CreateLabel extends Component {
 
         await LabelServices.addLabels(label)
             .then(response => {
-
                 this.setState({
                     newLabel: response.data,
                     labelId:  response.data.id
                 })
+                // this.props.createLabelToGetAllLabels(true);
                 console.log("new label ",  response.data.id);
                 this.getNewLabel(response.data);
                 if(this.props.createNoteLabel){
@@ -118,7 +118,7 @@ class CreateLabel extends Component {
         return (
             !this.props.addLabelOpen ?
                 <div>
-                    <div onClick={this.handleClickOpen} style={{ cursor: 'pointer' }}>
+                    <div onClick={this.handleClickOpen} className="cursor-pointer">
                         <img className="update-card-img"
                             src={require('../assets/img/edit_label.svg')}
                             alt="color picker" />
@@ -140,6 +140,7 @@ class CreateLabel extends Component {
                                             <Add
                                                 onClick={this.handleCloseEdit}
                                                 style={{ marginLeft: "-4px" }}
+                                                className="cursor-pointer"
                                             />
                                         </Tooltip>
                                         <InputBase
@@ -157,6 +158,7 @@ class CreateLabel extends Component {
                                             <Close
                                                 onClick={this.handleCloseEdit}
                                                 style={{ marginLeft: "-4px" }}
+                                                className="cursor-pointer"
                                             />
                                         </Tooltip>
                                         <Input
@@ -172,6 +174,7 @@ class CreateLabel extends Component {
                                             <Check
                                                 onClick={this.addLabel}
                                                 style={{ cursor: "pointer" }}
+                                                className="cursor-pointer"
                                             />
                                         </Tooltip>
                                     </div>
@@ -225,7 +228,7 @@ class CreateLabel extends Component {
                             <img
                                 src={require('../assets/img/add_label.svg')}
                                 alt="add label"
-                                className="img"
+                                className="cursor-pointer"
                             />
 
                             <span>Create</span>

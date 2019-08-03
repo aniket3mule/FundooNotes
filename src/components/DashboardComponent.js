@@ -63,15 +63,15 @@ class DashboardComponent extends Component {
         this.props.listGridView(this.state.view)
     }
 
-    DrawerMenuToDashboard = (isReminder, isTrash, isArchive, isNotes) => {
-        this.setState({
-            isReminder: isReminder,
-            isTrash: isTrash,
-            isArchive: isArchive,
-            isNotes: isNotes
-        })
-        this.props.DashboardToPage(isReminder, isTrash, isArchive, isNotes);
-    }
+    // DrawerMenuToDashboard = (isReminder, isTrash, isArchive, isNotes) => {
+    //     this.setState({
+    //         isReminder: isReminder,
+    //         isTrash: isTrash,
+    //         isArchive: isArchive,
+    //         isNotes: isNotes
+    //     })
+    //     this.props.DashboardToPage(isReminder, isTrash, isArchive, isNotes);
+    // }
 
     render() {
         return (
@@ -88,7 +88,7 @@ class DashboardComponent extends Component {
                             </Tooltip>
 
                             <div style={{ width: "10%" }}>
-                                {this.state.isNotes === true ?
+                                {this.props.isNotes === true ?
                                     <div className="note-text-img">
                                         <img className="fundoo-note-img"
                                             src={require('../assets/img/keep_48dp.png')}
@@ -102,17 +102,17 @@ class DashboardComponent extends Component {
                                     :
                                     null
                                         ||
-                                        this.state.isReminder === true ?
+                                        this.props.isReminder === true ?
                                         <span className="fundoo-text">Reminders</span>
                                         :
                                         null
                                             ||
-                                            this.state.isArchive === true ?
+                                            this.props.isArchive === true ?
                                             <span className="fundoo-text">Archive</span>
                                             :
                                             null
                                                 ||
-                                                this.state.isTrash === true ?
+                                                this.props.isTrash === true ?
                                                 <span className="fundoo-text">Trash</span>
                                                 :
                                                 null

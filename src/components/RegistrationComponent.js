@@ -98,10 +98,10 @@ export default class RegistrationComponent extends Component {
   }
 
   render() {
-    var cssColor = '', cardId = '';
+    var cssColor = '', cartId = '';
     if (this.props.history.location.state !== undefined) {
       cssColor = "orange";
-      cardId = this.props.history.location.state.cartId;
+      cartId = this.props.history.location.state.cartId;
     }
     const { firstName, lastName, email, password, confirmPassword } = this.state;
     return (
@@ -152,7 +152,7 @@ export default class RegistrationComponent extends Component {
                   onChange={this.handleChange}
                   margin="normal"
                   variant="outlined"
-                  className="new-register-input"
+                  className="new-register-email"
                   required
                   type="email"
                 />
@@ -190,7 +190,7 @@ export default class RegistrationComponent extends Component {
                 cartProps={true}
                 // shoppingCartToRegister = {this.shoppingCartToRegister}
                 cssColor={cssColor}
-                cartId={cardId}
+                cartId={cartId}
               />
               <div className="new-register-bottom">
                 <Button

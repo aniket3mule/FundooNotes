@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import LabelService from '../services/LabelServices';
-import { MenuItem, Checkbox, FormControlLabel, InputBase } from '@material-ui/core';
-// import Check from '@material-ui/icons/Check'
+import { MenuItem, Checkbox, FormControlLabel, InputBase, Tooltip } from '@material-ui/core';
+import Check from '@material-ui/icons/Check'
 import Edit from '@material-ui/icons/EditOutlined'
 import NoteService from '../services/NoteServices';
 
@@ -14,7 +14,10 @@ export default class GetAllLabels extends Component {
             allLabels: [],
             mouseOver: false,
             isChecked: [],
-            NoteLabels: []
+            NoteLabels: [],
+            closeEdit:false,
+            labelName:'',
+            labelId:''
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleUserLabel = this.handleUserLabel.bind(this);
@@ -139,11 +142,7 @@ export default class GetAllLabels extends Component {
             })
     }
 
-    getNewNote = (newNote) => {
-        console.log("newnote==>", newNote);
-        this.labelToCards.current.displayCard(newNote);
-        // this.props.getNewNote(newNote);
-    }
+   
 
     handleUserLabel(labelName) {
         this.props.props.history.push(`/usernote/${labelName}`,labelName)
@@ -205,7 +204,20 @@ export default class GetAllLabels extends Component {
            
         
     // }
+    handleCloseEdit = (labelId, labelName) => {
+        this.setState({
+            closeEdit: true,
+            labelId:labelId,
+            labelName:labelName,
+            mouseOver:true
+        })
+    }
 
+    handleChangeUpdateLabel = (e) => {
+        this.setState({
+            [e.target.name]:e.target.value
+        })
+    }
 
     render() {
         // console.log("map",this.mapChecked());
@@ -217,7 +229,7 @@ export default class GetAllLabels extends Component {
             return (
                 this.props.sidebarLabel ?
                     <MenuItem key={key.id} onClick={() => this.handleUserLabel(key.label)}>
-                        <img className="update-card-img"
+                        <img className="update-card-img cursor-pointer"
                             src={require('../assets/img/label.svg')}
                             alt="label"
                         />
@@ -227,8 +239,8 @@ export default class GetAllLabels extends Component {
                     this.props.editLabels ?
                         <div className="edit-label-dialog" key={key.id}>
                             {!this.state.mouseOver ?
-                                <div className="edit_label_gray">
-                                    <img className="update-card-img"
+                                <div className="edit_label_gray ">
+                                    <img className="update-card-img cursor-pointer"
                                         src={require('../assets/img/edit_label_gray.png')}
                                         alt="label"
                                         onMouseOver={() => this.handleMounseEvent(key.id)}
@@ -236,24 +248,64 @@ export default class GetAllLabels extends Component {
                                 </div>
                                 :
                                 (this.state.labelId === key.id) ?
+                                <Tooltip title="Delete label">
                                     <div className="delete_label_gray" key={key.id}>
-                                        <img className="update-card-img"
+                                        <img className="update-card-img cursor-pointer"
                                             src={require('../assets/img/delete_grey.png')}
                                             alt="label"
                                             onMouseLeave={this.handleMounseEvent}
                                             onClick={() => this.handleDeleteLabel(key.id)}
                                         />
                                     </div>
+                                    </Tooltip>
                                     :
                                     <div className="edit_label_gray">
-                                        <img className="update-card-img"
+                                        <img className="update-card-img cursor-pointer"
                                             src={require('../assets/img/edit_label_gray.png')}
                                             alt="label"
                                             onMouseOver={() => this.handleMounseEvent(key.id)}
                                         />
                                     </div>
                             }
+                            
+                            <div>
+                            { (this.state.editLabel) ?
                             <div style={{ display: "flex" }}>
+                                <InputBase
+                                    placeholder="create new label"
+                                    name="label"
+                                    value={key.label}
+                                    onClick={() => this.handleCloseEdit(key.id, key.label)}
+                                    readOnly
+                                />
+                                <Tooltip title="Rename label">
+                                <Edit
+                                    onClick={() => this.handleCloseEdit(key.id, key.label)}
+                                    className="cursor-pointer"
+                                />
+                                </Tooltip>
+                            </div>
+                            :
+                                (this.state.labelId === key.id) ?
+                                <div style={{ display: "flex" }}>
+                                <InputBase
+                                    placeholder="create new label"
+                                    name="label"
+                                    value={this.state.editLabel}
+                                    onChange={this.handleChangeUpdateLabel}
+                                    autoFocus
+                                    style={{borderBottom:"1px solid lightgray"}}
+                                />
+                                <Tooltip title="Rename label">
+                                <Check
+                                   onClick={() => this.handleUpdateLabel(key.id, key.label)}
+                                   className="cursor-pointer"
+                                   
+                                />
+                                </Tooltip>
+                                </div>
+                                :
+                                <div style={{ display: "flex" }}>
                                 <InputBase
                                     placeholder="create new label"
                                     name="label"
@@ -261,26 +313,18 @@ export default class GetAllLabels extends Component {
                                     onClick={() => this.handleCloseEdit(key.id)}
                                     readOnly
                                 />
+                                <Tooltip title="Rename label">
                                 <Edit
                                     onClick={() => this.handleCloseEdit(key.id)}
+                                    className="cursor-pointer"
                                 />
-                                {/* <Check
-                                onClick={this.addLabel}
-                                /> */}
+                                </Tooltip>
+                                </div>
+                             }
                             </div>
                         </div>
                         :
                         this.props.createLabelNoteCreate &&
-                        // this.state.isChecked.length === this.state.allLabels.length &&
-//                         this.state.isChecked.map(checkedCheckbox => {
-//                             console.log(checkedCheckbox);
-//                         var i = 0; 
-//                             if(this.state.allLabels.length > i){
-// i++;
-//                         console.log(i);
-
-                            // this.state.allLabels.length > isChecked
-                            // return (
                                 <div key={key.id} style={{ marginLeft: "5%" }}>
                                     <FormControlLabel
                                         control={

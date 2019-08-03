@@ -47,15 +47,15 @@ class UserDashboard extends Component {
         console.log(this.state.listGridView);
     }
 
-    DashboardToPage = (isReminder, isTrash, isArchive, isNotes) => {
-        this.setState({
-            isReminder: isReminder, 
-            isTrash: isTrash,
-            isArchive: isArchive,
-            isNotes: isNotes
-         })
-         console.log("dashboard page satte=>", this.state.isArchive , this.state.isTrash, this.state.isReminder, this.state.isNotes);
-    }
+    // DashboardToPage = (isReminder, isTrash, isArchive, isNotes) => {
+    //     this.setState({
+    //         isReminder: isReminder, 
+    //         isTrash: isTrash,
+    //         isArchive: isArchive,
+    //         isNotes: isNotes
+    //      })
+    //      console.log("dashboard page satte=>", this.state.isArchive , this.state.isTrash, this.state.isReminder, this.state.isNotes);
+    // }
     // GetAllLabelToDrawerMenu = (newLabel) => {
     //     console.log("newnote==>", newLabel);
     //     this.labelToCards.current.displayCard(newLabel);
@@ -80,8 +80,9 @@ class UserDashboard extends Component {
                             slidecard={this.slidecard}
                             searchNote={this.searchNote}
                             listGridView={this.listGridView}
-                            DashboardToPage={this.DashboardToPage}
+                            // DashboardToPage={this.DashboardToPage}
                             props={this.props}
+                            isNotes = {true}
                             
                         />
                     </div>

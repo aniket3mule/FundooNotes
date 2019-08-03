@@ -29,21 +29,21 @@ class DrawerMenu extends Component {
     }
 
     handleReminder = ()=>{
-        this.props.DrawerMenuToDashboard(true, false, false, false);
+        // this.props.DrawerMenuToDashboard(true, false, false, false);
         this.props.props.history.push('/reminder');
     }
 
     handleArchived = ()=>{
-        this.props.DrawerMenuToDashboard(false, false, true, false);
+        // this.props.DrawerMenuToDashboard(false, false, true, false);
         this.props.props.history.push('/archive');
     }
 
     handleTrash = ()=>{
-        this.props.DrawerMenuToDashboard(false, true, false, false);
+        // this.props.DrawerMenuToDashboard(false, true, false, false);
         this.props.props.history.push('/trash');
     }
     handleNotes = ()=>{
-        this.props.DrawerMenuToDashboard(false, false, false, true);
+        // this.props.DrawerMenuToDashboard(false, false, false, true);
         this.props.props.history.push('/dashboard');
     }
 
