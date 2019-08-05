@@ -59,9 +59,16 @@ export default class RegistrationComponent extends Component {
   //   })
   // }
 
-  handleSignInInstead = (e) => {
-    e.preventDefault();
-    this.props.history.push("/signin")
+  handleSignInInstead = (cartInfo) => {
+    // console.log("this sigin ", this.props.history.location.state);
+    var data = {
+      'color': 'orange',
+      'cartId': cartInfo.cartId,
+      'price':cartInfo.price,
+      'description' : cartInfo.description,
+      'name' : cartInfo.service
+    }
+    this.props.history.push("/signin",data)
   }
 
   handleChange = (e) => {
@@ -98,6 +105,8 @@ export default class RegistrationComponent extends Component {
   }
 
   render() {
+    console.log("resister props", this.props.location.state);
+    
     var cssColor = '', cartId = '';
     if (this.props.history.location.state !== undefined) {
       cssColor = "orange";
@@ -186,15 +195,17 @@ export default class RegistrationComponent extends Component {
               {/**
                 display card here.......
                 */}
+                <div>
               <ShoppingComponent
                 cartProps={true}
                 // shoppingCartToRegister = {this.shoppingCartToRegister}
                 cssColor={cssColor}
                 cartId={cartId}
               />
+              </div>
               <div className="new-register-bottom">
                 <Button
-                  onClick={this.handleSignInInstead}
+                  onClick={() => this.handleSignInInstead(this.props.location.state)}
                   color="primary">
                   Sign in instead
               </Button>

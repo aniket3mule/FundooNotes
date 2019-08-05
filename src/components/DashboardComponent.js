@@ -74,6 +74,7 @@ class DashboardComponent extends Component {
     // }
 
     render() {
+        
         return (
             <div>
                 <MuiThemeProvider theme={thm}>

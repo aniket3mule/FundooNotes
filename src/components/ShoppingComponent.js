@@ -21,12 +21,14 @@ export default class ShoppingComponent extends Component {
                 })
             })
     }
-    handleCart = (cartId, name) => {
+    handleCart = (cartId, name, description, price) => {
         console.log("true", cartId);
         // this.props.shoppingCartToRegister(cartId);
         var cartInfo = {
             'cartId': cartId,
-            'service' : name
+            'service' : name,
+            'description':description,
+            'price':price
         }
         this.setState({
             cartId: cartId,
@@ -36,53 +38,22 @@ export default class ShoppingComponent extends Component {
     }
 
     handleSignInInstead = () => {
-        var cartInfo = {
-            'cartId': this.state.cartId,
-            'service' : this.state.service
-        }
-        this.props.props.history.push(`/signin${this.state.cartId}`,cartInfo)
+        // var cartInfo = {
+        //     'cartId': this.state.cartId,
+        //     'service' : this.state.service
+        // }
+        this.props.props.history.push(`/signin`)
       }
     render() {
-        console.log("props cart ",this.props.cartId);
-        const selectedCart = this.props.cartId ? "cartSelected":null 
+        // console.log("props cart ",this.props.cartId);
+        const selectedCart = this.props.cartProps ? "cartSelected":null
         const shoppingService = this.state.serviceDetails.map(key => {
             return (
-                this.props.cartProps ?
-                (key.id ===this.props.cartId) &&
-                <div key={key.id}>
-                <Typography variant="body1" style={{marginLeft:"19px"}} >
-                  {"Selected Service: "}
-                </Typography>
                 <Card
-                onClick={this.props.cartProps ? null : () => this.handleCart(key.id)}
-                style={{ maxWidth: "40vh", height: "30vh", marginLeft: "8vh", backgroundColor:`${this.props.cssColor}` }} key={key.id}
-                className={selectedCart}
-                >
-                    
-                    <CardActionArea >
-                        <CardContent>
-                            <Typography gutterBottom variant="h5" component="div" style={{borderBottom:"1px solid rgb(128,128,128)"}}>
-                                Price : ${key.price} per month
-                            </Typography>
-                            <Typography color="primary" component="p">
-                                {(key.name).toString().toUpperCase()}
-                            </Typography>
-                            <div>
-                                <List style={{ height: "200px" }}>
-                                    <ListItem>
-                                        {key.description}
-                                    </ListItem>
-                                </List>
-                            </div>
-                        </CardContent>
-                    </CardActionArea>
-                </Card>
-                
-                </div>
-                :
-                <Card
-                onClick={this.props.cartProps ? null : () => this.handleCart(key.id, key.name)}
-                style={{ maxWidth: "40vh", height: "40vh", marginLeft: "8vh" }} key={key.id}
+                onClick={this.props.cartProps ? null : () => this.handleCart(key.id, key.name,key.description,key.price)}
+                style={{ maxWidth: "40vh", height: "40vh", marginLeft: "8vh", 
+                backgroundColor:   (key.id ===this.props.cartId) ? this.props.cssColor : null }} 
+                key={key.id}
                 className={selectedCart}
                 >
                     <CardActionArea>
@@ -107,7 +78,7 @@ export default class ShoppingComponent extends Component {
         })
         return (
             this.props.cartProps ?
-            <div>
+            <div style={{ display: "flex", justifyContent: "flex-start" }}>
                         {shoppingService}
             </div>
             :

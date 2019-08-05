@@ -19,7 +19,7 @@ export default class GetAllLabels extends Component {
             labelName:'',
             labelId:''
         }
-        this.handleChange = this.handleChange.bind(this);
+        this.handleLableChange = this.handleLableChange.bind(this);
         this.handleUserLabel = this.handleUserLabel.bind(this);
     }
 
@@ -148,7 +148,7 @@ export default class GetAllLabels extends Component {
         this.props.props.history.push(`/usernote/${labelName}`,labelName)
     }
 
-    handleChange(e, labelId) {
+    handleLableChange(e, labelId) {
         let isChecked = e.target.checked;
         let checkedValue = e.target.value
         // do whatever you want with isChecked value
@@ -166,9 +166,7 @@ export default class GetAllLabels extends Component {
             }
             NoteServices.addLabelToNotes(addData)
                 .then(() => {
-                    // this.props.getAllLabelsToCreateLabels(isChecked);
-                    console.log("updated successfully");
-
+                    this.props.getAllLabelsToCreateLabels(true);
                 })
                 .catch((err) => {
                     console.log("error in addlabeltonote", err);
@@ -181,7 +179,7 @@ export default class GetAllLabels extends Component {
             }
             NoteServices.removeLabelToNotes(removeData)
                 .then(() => {
-                    this.props.getAllLabelsToCreateLabels(isChecked);
+                     this.props.getAllLabelsToCreateLabels(true);
                 })
                 .catch((err) => {
                     console.log("error in addlabeltonote", err);
@@ -329,7 +327,7 @@ export default class GetAllLabels extends Component {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                onChange={(e) => this.handleChange(e, key.id)}
+                                                onChange={(e) => this.handleLableChange(e, key.id)}
                                                 value={key.label}
                                                 color="primary"
                                                 style={{ padding: "0" }}

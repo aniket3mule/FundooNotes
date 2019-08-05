@@ -71,6 +71,8 @@ class UserDashboard extends Component {
             )
         }
         else {
+            console.log("user dashboar props", this.props.history.location.state);
+            const key = this.props.history.location.state;
             const slide = this.state.slidecards ? "afterslide" : "beforeslide";
             const listView = this.state.listGridView ? "list-view-allNotes":"allDemo" 
             return (
@@ -87,6 +89,11 @@ class UserDashboard extends Component {
                         />
                     </div>
                     <div className={slide}>
+                        { (key!== undefined) ?
+                        <div>
+                            {this.props.history.push('/usercart', key)}
+                        </div>
+                        :
                         <div className="create-note-margin">
                             {(!this.state.isTrash && !this.state.isArchive) &&
                             <div>
@@ -95,7 +102,7 @@ class UserDashboard extends Component {
                             }
                             <div className={listView}>
                                 <AllNotes
-                                    wrappedComponentRef={this.noteToCards}
+                                    ref={this.noteToCards}
                                     searchNote={this.state.searchNote}
                                     listGridView={this.state.listGridView}
                                     isReminder ={this.state.isReminder}
@@ -113,6 +120,7 @@ class UserDashboard extends Component {
                                 </GetAllLabels>
                             </div> */}
                         </div>
+                        }
                     </div>
                 </div>
 

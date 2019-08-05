@@ -76,7 +76,7 @@ class CreateLabel extends Component {
         }
         NoteServices.addLabelToNotes(addData)
             .then(() => {
-                // this.props.getAllLabelsToCreateLabels(isChecked);
+                this.props.createLabelToMoreOptions(true)
                 console.log("updated successfully");
 
             })
@@ -203,7 +203,7 @@ class CreateLabel extends Component {
                     <div>
                         Label note:
                     </div>
-                    <div onClick={this.handleRemindToday}>
+                    <div >
                         <div>
                             <InputBase
                                 id="outlined-dense-multiline"

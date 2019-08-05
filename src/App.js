@@ -15,6 +15,7 @@ import NewNoteDemo from './pages/NewNoteDemo';
 import RegistrationComponent from './components/RegistrationComponent';
 import ShoppingComponent from './components/ShoppingComponent';
 import Home from './pages/Home';
+import Cart from './pages/Cart';
 
 //import AppBar from './components/DashboardComponent'
 
@@ -37,6 +38,7 @@ class App extends React.Component {
           <Route path="/notes" component = {NewNoteDemo}/>
           <Route path="/register" component= {RegistrationComponent}/>
           <Route path="/shoppingcart" component= {ShoppingComponent}/>
+          <Route path="/usercart" component= {Cart}/>
 
         </Router>
     )

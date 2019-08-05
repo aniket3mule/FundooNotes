@@ -8,30 +8,6 @@ const loginService = new Services().loginService;
 
 const url = "http://34.213.106.173/";
 
-// const useStyles = makeStyles(theme => ({
-    
-//     MuiContainer: {
-//         root:{
-//             display: 'flex',
-//             justifyContent: 'center',
-//             flexWrap: 'wrap',
-//         }
-       
-//     },
-//     container: {
-//         display: 'flex',
-//         flexWrap: 'wrap',
-//         justifyContent:'center'
-//       },
-//       textField: {
-//         marginLeft: theme.spacing(1),
-//         marginRight: theme.spacing(1),
-//       },
-//       dense: {
-//         marginTop: theme.spacing(2),
-//       },
-//     }
-// ));
 
 
 class SignInComponent extends Component {

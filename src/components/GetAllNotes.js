@@ -278,7 +278,7 @@ class GetAllNotes extends Component {
     }
 
     moreOptionLabelToAllNote = (isChecked) => {
-        if (!isChecked) {
+        if (isChecked) {
             this.getUpdateNotes();
         }
     }

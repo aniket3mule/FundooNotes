@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Container, TextField, Typography, Button } from '@material-ui/core';
 import UserService from "../services/UserServices";
 import ShoppingComponent from './ShoppingComponent';
+// import ShoppingComponent from './ShoppingComponent';
 
 const UserServices = new UserService();
 const url = "http://34.213.106.173/";
@@ -24,8 +25,12 @@ export default class LoginComponent extends Component {
         this.props.props.history.push("/")
     }
 
+    handleForgetPassword = () => {
+        this.props.props.history.push("/forgetpassword")
+    }
+
     handleSignIn = (e) => {
-        
+        const key = this.props.props.location.state;
         e.preventDefault();
         var data = {
             'email': this.state.email,
@@ -43,18 +48,25 @@ export default class LoginComponent extends Component {
                 localStorage.setItem('email', response.data.email)
                 localStorage.setItem('ProfileImage', url + response.data.imageUrl)
                 console.log("this.props", this);
-                this.props.props.history.push('/dashboard');
+                if (this.props.props.location.state !== undefined) {
+                    this.props.props.history.push('/usercart', key);
+                } else {
+                    this.props.props.history.push('/dashboard');
+                }
+
             })
             .catch(error => {
                 console.log(error);
             })
     }
     render() {
+        console.log("login props", this.props);
         var cssColor = '', cartId = '';
-        if (this.props.history.location.state !== undefined) {
+        if (this.props.props.location.state !== undefined) {
             cssColor = "orange";
-            cartId = this.props.history.location.state.cartId;
+            cartId = this.props.props.location.state.cartId;
         }
+
         const { email, password } = this.state;
         return (
             <Container>
@@ -104,18 +116,9 @@ export default class LoginComponent extends Component {
                                 />
                             </Typography>
                         </div>
-                        <ShoppingComponent
-                            cartProps={true}
-                            // shoppingCartToRegister = {this.shoppingCartToRegister}
-                            cssColor={cssColor}
-                            cartId={cartId}
-                        />
-                        <div style={{ margin: "auto", display: "flex", justifyContent: "center", paddingBottom: "5vh" }}>
-                            <Button
-                                onClick={this.handleCreateAccount}
-                                color="primary">
-                                Create account
-                            </Button>
+
+                        <div style={{ margin: "auto", display: "flex", justifyContent: "flex-end", padding: "1vh 4vh" }}>
+
                             <Button
                                 onClick={this.handleSignIn}
                                 variant="outlined" color="primary"
@@ -124,9 +127,44 @@ export default class LoginComponent extends Component {
                                 Sign in
                             </Button>
                         </div>
+
+                        <div style={{ display: "flex", flexDirection: "column" }}>
+                            <Button
+                                onClick={this.handleForgetPassword}
+                                color="primary">
+                                Forget Password
+                            </Button>
+                            <Button
+                                onClick={this.handleCreateAccount}
+                                color="primary">
+                                Create account
+                            </Button>
+                        </div>
                     </div>
+                    {(this.props.props.history.location.state !== undefined)  &&
+                    <div className=" login-cart-div">
+                        <div style={{textAlign:"center", padding:"3%", fontWeight:"500"}}>
+                            <span>Service</span>
+                        </div>
+                    <div className=" login-cart-div1"
+                        >
+                        
+                       
+                        <ShoppingComponent
+                            cartProps={true}
+                            // shoppingCartToRegister = {this.shoppingCartToRegister}
+                            cssColor={cssColor}
+                            cartId={cartId}
+
+                        />
+                    
                 </div>
-            </Container>
+                
+                </div>
+                }
+                </div>
+                
+            </Container >
         )
     }
 }
