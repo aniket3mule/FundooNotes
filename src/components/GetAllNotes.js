@@ -750,14 +750,7 @@ class GetAllNotes extends Component {
                     }}
                     message={<span id="message-id">{this.state.messageInfo}</span>}
                     action={[
-                        <Button
-                            key="undo"
-                            color="secondary"
-                            size="small"
-                            onClick={this.handleCloseSnackbar}
-                        >
-                            UNDO
-                    </Button>,
+                       
                         <IconButton
                             key="close"
                             aria-label="Close"

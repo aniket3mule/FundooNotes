@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardTitle, CardLink, Label, Container } from 'reactstrap';
+import { Card, CardBody, CardLink, Container } from 'reactstrap';
+import GetNote from '../services/NoteServices';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import Reminder from './Reminder'
 import ColorPallete from './Color';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Chip, Dialog, InputBase, Avatar } from '@material-ui/core';
-import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { Chip, Dialog, Avatar, Button, IconButton, InputBase } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar'
+import { makeStyles } from '@material-ui/core/styles';
 import MoreOptions from './MoreOptions';
-import GetNote from '../services/NoteServices';
 import CollaboratorComponent from './CollaboratorComponent';
+import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
+import CloseIcon from "@material-ui/icons/Close";
 
-const NoteService = new GetNote();
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
@@ -20,7 +23,11 @@ const useStyles = makeStyles(theme => ({
     chip: {
         margin: theme.spacing(1),
     },
-}));
+    cardWidth: {
+        width: "100%"
+    }
+}
+));
 
 const thm = createMuiTheme({
     overrides: {
@@ -38,35 +45,48 @@ const thm = createMuiTheme({
     }
 });
 
-// function searchingFor(search) {
-//     return function (x) {
-//         return x.title.includes(search) || x.description.includes(search)
-//     }
-// }
+const NoteService = new GetNote();
 
+function searchingFor(search) {
+    return function (x) {
+        return x.title.includes(search) || x.description.includes(search)
+    }
+}
 class DisplayCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            noteId: '',
+            allNotes: [],
+            open: false,
             title: '',
             description: '',
+            noteId: '',
             modal: false,
-            allNotes: [],
+            isArchived: false,
+            isTrash: false,
+            // isReminder: false,
+            isNotes: false,
+            tooltipOpen: false,
+            color: '',
+            reminder: '',
+            openSnackbar: false,
+            messageInfo: '',
+            collaborator: [],
         }
+
+        this.handleToggleOpen = this.handleToggleOpen.bind(this);
+        this.displayCard = this.displayCard.bind(this);
+        // this.getUpdateNotes = this.getUpdateNotes.bind(this);
+        this.handleQuestionAnsAnswer = this.handleQuestionAnsAnswer.bind(this);
     }
-    
-    componentDidMount(){
-        this.getUpdatedNotes();
+
+    handleToggle = (e) => {
+        this.setState({ open: !this.state.open });
     }
-    getUpdatedNotes(){
-        NoteService.getReminderNotesList()
-        .then(response => {
-            console.log("trash notes ", response);
-            this.setState({
-                allNotes: response.data.data.data
-            })
-            
+
+    closePopper() {
+        this.setState({
+            openPopper: false
         })
     }
 
@@ -77,12 +97,21 @@ class DisplayCard extends Component {
             title: oldTitle,
             description: oldDescription
         }));
-
         console.log("id ......", id);
         console.log("note id ......", this.state.noteId);
-        //update existing Note
+        this.props.props.history.push(`/dashboard/${id}`)
+    }
+
+    /**
+     * Update existing note
+     */
+    handleToggleClose = () => {
+
         try {
-            if (this.state.modal && (this.state.description !== oldTitle || this.state.title !== oldDescription)) {
+            this.setState(prevState => ({
+                modal: !prevState.modal,
+            }))
+            if (this.state.modal) {
                 var data = {
                     'noteId': this.state.noteId,
                     'title': this.state.title,
@@ -93,42 +122,70 @@ class DisplayCard extends Component {
                 formData.append('title', this.state.title);   //append the values with key, value pair
                 formData.append('description', this.state.description);
 
-                console.log("get all note data", data);
+                console.log("get all note data", formData);
 
                 NoteService.updateNote(data)
                     .then(response => {
                         console.log("uddate note function", response);
-                        this.getUpdatedNotes();
+                        this.getUpdateNotes();
+                        this.handleClickSnackbar("Note Updated successfully");
                     })
                     .catch(err => {
                         console.log("Eroorrrrrr....", err);
                     })
             }
         } catch {
+
         }
     }
+    /**
+     * Archive Notes Funtions
+    */
 
-    handleClose = () => {
-        this.setState({
-            modal: false
-        })
-    }
+    handleArchive = (noteId, isArchive) => {
+        console.log(noteId);
+        this.setState({ isArchived: isArchive });
+        console.log(this.state.isArchived);
 
-    handleDeleteChip = (noteId) => {
+
         var note = {
             'noteIdList': [noteId],
-            'reminder': []
+            'isArchived': isArchive
         }
 
-        NoteService.removeReminderNotes(note)
+        //Update service
+        NoteService.archiveNote(note)
             .then(response => {
-                console.log("update reminder >>>", response);
+                console.log(response);
+                // this.getUpdateNotes()
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
             })
     }
 
+    /**
+     * Note Color Changer function 
+     */
+
+    handleColorChanger = (value, noteId) => {
+        this.setState({ color: value })
+        var note = {
+            'noteIdList': [noteId],
+            'color': value,
+        }
+
+        NoteService.changesColorNotes(note)
+            .then(response => {
+                // this.getUpdateNotes();
+            })
+            .catch(err => {
+                console.log("Eroorrrrrr....", err);
+            })
+    }
+    /**
+     * Note Reminder function
+     */
     handleReminder = (reminderdate, noteId) => {
         console.log(reminderdate);
         this.setState({ reminder: reminderdate })
@@ -139,172 +196,275 @@ class DisplayCard extends Component {
         NoteService.updateReminderNotes(note)
             .then(response => {
                 console.log("update reminder >>>", response);
-                this.getUpdatedNotes();
+                // this.getUpdateNotes();
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
             })
     }
-
-    handleColorChanger = (value, noteId) => {
-        this.setState({ color: value })
+    /**
+     * Deleting exsting reminder 
+     */
+    handleDeleteChip = (noteId) => {
         var note = {
             'noteIdList': [noteId],
-            'color': value,
+            'reminder': []
         }
-
-        NoteService.changesColorNotes(note)
-            .then(() => {
-                this.getUpdatedNotes();
+        NoteService.removeReminderNotes(note)
+            .then(response => {
+                console.log("update reminder >>>", response);
+                // this.getUpdateNotes();
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
             })
     }
-
+    /**
+     * Handle change event
+     */
+    handleChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value });
+    }
+    /**
+     * Tooltip functions
+     */
+    handleToggleTooltip = () => {
+        console.log("tooltips......", this.state.tooltipOpen)
+        this.setState({
+            tooltipOpen: !this.state.tooltipOpen
+        });
+    }
+    /**
+     * Deleting exsting Note
+     */
     handleDeleteNote = (noteId) => {
         var note = {
             'noteIdList': [noteId],
             'isDeleted': true
         }
-
         NoteService.trashNote(note)
             .then(response => {
                 console.log(response);
                 let newArray = this.state.allNotes
                 console.log("new array", newArray);
-                this.getUpdatedNotes();
+                // this.getUpdateNotes();
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);
             })
     }
 
-    handleChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
+    moreOptionLabelToAllNote = (isChecked) => {
+        if (isChecked) {
+            // this.getUpdateNotes();
+        }
     }
+    /**
+     * Getting ref from child component
+     */
+    displayCard(newNote) {
+        console.log("display card==>", newNote);
+        var allNotesArray = [];
+        allNotesArray = this.state.allNotes;
+        allNotesArray.unshift(newNote);
+        this.setState({
+            allNotes: allNotesArray
+        })
+    }
+    /**
+     * Handle close function
+     */
+    handleClose = () => {
+        this.setState({
+            modal: false
+        })
+        this.props.props.history.push(`/dashboard`)
+    }
+    /**
+     * Props starts
+     */
+    // ReminderComponentToAllNotes = (allNotes) => {
+    //     this.setState({
+    //         allNotes: allNotes
+    //     })
+    // }
 
-    removeCollaborator = (value) => {
+    removeCollaborator = async (value) => {
         if (value) {
-            this.getUpdatedNotes();
+            await this.getUpdateNotes();
         }
-
     }
 
-    saveCollaborator = (value) => {
+    saveCollaborator = async (value) => {
         if (value) {
-            this.getUpdatedNotes();
+            await this.getUpdateNotes();
         }
     }
-
-    handleArchive = (noteId) => {
-        var note = {
-            'noteIdList': [noteId],
-            'isArchived': true
-        }
-
-        //Update service
-        NoteService.archiveNote(note)
-            .then(response => {
-                console.log(response);
-                this.getUpdatedNotes()
-            })
-            .catch(err => {
-                console.log("Eroorrrrrr....", err);
-            })
+    /**
+     * props ends
+     **/
+    
+    /**
+     * Redirecting to Question and Answer page with NoteId
+     */
+    handleQuestionAnsAnswer(noteId) {
+        console.log("note id", noteId);
+        this.props.props.history.push(`/questionanswer/${noteId}`, noteId)
     }
 
     handleDeletelabel = (noteId, labelId, label) => {
         var removeData = {
-            'noteId':noteId,
-            'labelId':labelId,
-            data : {
-                'noteIdList' : noteId,
+            'noteId': noteId,
+            'labelId': labelId,
+            data: {
+                'noteIdList': noteId,
                 'label': label
             }
         }
 
         NoteService.removeLabelToNotes(removeData)
-        .then(res => {
-            console.log("removed lable");
-            this.getUpdatedNotes();
-        })
+            .then(res => {
+                console.log("removed lable");
+                // this.getUpdateNotes();
+            })
     }
 
+    handlePinNote = (noteId) => {
+        var data = {
+            'noteIdList': [noteId],
+            'isPined' : true
+        }
+
+        NoteService.pinUnpinNotes(data)
+        .then(res => {
+            console.log("Note pinned successfully");
+            this.setState({
+                            openSnackbar: true,
+                            messageInfo: 'Note pinned successfully'
+                        });
+            // this.getUpdateNotes();
+        })
+    }
+    handleUnpinNote = (noteId) => {
+        var data = {
+            'noteIdList': [noteId],
+            'isPined' : false
+        }
+
+        NoteService.pinUnpinNotes(data)
+        .then(res => {
+            console.log("Note Unpinned successfully");
+            // this.getUpdateNotes();
+        })
+    }
     render() {
+        // console.log(this.props.isNotes);
         var listgridvalue = this.props.listGridView;
-        const listgridview = listgridvalue ? "list-view-archive" : "default-view";
+        const listgridview = listgridvalue ? "list-view" : "default-view";
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";
         const listView = listgridvalue ? null : "card-grid";
-        const allReminders = this.props.allNotes.map(key => {
-            // console.log("key data",key)
+        const containerAllnotes = listgridvalue ? null : "container-allnotes"
+        // var doc;
+        var notes = this.props.allNotes.map((key) => {
             return (
-                    <div key={key.id} className={listgridview}>
-                         <MuiThemeProvider theme={thm}>
-                            <Container className="card-margin" >
-                                <Card className="take-note-user-card-description "
-                                    onChange={() => this.handleColorChanger(key.color, key.id)}
-                                    style={{ backgroundColor: key.color }}>
-                                    <CardBody className="user-card-body-desc">
-                                        <CardTitle>
-                                        <InputBase
-                                            id="outlined-dense-multiline"
-                                            value={key.title}
-                                            onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
-                                            // className={clsx(classes.textField, classes.dense)}
-                                            margin="dense"
-                                            variant="outlined"
-                                            readOnly
-                                            multiline
-                                            style={{ backgroundColor: key.color }}
-                                        />
-                                    </CardTitle>
+                (
+                    key.isArchived === false
+                    && key.isDeleted === false
+                )
+                &&
+                <div key={key.id} className={listgridview}>
+                    <MuiThemeProvider theme={thm}>
+                        <Container className="card-margin" >
+                            <Card className="take-note-user-card-description"
+                                onChange={() => this.handleColorChanger(key.color, key.id)}
+                                style={{ backgroundColor: key.color }}>
+                                <CardBody className="user-card-body-desc">
+                                    <div style={{ display: "flex" }}>
+                                        <div style={{ width: "98%" }}>
+                                            <InputBase
+                                                id="outlined-dense-multiline"
+                                                value={key.title}
+                                                onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
+                                                margin="dense"
+                                                variant="outlined"
+                                                readOnly
+                                                multiline
+                                                style={{ backgroundColor: key.color, width: "98%" }}
+                                                placeholder="Title"
+                                            />
+                                        </div>
+                                        {(key.isPined===true)?
+                                        <div style={{ height: "24px" }}>
+                                        <Tooltip title="Unpin note">
+                                            <img src={require('../assets/img/pin.svg')}
+                                                alt="pin" className="is-pin"
+                                                onClick={() => this.handleUnpinNote(key.id)}
+                                            />
+
+                                            {/* <Pin/> */}
+                                        </Tooltip>
+                                    </div>
+                                            :<div style={{ height: "24px" }}>
+                                                <Tooltip title="Pin note">
+                                                    <img src={require('../assets/img/unPin.svg')}
+                                                        alt="pin" className="is-pin"
+                                                        onClick={() => this.handlePinNote(key.id)}
+                                                    />
+
+                                                    {/* <Pin/> */}
+                                                </Tooltip>
+                                            </div>
+                                        }
+                                    </div>
+
+
                                     <InputBase
                                         id="outlined-dense-multiline"
                                         value={key.description}
                                         onClick={() => this.handleToggleOpen(key.id, key.title, key.description)}
-                                        // className={clsx(classes.textField, classes.dense)}
                                         margin="dense"
                                         variant="outlined"
                                         readOnly
                                         multiline
                                         style={{ backgroundColor: key.color }}
+                                        placeholder="Description"
                                     />
+                                    {(key.reminder.length > 0) &&
+                                        <div>
+                                            <Chip
+                                                label={key.reminder.toString().substring(0, 24)}
+                                                onDelete={() => this.handleDeleteChip(key.id)}
+                                                className={useStyles.chip}
+                                                variant="outlined"
+                                                size="small"
+                                            />
+                                        </div>
+                                    }
 
-                                        {(key.reminder.length > 0) &&
-                                            <div>
-                                                <Chip
-                                                    // avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
-                                                    label={key.reminder.toString().substring(0, 24)}
-                                                    onDelete={() => this.handleDeleteChip(key.id)}
-                                                    className={useStyles.chip}
-                                                    variant="outlined"
-                                                    size="small"
-                                                />
-                                            </div>
-                                        }
-                                        {(key.noteLabels.length > 0) &&
-                                        <div style={{ display: "flex", flexWrap:"wrap", width:"218px" }}>{
+                                    {(key.noteLabels.length > 0) &&
+                                        <div style={{ display: "flex", flexWrap: "wrap", width: "218px" }}>{
                                             key.noteLabels.map(labelskey => {
                                                 return (
-                                                    <div>
-                                                    <Chip
-                                                        label={labelskey.label}
-                                                        onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
-                                                        className={useStyles.chip}
-                                                        variant="outlined"
-                                                        size="small"
-                                                    />
-                                                </div>
+                                                    (labelskey.isDeleted === false)&&
+                                                    <div key={labelskey.id}>
+                                                        <Chip
+                                                            label={labelskey.label}
+                                                            onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
+                                                            className={useStyles.chip}
+                                                            variant="outlined"
+                                                            size="small"
+                                                        />
+                                                    </div>
                                                 )
                                             })}
                                         </div>
                                     }
-                                        {(key.collaborators.length > 0) &&
+
+                                    {(key.collaborators.length > 0) &&
                                         <div style={{ display: "flex" }}>{
                                             key.collaborators.map(collaborator => {
                                                 return (
-                                                    <div className="collab">
+                                                    <div className="collab" key={collaborator.userId}>
                                                         <Tooltip title={collaborator.email}>
                                                             <Avatar>
                                                                 <span>{collaborator.firstName.toString().substring(0, 1)}</span>
@@ -315,75 +475,90 @@ class DisplayCard extends Component {
                                             })}
                                         </div>
                                     }
-                                    </CardBody>
-                                    <CardBody >
-                                        <div className={modalbottom}>
-                                            <Reminder
-                                                toolsPropsToReminder={this.handleReminder}
-                                                noteID={key.id}
-                                                id="color-picker"
-                                            >
-                                            </Reminder>
+                                </CardBody>
+                                <CardBody >
+                                    <div className={modalbottom}>
+                                        <Reminder
+                                            toolsPropsToReminder={this.handleReminder}
+                                            noteID={key.id}
+                                            id="color-picker"
+                                        >
+                                        </Reminder>
 
-                                            <CardLink>
                                             <CollaboratorComponent
                                                 noteID={key.id}
                                                 collaborators={key.collaborators}
                                                 removeCollaborator={this.removeCollaborator}
                                                 saveCollaborator={this.saveCollaborator}
-                                            // updatedCollaborator= {this.state.collaborator}
                                             />
+
+                                        <ColorPallete
+                                            toolsPropsToColorpallete={this.handleColorChanger}
+                                            noteID={key.id}
+                                            id="color-picker"
+                                        >
+                                        </ColorPallete>
+
+                                            <Tooltip title="Archive">
+                                                <img className="img"
+                                                    src={require('../assets/img/archived.svg')}
+                                                    alt="color picker"
+                                                    onClick={() => this.handleArchive(key.id, true)}
+                                                />
+                                            </Tooltip>
+                                        <CardLink className="add-image">
+                                            <Tooltip title="add image">
+                                                <img className="img"
+                                                    src={require('../assets/img/add_image.svg')}
+                                                    alt="color picker"
+                                                />
+                                            </Tooltip>
                                         </CardLink>
-
-                                            <ColorPallete
-                                                toolsPropsToColorpallete={this.handleColorChanger}
-                                                noteID={key.id}
-                                                id="color-picker"
-                                            >
-                                            </ColorPallete>
-
-                                            <CardLink
-                                                onClick={() => this.handleArchive(key.id)}
-                                            >
-                                                <Tooltip title="Archive">
-                                                    <img className="img"
-                                                        src={require('../assets/img/archived.svg')}
-                                                        alt="color picker"
-                                                    />
-                                                </Tooltip>
-                                            </CardLink>
-                                            <CardLink className="add-image">
-                                                <Tooltip title="add image">
-                                                    <img className="img"
-                                                        src={require('../assets/img/add_image.svg')}
-                                                        alt="color picker"
-                                                    />
-                                                </Tooltip>
-                                            </CardLink>
-                                            <MoreOptions
-                                                toolsPropsToMoreOptions={this.handleDeleteNote}
-                                                noteID={key.id}
-                                                id="color-picker">
-                                            </MoreOptions>
-                                        </div>
-                                    </CardBody>
-                                </Card>
-                            </Container>
-                        {(this.state.noteId === key.id) &&
-                            <div key={key.id} >
-                                <Dialog
-                                    key={key.id}
-                                    open={this.state.modal}
-                                    onClose={this.handleClose}
-                                    aria-labelledby="responsive-dialog-title"
-                                    className="dialog-bottom-icons"
-                                >
-
-                                    <Card className="take-note-user-card-dialog"
-                                        onChange={() => this.handleColorChanger(key.color, key.id)}
-                                        style={{ backgroundColor: key.color }}>
-                                        <CardBody className="user-card-body-desc">
+                                        <MoreOptions
+                                            toolsPropsToMoreOptions={this.handleDeleteNote}
+                                            noteID={key.id}
+                                            id="color-picker"
+                                            moreOptionLabelToAllNote={this.moreOptionLabelToAllNote}
+                                            props={this.props.props}
+                                        >
+                                        </MoreOptions>
+                                    </div>
+                                </CardBody>
+                                {(key.questionAndAnswerNotes.length > 0) &&
+                                    <Tooltip title="Reply">
+                                        <div
+                                            className="q-a-asked"
+                                            style={{ borderTop: "1px solid gray", borderBottom: "none", cursor: "pointer" }}
+                                            onClick={() => this.handleQuestionAnsAnswer(key.id)}
+                                        >
                                             <div>
+                                                <span><strong>Question Asked</strong></span>
+                                            </div>
+                                            <div className="innerHTML"
+                                                dangerouslySetInnerHTML={{ __html: key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message }}
+                                                style={{ maxWidth: "200px" }}
+                                            >
+                                            </div>
+                                        </div>
+                                    </Tooltip>
+                                }
+                            </Card>
+                        </Container>
+                        <ToastContainer />
+                        {(this.state.noteId === key.id) &&
+                            <Dialog
+                                key={key.id}
+                                open={this.state.modal}
+                                onClose={this.handleClose}
+                                aria-labelledby="responsive-dialog-title"
+                                className="dialog-bottom-icons"
+                            >
+                                <Card className="take-note-user-card-dialog"
+                                    onChange={() => this.handleColorChanger(key.color, key.id)}
+                                    style={{ backgroundColor: key.color }}
+                                >
+                                    <CardBody className="user-card-body-desc">
+                                        <div>
                                             <InputBase
                                                 name="title"
                                                 value={this.state.title}
@@ -395,129 +570,173 @@ class DisplayCard extends Component {
                                                 placeholder="Title"
                                                 className="dialog-input"
                                             />
-                                        <InputBase
-                                            name="description"
-                                            value={this.state.description}
-                                            onChange={this.handleChange}
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Description"
-                                            multiline
-                                            style={{ backgroundColor: key.color }}
-                                            className="dialog-input"
-                                        />
-                                        </div>
-                                        {(key.reminder.length > 0) &&
-                                        <div>
-                                            <Chip
-                                                label={key.reminder.toString().substring(0, 24)}
-                                                onDelete={() => this.handleDeleteChip(key.id)}
-                                                className={useStyles.chip}
+
+                                            <InputBase
+                                                name="description"
+                                                value={this.state.description}
+                                                onChange={this.handleChange}
+                                                margin="dense"
                                                 variant="outlined"
-                                                size="small"
+                                                placeholder="Description"
+                                                multiline
+                                                style={{ backgroundColor: key.color }}
+                                                className="dialog-input"
                                             />
                                         </div>
-                                    }
-                                    {(key.noteLabels.length > 0) &&
-                                        <div style={{ display: "flex", flexWrap:"wrap", width:"218px" }}>{
-                                            key.noteLabels.map(labelskey => {
-                                                return (
-                                                    <div>
-                                                    <Chip
-                                                        label={labelskey.label}
-                                                        onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
-                                                        className={useStyles.chip}
-                                                        variant="outlined"
-                                                        size="small"
-                                                    />
-                                                </div>
-                                                )
-                                            })}
-                                        </div>
-                                    }
-                                    {(key.collaborators.length > 0) &&
-                                        <div style={{ display: "flex" }}>{
-                                            key.collaborators.map(collaborator => {
-                                                return (
-                                                    <div className="collab">
-                                                        <Tooltip title={collaborator.email}>
-                                                            <Avatar>
-                                                                <span>{collaborator.firstName.toString().substring(0, 1)}</span>
-                                                            </Avatar>
-                                                        </Tooltip>
-                                                    </div>
-                                                )
-                                            })}
-                                        </div>
-                                    }
-                                        </CardBody>
-                                            <div
-                                                className="modal-footer-note"
-                                            >
-                                                <CardLink onClick={this.handleReminder}>
-                                                    <Reminder
-                                                        toolsPropsToReminder={this.handleReminder}
-                                                        noteID={key.id}
-                                                        id="color-picker"
-                                                    >
-                                                    </Reminder>
-                                                </CardLink>
-
-                                                <CardLink >
-                                                    <Tooltip title="Collaborator">
-                                                        <img className="img"
-                                                            src={require('../assets/img/colaborator.svg')}
-                                                            alt="color picker" />
-                                                    </Tooltip>
-                                                </CardLink>
-
-                                                <ColorPallete
-                                                    toolsPropsToColorpallete={this.handleColorChanger}
-                                                    noteID={key.id}
-                                                    id="color-picker"
-                                                >
-                                                </ColorPallete>
-
-                                                <CardLink
-                                                    onClick={() => this.props.handleArchive(key.id, true)}>
-                                                    <Tooltip title="Archive">
-                                                        <img className="img"
-                                                            src={require('../assets/img/archived.svg')}
-                                                            alt="color picker" />
-                                                    </Tooltip>
-                                                </CardLink>
-                                                <CardLink>
-                                                    <Tooltip title="add image">
-                                                        <img className="img"
-                                                            src={require('../assets/img/add_image.svg')}
-                                                            alt="color picker"
-                                                        />
-                                                    </Tooltip>
-                                                </CardLink>
-                                                <MoreOptions
-                                                    // toolsPropsToColorpallete={this.handleMoreOptions}
-                                                    noteID={key.id}
-                                                    id="color-picker">
-
-                                                </MoreOptions>
-                                                <CardLink ></CardLink>
-                                                <CardLink
-                                                    className="close-btn"
-                                                    onClick={this.handleToggleOpen}
-                                                >
-                                                    <Label>Close</Label>
-                                                </CardLink>
+                                        {(key.reminder.length > 0) &&
+                                            <div>
+                                                <Chip
+                                                    label={key.reminder.toString().substring(0, 24)}
+                                                    onDelete={() => this.handleDeleteChip(key.id)}
+                                                    className={useStyles.chip}
+                                                    variant="outlined"
+                                                    size="small"
+                                                />
                                             </div>
-                                    </Card>
-                                </Dialog>
-                            </div>}
-                            </MuiThemeProvider>
-                    </div>
+                                        }
+                                        {(key.noteLabels.length > 0) &&
+                                            <div style={{ display: "flex", flexWrap: "wrap", width: "100%" }}>{
+                                                key.noteLabels.map(labelskey => {
+                                                    return (
+                                                        (labelskey.isDeleted === false)&&
+                                                        <div>
+                                                            <Chip
+                                                                label={labelskey.label}
+                                                                onDelete={() => this.handleDeletelabel(key.id, labelskey.id, labelskey.label)}
+                                                                className={useStyles.chip}
+                                                                variant="outlined"
+                                                                size="small"
+                                                            />
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        }
+                                        {(key.collaborators.length > 0) &&
+                                            <div style={{ display: "flex" }}>{
+                                                key.collaborators.map(collaborator => {
+                                                    return (
+                                                        <div className="collab" key={collaborator.userId}>
+                                                            <Tooltip title={collaborator.email}>
+                                                                <Avatar>
+                                                                    <span>{collaborator.firstName.toString().substring(0, 1)}</span>
+                                                                </Avatar>
+                                                            </Tooltip>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        }
+                                    </CardBody>
+                                    <div
+                                        className="modal-footer-note"
+                                    >
+                                            <Reminder
+                                                toolsPropsToReminder={this.handleReminder}
+                                                noteID={key.id}
+                                                id="color-picker"
+                                            >
+                                            </Reminder>
+
+                                            <CollaboratorComponent
+                                                noteID={key.id}
+                                                collaborators={key.collaborators}
+                                                removeCollaborator={this.removeCollaborator}
+                                                saveCollaborator={this.saveCollaborator}
+                                            />
+                                            <ColorPallete
+                                                toolsPropsToColorpallete={this.handleColorChanger}
+                                                noteID={key.id}
+                                                id="color-picker"
+                                            >
+                                            </ColorPallete>
+                                        <CardLink
+                                            onClick={() => this.handleArchive(key.id, true)}>
+                                            <Tooltip title="Archive">
+                                                <img className="img"
+                                                    src={require('../assets/img/archived.svg')}
+                                                    alt="color picker" />
+                                            </Tooltip>
+                                        </CardLink>
+                                            <Tooltip title="add image">
+                                                <img className="img"
+                                                    src={require('../assets/img/add_image.svg')}
+                                                    alt="color picker"
+                                                />
+                                            </Tooltip>
+                                        <MoreOptions
+                                            toolsPropsToMoreOptions={this.handleDeleteNote}
+                                            noteID={key.id}
+                                            id="color-picker"
+                                            moreOptionLabelToAllNote={this.moreOptionLabelToAllNote}
+                                            props={this.props.props}
+                                        >
+                                        </MoreOptions>
+
+                                        <CardLink ></CardLink>
+                                        <Button
+                                            className="close-btn"
+                                            onClick={this.handleToggleClose}
+                                        >
+                                            Close
+                                        </Button>
+                                    </div>
+                                    {(key.questionAndAnswerNotes.length > 0) &&
+                                        <Tooltip title="Reply">
+                                            <div
+                                                className="q-a-asked"
+                                                style={{ borderTop: "1px solid gray", borderBottom: "none", cursor: "pointer" }}
+                                                onClick={() => this.handleQuestionAnsAnswer(key.id)}
+                                            >
+                                                <div>
+                                                    <span><strong>Question Asked</strong></span>
+                                                </div>
+
+                                                <div className="innerHTML"
+                                                    dangerouslySetInnerHTML={{ __html: key.questionAndAnswerNotes[key.questionAndAnswerNotes.length - 1].message }}>
+                                                </div>
+                                            </div>
+                                        </Tooltip>
+                                    }
+                                </Card>
+                            </Dialog>
+                        }
+                    </MuiThemeProvider>
+                </div>
             )
         })
         return (
-            <div className={listView}>
-                {allReminders}
+            <div className={containerAllnotes}>
+                <div className={listView}>
+                    {notes}
+                </div>
+
+                <Snackbar
+                    // key={this.state.messageInfo}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center"
+                    }}
+                    open={this.state.openSnackbar}
+                    autoHideDuration={1000}
+                    onClose={this.handleCloseSnackbar}
+                    // onExited={this.handleExitedSnackbar}
+                    ContentProps={{
+                        "aria-describedby": "message-id"
+                    }}
+                    message={<span id="message-id">{this.state.messageInfo}</span>}
+                    action={[
+                       
+                        <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            onClick={this.handleCloseSnackbar}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    ]}
+                />
             </div>
         )
     }

@@ -63,6 +63,10 @@ class DashboardComponent extends Component {
         this.props.listGridView(this.state.view)
     }
 
+    handleCart = () => {
+        this.props.props.history.push('/usercart');
+    }
+
     // DrawerMenuToDashboard = (isReminder, isTrash, isArchive, isNotes) => {
     //     this.setState({
     //         isReminder: isReminder,
@@ -74,7 +78,6 @@ class DashboardComponent extends Component {
     // }
 
     render() {
-        
         return (
             <div>
                 <MuiThemeProvider theme={thm}>
@@ -158,7 +161,7 @@ class DashboardComponent extends Component {
                                     null
                                 }
                                 </div>
-                                <div>
+                                <div onClick={this.handleCart} style={{cursor:"pointer"}}>
                                 <Tooltip title="Cart">
                                     <div onClick={this.handleToggleCart}>
                                         <img style={{padding:"1.5vh", justifyItems:'center'}}

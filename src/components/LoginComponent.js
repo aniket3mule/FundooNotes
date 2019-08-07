@@ -30,29 +30,29 @@ export default class LoginComponent extends Component {
     }
 
     handleSignIn = (e) => {
-        const key = this.props.props.location.state;
         e.preventDefault();
         var data = {
             'email': this.state.email,
-            'password': this.state.password
+            'password': this.state.password,
+            'cartId': (this.props.props.location.state !== undefined) ? this.props.props.location.state.cartId : ''
         }
 
         UserServices.loginService(data)
             .then(response => {
-                console.log(response);
+                console.log("logi resp", response);
                 localStorage.setItem('firstName', response.data.firstName);
                 localStorage.setItem('lastName', response.data.lastName);
                 localStorage.setItem('token', response.data.id);
                 localStorage.setItem('token1', true);
                 localStorage.setItem('userid', response.data.userId);
                 localStorage.setItem('email', response.data.email)
-                localStorage.setItem('ProfileImage', url + response.data.imageUrl)
-                console.log("this.props", this);
+                localStorage.setItem('ProfileImage', url + response.data.imageUrl);
+                // console.log("this.props", this);
                 if (this.props.props.location.state !== undefined) {
-                    this.props.props.history.push('/usercart', key);
-                } else {
-                    this.props.props.history.push('/dashboard');
-                }
+                    this.props.props.history.push('/usercart');
+                 } else     {
+                this.props.props.history.push('/dashboard');
+                 }
 
             })
             .catch(error => {
@@ -61,16 +61,16 @@ export default class LoginComponent extends Component {
     }
     render() {
         console.log("login props", this.props);
-        var cssColor = '', cartId = '';
+        var cssColor = '', productId = '';
         if (this.props.props.location.state !== undefined) {
             cssColor = "orange";
-            cartId = this.props.props.location.state.cartId;
+            productId = this.props.props.location.state.productId;
         }
 
         const { email, password } = this.state;
         return (
             <Container>
-                <div style={{ display: "flex", justifyContent: "center", marginTop: "6%" }}>
+                <div style={{ display: "flex", justifyContent: "center", marginTop: "6%" }} className="login-cart">
                     <div className="new-login">
                         <div style={{ fontSize: "1.6rem", padding: "1%", textAlign: "center", fontWeight: "bolder", fontFamily: "sarif" }}>
                             <span style={{ color: "blue" }}>F</span>
@@ -141,29 +141,29 @@ export default class LoginComponent extends Component {
                             </Button>
                         </div>
                     </div>
-                    {(this.props.props.history.location.state !== undefined)  &&
-                    <div className=" login-cart-div">
-                        <div style={{textAlign:"center", padding:"3%", fontWeight:"500"}}>
-                            <span>Service</span>
-                        </div>
-                    <div className=" login-cart-div1"
-                        >
-                        
-                       
-                        <ShoppingComponent
-                            cartProps={true}
-                            // shoppingCartToRegister = {this.shoppingCartToRegister}
-                            cssColor={cssColor}
-                            cartId={cartId}
+                    {(this.props.props.history.location.state !== undefined) &&
+                        <div className=" login-cart-div ">
+                            <div style={{ textAlign: "center", padding: "3%", fontWeight: "500" }}>
+                                <span>Service</span>
+                            </div>
+                            <div className=" login-cart-div1"
+                            >
 
-                        />
-                    
+
+                                <ShoppingComponent
+                                    cartProps={true}
+                                    // shoppingCartToRegister = {this.shoppingCartToRegister}
+                                    cssColor={cssColor}
+                                    cartId={productId}
+
+                                />
+
+                            </div>
+
+                        </div>
+                    }
                 </div>
-                
-                </div>
-                }
-                </div>
-                
+
             </Container >
         )
     }

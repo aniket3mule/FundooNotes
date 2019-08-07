@@ -3,7 +3,19 @@ import { Drawer } from '@material-ui/core';
 import { MenuItem } from '@material-ui/core';
 import { Label } from 'reactstrap'
 import GetAllLabels from './GetAllLabels';
+// import { withStyles } from '@material-ui/core/styles';
 import CreateLabel from './CreateLabel';
+// import PropTypes from 'prop-types';
+
+
+// const styles = theme => ({
+//     MuiMenuItem : {
+//         root: {
+//             borderRadius : "0 25px 25px 0"
+//         }
+//     }
+//   });
+
 class DrawerMenu extends Component {
 
     constructor(props) {
@@ -12,10 +24,13 @@ class DrawerMenu extends Component {
             open: false,
             status: false,
             allLabels: [],
+            trash:false
         }
         // this.labelToCards = React.createRef();
 
     }
+
+    
 
     
     // getNewLabel = (newLabel) => {
@@ -40,7 +55,9 @@ class DrawerMenu extends Component {
 
     handleTrash = ()=>{
         // this.props.DrawerMenuToDashboard(false, true, false, false);
+        
         this.props.props.history.push('/trash');
+        
     }
     handleNotes = ()=>{
         // this.props.DrawerMenuToDashboard(false, false, false, true);
@@ -55,6 +72,7 @@ class DrawerMenu extends Component {
     // }
 
     render() {
+    // const { classes } = this.props;
         return (
             <div>
                 <Drawer
@@ -63,14 +81,16 @@ class DrawerMenu extends Component {
                     width={200}
                    
                 >
-                    <MenuItem onClick={this.handleNotes} className="links">
+                    <MenuItem onClick={this.handleNotes}
+                    style={{borderRadius:"0 25px 25px 0",  backgroundColor:(this.state.trash) ?"#feefc3":null}}>
                     <img className="update-card-img"
                             src={require('../assets/img/notes.svg')}
                             alt="color picker" />
                     <span className="fundoo-text-sidebar">Notes</span>
                     </MenuItem>
 
-                    <MenuItem onClick={this.handleReminder} className="links">
+                    <MenuItem onClick={this.handleReminder} className="MuiMenuItem-gutters"
+                    style={{borderRadius:"0 25px 25px 0",  backgroundColor:(this.state.trash) ?"#feefc3":null}}>
                     <img className="update-card-img"
                             src={require('../assets/img/reminder.svg')}
                             alt="reminder" />
@@ -88,7 +108,7 @@ class DrawerMenu extends Component {
                             />
                             <MenuItem
                             onClick={this.handleLabelOpen}
-                            className="links"
+                            className="drawer-links"
                             >
                             <CreateLabel
                             sidebarLabel = {this.state.open}
@@ -98,7 +118,8 @@ class DrawerMenu extends Component {
                     </div>
 
                     <MenuItem onClick={this.handleArchived}
-                    className="links">
+                    className="MuiMenuItem-gutters"
+                    style={{borderRadius:"0 25px 25px 0",  backgroundColor:(this.state.trash) ?"#feefc3":null}}>
                         <img className="update-card-img"
                             src={require('../assets/img/archived.svg')}
                             alt="color picker" />
@@ -106,10 +127,12 @@ class DrawerMenu extends Component {
                     </MenuItem>
 
                     <MenuItem onClick={this.handleTrash}
-                    className="links">
+                    className="MuiMenuItem-gutters"
+                    style={{borderRadius:"0 25px 25px 0",  backgroundColor:(this.state.trash) ?"#feefc3":null}}>
                     <img className="update-card-img"
                     src={require('../assets/img/trash.svg')}
                     alt="trash notes"
+                    
                     />
                     <span className="fundoo-text-sidebar">Trash</span>
                     </MenuItem>
@@ -118,5 +141,7 @@ class DrawerMenu extends Component {
         )
     }
 }
-
-export default DrawerMenu
+// DrawerMenu.propTypes = {
+//     classes: PropTypes.object,
+//   };
+export default (DrawerMenu)

@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import { CardContent, CardActionArea, Typography, Card, Container, List, ListItem, AppBar, IconButton, Toolbar, Button } from '@material-ui/core';
+import { CardContent, CardActionArea, Typography, Card, Container, AppBar, IconButton, Toolbar, Button } from '@material-ui/core';
 import UserService from '../services/UserServices'
+import CartService from '../services/CartServices';
 
+const CartServices = new CartService();
 const UserServices = new UserService();
 export default class ShoppingComponent extends Component {
     constructor(props) {
@@ -21,20 +23,25 @@ export default class ShoppingComponent extends Component {
                 })
             })
     }
-    handleCart = (cartId, name, description, price) => {
-        console.log("true", cartId);
-        // this.props.shoppingCartToRegister(cartId);
-        var cartInfo = {
-            'cartId': cartId,
-            'service' : name,
-            'description':description,
-            'price':price
+     handleCart = async(productId, name) => {
+        console.log("true", productId);
+
+        var data = {
+            "productId" :productId
         }
-        this.setState({
-            cartId: cartId,
-            service:name
+        CartServices.addToCart(data)
+        .then((res) => {
+            console.log("addto cart res",res.data.data.details.id);
+            
+            var cartInfo = {
+                'cartId': res.data.data.details.id,
+                'productId' : productId
+            }
+            this.props.props.history.push(`/register/${productId}`, cartInfo)
         })
-        this.props.props.history.push(`/register/${cartId}`, cartInfo)
+        // this.props.shoppingCartToRegister(cartId);
+        
+        
     }
 
     handleSignInInstead = () => {
@@ -46,43 +53,40 @@ export default class ShoppingComponent extends Component {
       }
     render() {
         // console.log("props cart ",this.props.cartId);
-        const selectedCart = this.props.cartProps ? "cartSelected":null
         const shoppingService = this.state.serviceDetails.map(key => {
             return (
+                // <div>
                 <Card
-                onClick={this.props.cartProps ? null : () => this.handleCart(key.id, key.name,key.description,key.price)}
-                style={{ maxWidth: "40vh", height: "40vh", marginLeft: "8vh", 
-                backgroundColor:   (key.id ===this.props.cartId) ? this.props.cssColor : null }} 
+                onClick={this.props.cartProps ? null : () => this.handleCart(key.id, key.name)}
+                style={{backgroundColor: (key.id ===this.props.cartId) ? this.props.cssColor : null,
+                }} 
                 key={key.id}
-                className={selectedCart}
+                className="cart-selected"
                 >
-                    <CardActionArea>
                         <CardContent>
-                            <Typography gutterBottom variant="h5" component="div" style={{borderBottom:"1px solid rgb(128,128,128)"}}>
+                            <Typography gutterBottom variant="h6" component="div" style={{borderBottom:"1px solid rgb(128,128,128)"}}>
                                 Price : ${key.price} per month
                             </Typography>
                             <Typography color="primary" component="p">
                                 {(key.name).toString().toUpperCase()}
                             </Typography>
-                            <div>
-                                <List style={{ height: "200px" }}>
-                                    <ListItem>
+                            <Typography variant="body2" component="p">
+                                
                                         {key.description}
-                                    </ListItem>
-                                </List>
-                            </div>
+                            </Typography>
                         </CardContent>
-                    </CardActionArea>
                 </Card>
+                
+
             )
         })
         return (
             this.props.cartProps ?
-            <div style={{ display: "flex", justifyContent: "flex-start" }}>
+            <div style={{ display: "flex", justifyContent: "space-evenly" }} className = "shopping-cart">
                         {shoppingService}
             </div>
             :
-            <div>
+            <div >
                 <AppBar style={{ backgroundColor: "whitesmoke" }} color="primary" position="fixed">
                     <Toolbar variant="dense">
                         <IconButton edge="start" color="inherit" aria-label="menu">
@@ -96,8 +100,9 @@ export default class ShoppingComponent extends Component {
                     <Typography variant="h6" component="p" style={{ textAlignLast: "center", padding: "10vh", }}>
                         {"FundooNotes offered. Choose below service to Register."}
                     </Typography>
-                    <div style={{ display: "flex", justifyContent: "center" }}>
+                    <div style={{ display: "flex", justifyContent: "space-evenly" }} className = "shopping-cart">
                         {shoppingService}
+                        
                     </div>
                     <Typography variant="h6" component="p" style={{ textAlignLast: "center", padding: "5vh" }}> 
                     <Button

@@ -60,13 +60,11 @@ export default class RegistrationComponent extends Component {
   // }
 
   handleSignInInstead = (cartInfo) => {
-    // console.log("this sigin ", this.props.history.location.state);
+    console.log("this registr ", cartInfo);
     var data = {
-      'color': 'orange',
+      'productId' : cartInfo.productId,
       'cartId': cartInfo.cartId,
-      'price':cartInfo.price,
-      'description' : cartInfo.description,
-      'name' : cartInfo.service
+     
     }
     this.props.history.push("/signin",data)
   }
@@ -107,10 +105,10 @@ export default class RegistrationComponent extends Component {
   render() {
     console.log("resister props", this.props.location.state);
     
-    var cssColor = '', cartId = '';
+    var cssColor = '', productId = '';
     if (this.props.history.location.state !== undefined) {
       cssColor = "orange";
-      cartId = this.props.history.location.state.cartId;
+      productId = this.props.history.location.state.productId;
     }
     const { firstName, lastName, email, password, confirmPassword } = this.state;
     return (
@@ -200,7 +198,7 @@ export default class RegistrationComponent extends Component {
                 cartProps={true}
                 // shoppingCartToRegister = {this.shoppingCartToRegister}
                 cssColor={cssColor}
-                cartId={cartId}
+                cartId={productId}
               />
               </div>
               <div className="new-register-bottom">
