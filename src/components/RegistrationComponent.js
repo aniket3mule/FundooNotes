@@ -77,20 +77,16 @@ export default class RegistrationComponent extends Component {
 
   handleSignUp = (e) => {
     e.preventDefault();
-    var cartId = '', service = '';
-    if (this.props.history.location.state === undefined) {
-      service = "basic";
-    }else{
-      cartId = this.props.history.location.state.cartId;
-      service = this.props.history.location.state.service;
-    }
+   
+      // service = this.props.history.location.state.service;
     var data = {
       'firstName': this.state.firstName,
       'lastName': this.state.lastName,
-      'service': service,
+      'service': (this.props.location.state !== undefined) ? this.props.location.state.service : 'basic',
       'email': this.state.email,
       'password': this.state.password,
-      'cartId':cartId
+      'cartId': (this.props.location.state !== undefined) ? this.props.location.state.cartId : ''
+
     }
     UserServices.userRegister(data)
       .then(response => {

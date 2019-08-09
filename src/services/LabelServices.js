@@ -33,7 +33,14 @@ class LabelServices {
         })
     }
 
-    
+    updateLabel(data){
+        console.log("label ID");
+        return axios.post(`${BaseURL}/${data.id}/updateNoteLabel`, data.data, {
+            headers:{
+                'Authorization' :token
+            }
+        })
+    }
 }
 
 export default LabelServices;

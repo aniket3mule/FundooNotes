@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { CardContent, CardActionArea, Typography, Card, Container, AppBar, IconButton, Toolbar, Button } from '@material-ui/core';
+import { CardContent, Typography, Card, Container, AppBar, IconButton, Toolbar, Button } from '@material-ui/core';
 import UserService from '../services/UserServices'
 import CartService from '../services/CartServices';
 
@@ -35,7 +35,8 @@ export default class ShoppingComponent extends Component {
             
             var cartInfo = {
                 'cartId': res.data.data.details.id,
-                'productId' : productId
+                'productId' : productId,
+                'service': res.data.data.details.product.name
             }
             this.props.props.history.push(`/register/${productId}`, cartInfo)
         })

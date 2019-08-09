@@ -217,6 +217,22 @@ export default class GetAllLabels extends Component {
         })
     }
 
+    handleUpdateLabel = (labelId, labelName) => {
+        var data = {
+            'id' : labelId,
+            data : {
+                "label": labelName,
+                "isDeleted": false,
+            }
+          }
+
+          LabelServices.updateLabel(data)
+          .then(res => {
+              console.log(res);
+            //   this.props.getAllLabelsToCreateLabels(true);
+          })
+    }
+
     render() {
         // console.log("map",this.mapChecked());
 
@@ -226,7 +242,7 @@ export default class GetAllLabels extends Component {
         const labels = this.state.allLabels.map((key) => {
             return (
                 this.props.sidebarLabel ?
-                    <MenuItem key={key.id} onClick={() => this.handleUserLabel(key.label)}>
+                    <MenuItem key={key.id} onClick={() => this.handleUserLabel(key.label)}  style={{borderRadius:"0 25px 25px 0"}}>
                         <img className="update-card-img cursor-pointer"
                             src={require('../assets/img/label.svg')}
                             alt="label"
