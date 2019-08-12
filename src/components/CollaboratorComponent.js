@@ -93,9 +93,9 @@ class CollaboratorComponent extends Component {
                 console.log("error in collab : ", err);
             })
 
-            this.setState({
-                collaborators: this.props.collaborators
-            })
+            // this.setState({
+            //     collaborators: this.props.collaborators
+            // })
     }
 
     closePopper() {
@@ -108,7 +108,7 @@ class CollaboratorComponent extends Component {
     handleClickOpen() {
         this.setState({
             open: true,
-            collaborators: this.props.collaborators
+            // collaborators: this.props.collaborators
         })
     }
 
@@ -202,13 +202,14 @@ class CollaboratorComponent extends Component {
             }else{
                 NoteServices.addcollaboratorsNotes(user[0], this.props.noteID)
         
-            .then((response) => {
+            .then(async (response) => {
                 console.log("collab added successfully", response);
+                
+                await this.props.saveCollaborator(true);
                 this.setState({
                     open: false,
                     searchText: ''      
                 })
-                this.props.SaveCollaborator(true);
             })
             .catch(error => {
                 console.log("err in collab", error);
@@ -220,11 +221,11 @@ class CollaboratorComponent extends Component {
         // console.log("user list data", this.state.searchText);
         var collaboratorUser = ''
         if (!this.props.CreateNoteToCollaborator) {
-            collaboratorUser = this.state.collaborators.map(user => {
+            collaboratorUser = this.props.collaborators.map(user => {
                 return (
                     <div className="user-profile-info" key={user.userId}>
                         <Avatar>
-                            <span>{user.firstName.toString().substring(0, 1)}</span>
+                            <span>{user.firstName.toString().substring(0, 1).toUpperCase()}</span>
                         </Avatar>
     
                         <div className="collab-owner">
@@ -269,10 +270,8 @@ class CollaboratorComponent extends Component {
                                     <span>Collaborator</span>
                                 </DialogTitle>
                             </div>
-                            <DialogContent
-                                style={{ minHeight: "120px", minWidth: "250px" }}
-                            >
-                                <div className="user-profile-info">
+                            <DialogContent>
+                            <div className="user-profile-info">
                                     <div className="collab-icon-button">
                                         <img
                                             src={localStorage.getItem("ProfileImage")}
@@ -286,8 +285,15 @@ class CollaboratorComponent extends Component {
                                         <div>{localStorage.getItem('email')}</div>
                                     </div>
                                 </div>
+                                </DialogContent>
+                            <DialogContent
+                                style={{ maxHeight: "180px", minWidth: "250px" }}
+                            >
                                 {collaboratorUser}
-                                <div className="collab-input-search" >
+                                
+                            </DialogContent>
+                            <DialogContent>
+                            <div className="collab-input-search" >
                                     <div className="collab-icon-sm">
                                         <img
                                             src={require('../assets/img/person_add_grey_18x18.svg')}

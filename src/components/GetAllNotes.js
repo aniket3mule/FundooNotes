@@ -491,7 +491,7 @@ class GetAllNotes extends Component {
                                                     <div className="collab" key={collaborator.userId}>
                                                         <Tooltip title={collaborator.email}>
                                                             <Avatar>
-                                                                <span>{collaborator.firstName.toString().substring(0, 1)}</span>
+                                                                <span>{collaborator.firstName.toString().substring(0, 1).toUpperCase()}</span>
                                                             </Avatar>
                                                         </Tooltip>
                                                     </div>
@@ -643,7 +643,7 @@ class GetAllNotes extends Component {
                                                         <div className="collab" key={collaborator.userId}>
                                                             <Tooltip title={collaborator.email}>
                                                                 <Avatar>
-                                                                    <span>{collaborator.firstName.toString().substring(0, 1)}</span>
+                                                                    <span>{collaborator.firstName.toString().substring(0, 1).toUpperCase()}</span>
                                                                 </Avatar>
                                                             </Tooltip>
                                                         </div>

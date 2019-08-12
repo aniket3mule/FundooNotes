@@ -124,7 +124,6 @@ input.input:focus {
 
 .collab-input-search {
   display: flex;
-  margin: 4% 0% 0% 0%;
   align-items: center;
   outline-width: 0;
 }
@@ -630,16 +629,28 @@ input.input:focus {
 }
 
 .cart-selected {
- width: 28%;
- height: 250px;
- cursor: pointer;
+  width: 100%;
+  height: 200px;
+  overflow: visible;
+  margin-left: -10%;
+  margin-top: -10%;
  transition: transform .1s;
 }
 
-.cart-selected:hover {
-    -ms-transform: scale(1.5); /* IE 9 */
+.inner-card {
+    width: 25%;
+    overflow: visible;
+    background-color: antiquewhite;
+}
+
+
+
+
+.inner-card:hover{
+  -ms-transform: scale(1.5); /* IE 9 */
     -webkit-transform: scale(1.5); /* Safari 3-8 */
-    transform: scale(1.1); 
+    transform: scale(1.1);
+    background-color: orange
 }
 
 .new-register-email {
@@ -674,8 +685,6 @@ input.input:focus {
 }
 
 .login-cart-div1  {
-  height: 100%;
-  width: 90%;
   margin-top: 3%;
 }
 
@@ -724,6 +733,28 @@ input.input:focus {
     box-sizing: border-box;
     display: flex;
 } */
+
+
+@media only screen and (max-width: 1300px) {
+  .shopping-cart{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .inner-card {
+    width: 65%;
+    margin-top: 10%;
+}
+.new-register-input{
+  width: 90.5%;
+}
+.new-register-email {
+  width: 90.5%
+}
+}
+
 @media only screen and (max-width: 700px) {
   .list-view {
     width: 100%;
@@ -744,8 +775,8 @@ input.input:focus {
     width: 100%
   }
   .cart-selected {
-    width: 65%;
-    height: 250PX;
+    width: 100%;
+    /* height: 250PX; */
   }
 
   .take-note-div {
@@ -871,6 +902,10 @@ input.input:focus {
   }
   .login-cart-div{
     width: 100%;
+  }
+  .inner-card{
+    width: 65%;
+    margin-top: 10%;
   }
 
 
