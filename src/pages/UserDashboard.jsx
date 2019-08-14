@@ -47,6 +47,11 @@ class UserDashboard extends Component {
         console.log(this.state.listGridView);
     }
 
+     componentWillUnmount(){
+        console.log("compoent unmount");
+        
+    }
+
     // DashboardToPage = (isReminder, isTrash, isArchive, isNotes) => {
     //     this.setState({
     //         isReminder: isReminder, 

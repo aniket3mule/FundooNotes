@@ -1,8 +1,28 @@
 import React, { Component } from 'react'
-import { CardContent, Typography, Card, Container, AppBar, IconButton, Toolbar, Button } from '@material-ui/core';
+import { CardContent, Typography, Card, Container, AppBar, IconButton, Toolbar, Button, Dialog, DialogContent, DialogActions } from '@material-ui/core';
 import UserService from '../services/UserServices'
 import CartService from '../services/CartServices';
+import { MuiThemeProvider, createMuiTheme, } from '@material-ui/core';
 
+const thm = createMuiTheme({
+    overrides: {
+        MuiDialog: {
+            paperWidthSm: {
+                overflow: "Hidden",
+                width: "100%"
+            }
+        },
+        MuiPaper: {
+            root: {
+                margin: "1px 0 0 50px"
+            },
+            rounded: {
+                borderRadius: "10px",
+                boxShadow: "0 4px 6px rgb(143, 143, 143)"
+            }
+        },
+    }
+});
 const CartServices = new CartService();
 const UserServices = new UserService();
 export default class ShoppingComponent extends Component {
@@ -12,7 +32,8 @@ export default class ShoppingComponent extends Component {
             serviceDetails: [],
             cartId: '',
             service: '',
-            mouseEnter:false
+            mouseEnter: false,
+            cartSelected: false
         }
     }
     componentDidMount() {
@@ -54,42 +75,58 @@ export default class ShoppingComponent extends Component {
         this.props.props.history.push(`/signin`)
     }
 
+
+    handleCartDialog = (productId, name) => {
+        this.setState({
+            cartId: productId,
+            cartSelected: true,
+            open: true,
+        })
+    }
+
+    handleClose = () => {
+        this.setState({
+            open: false
+        })
+    }
     handleMouseOver = (id) => {
         this.setState({
-            mouseEnter : true,
-            cartId:id
+            mouseEnter: true,
+            cartId: id
         })
     }
     handleMouseLeave = () => {
         this.setState({
-            mouseEnter : false
+            mouseEnter: false
         })
     }
     render() {
         // console.log("props cart ",this.props.cartId);
-        const cardColor = this.state.mouseEnter ? "orange": "#acacac"
-
+        const cardColor = this.state.mouseEnter ? "orange" : "#acacac"
+        const cartSelected = this.state.cartSelected ? "orange" : "#acacac"
         const shoppingService = this.state.serviceDetails.map(key => {
             return (
-                // <div>
-                <Card className="inner-card" style={{overflow:"visible", 
-                backgroundColor:(this.state.cartId === key.id) ? cardColor : "#acacac" 
-                && (key.id === this.props.cartId) ? this.props.cssColor : "#acacac"}}
-                onMouseEnter={this.props.cartProps ? null : ()=>this.handleMouseOver(key.id)}
-                onMouseLeave={this.props.cartProps ? null : () => this.handleMouseLeave()} 
+
+                <Card className="inner-card" style={{
+                    overflow: "visible",
+                    backgroundColor: (this.state.cartId === key.id) ? cardColor : "#acacac"
+                        && (key.id === this.props.cartId) ? this.props.cssColor : "#acacac"
+                }}
+                    onMouseEnter={this.props.cartProps ? null : () => this.handleMouseOver(key.id)}
+                    onMouseLeave={this.props.cartProps ? null : () => this.handleMouseLeave()}
                 >
                     <Card
                         onClick={this.props.cartProps ? null : () => this.handleCart(key.id, key.name)}
                         style={{
-                            overflow:"visible"
+                            overflow: "visible"
                         }}
                         key={key.id}
                         className="cart-selected"
                     >
-
-
                         <CardContent>
-                            <Typography gutterBottom variant="div" component="strong" style={{ borderBottom: "1px solid rgb(128,128,128)" }}>
+                            <Typography gutterBottom variant="div"
+                                component="strong"
+                                style={{ borderBottom: "1px solid rgb(128,128,128)" }}>
                                 Price : ${key.price} per month
                             </Typography>
                             <Typography color="primary" component="p">
@@ -100,10 +137,13 @@ export default class ShoppingComponent extends Component {
                             </Typography>
                         </CardContent>
                     </Card>
-                    <div style={{width:"100%", textAlign:"center"}}>
-                    {(key.id === this.props.cartId) ?  <span >Selected</span> : <span >Add To Cart</span> }
+                    <div style={{ width: "100%", textAlign: "center" }}>
+                        {(key.id === this.props.cartId) ? <span >Selected</span> : <span >Add To Cart</span>}
                     </div>
                 </Card>
+
+
+
 
             )
         })
@@ -130,6 +170,39 @@ export default class ShoppingComponent extends Component {
                         <div style={{ display: "flex", justifyContent: "space-evenly" }} className="shopping-cart">
                             {shoppingService}
 
+                            {/* <MuiThemeProvider theme={thm}>
+                                <Dialog
+                                    open={this.state.open}
+                                    onClose={this.handleClose}
+                                    aria-labelledby="responsive-dialog-title"
+                                    style={{ borderRadius: "8px" }}
+                                >
+                                    <div style={{ minHeight: "40%", minWidth: "50%", borderRadius: "8px" }}>
+                                        <DialogContent
+                                            style={{ maxHeight: "180px", minWidth: "250px" }}
+                                        >
+                                            <div>sdddddddddddd</div>
+                                        </DialogContent>
+
+                                        <DialogActions style={{ display: "flex", justifyContent: "space-between" }}>
+                                            <Button
+                                                className="close-btn"
+                                                onClick={this.handleClose}
+                                                style={{ cursor: "pointer" }}
+                                            >
+                                                <span style={{ textTransform: "none" }}> Close </span>
+                                            </Button>
+                                            <Button
+                                                className="close-btn"
+                                                onClick={this.handleSaveCollaborator}
+                                                style={{ cursor: "pointer" }}
+                                            >
+                                                <span style={{ textTransform: "none" }}> Save </span>
+                                            </Button>
+                                        </DialogActions>
+                                    </div>
+                                </Dialog>
+                            </MuiThemeProvider> */}
                         </div>
                         <Typography variant="h6" component="p" style={{ textAlignLast: "center", padding: "5vh" }}>
                             <Button

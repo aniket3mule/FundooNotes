@@ -47,11 +47,11 @@ const thm = createMuiTheme({
 
 const NoteService = new GetNote();
 
-function searchingFor(search) {
-    return function (x) {
-        return x.title.includes(search) || x.description.includes(search)
-    }
-}
+// function searchingFor(search) {
+//     return function (x) {
+//         return x.title.includes(search) || x.description.includes(search)
+//     }
+// }
 class DisplayCard extends Component {
     constructor(props) {
         super(props);
@@ -106,7 +106,6 @@ class DisplayCard extends Component {
      * Update existing note
      */
     handleToggleClose = () => {
-
         try {
             this.setState(prevState => ({
                 modal: !prevState.modal,
@@ -127,7 +126,7 @@ class DisplayCard extends Component {
                 NoteService.updateNote(data)
                     .then(response => {
                         console.log("uddate note function", response);
-                        this.getUpdateNotes();
+                        this.props.getUpdateNotes(true);
                         this.handleClickSnackbar("Note Updated successfully");
                     })
                     .catch(err => {

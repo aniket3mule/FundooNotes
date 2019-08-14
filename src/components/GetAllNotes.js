@@ -85,6 +85,8 @@ class GetAllNotes extends Component {
         this.getUpdateNotes();
     }
 
+   
+
     getUpdateNotes = async () => {
         
         await NoteService.getAllNotes()
@@ -234,9 +236,9 @@ class GetAllNotes extends Component {
             'reminder': []
         }
         NoteService.removeReminderNotes(note)
-            .then(response => {
+            .then(async response => {
                 console.log("update reminder >>>", response);
-                this.getUpdateNotes();
+                await this.getUpdateNotes();
             })
             .catch(err => {
                 console.log("Eroorrrrrr....", err);

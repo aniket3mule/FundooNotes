@@ -11,7 +11,7 @@ import CartService from '../services/CartServices';
 const CartServices = new CartService();
 const styles = theme => ({
   root: {
-    width: '50%',
+    width: '100%',
   },
   backButton: {
     marginRight: theme.spacing(2),
@@ -115,6 +115,7 @@ class CartComponent extends React.Component {
     return (
       !this.state.isOrderPlaced ?
         <div className={classes.root}>
+          <div style={{width:"50%"}}>
           <Stepper activeStep={activeStep} alternativeLabel>
             {steps.map(label => (
               <Step key={label}>
@@ -122,6 +123,7 @@ class CartComponent extends React.Component {
               </Step>
             ))}
           </Stepper>
+          </div>
           <div>
             {this.state.activeStep === steps.length ? (
               <div>
@@ -131,10 +133,12 @@ class CartComponent extends React.Component {
             ) : (
                 <div>
                   <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
+                  
                   <div className="cart-details-div">
                     <div className="product-price">
                       <span>${(key.price)} per month basic</span>
                     </div>
+                    <div style={{display:"flex", padding:"2%"}}>
                     <div style={{ fontSize: "0.86rem", width: "300px" }}>
                       <Typography variant="body1" color="primary" component="strong">{key.name} Pack Details</Typography>
                       <ul>
@@ -145,6 +149,7 @@ class CartComponent extends React.Component {
                       <Typography variant="body1" color="primary" component="strong">{"Price"}</Typography>
                       <br />
                       <span>${key.price} per month</span>
+                    </div>
                     </div>
 
                     <div className="checkout-box">
@@ -165,8 +170,8 @@ class CartComponent extends React.Component {
                 </div>
               )}
             {activeStep === steps.length - 1 &&
-              <div style={{ display: "flex", justifyContent: "space-between", width: "130vh", padding: "2%" }}>
-                <div>
+              <div className="payment-div-box">
+                <div style={{width:"60%"}}>
                   <textarea
                     multiline="true"
                     placeholder="Enter address"
@@ -174,7 +179,7 @@ class CartComponent extends React.Component {
                     rows="5"
                     value={this.state.address}
                     onChange={this.handleChange}
-                    style={{ border: "1px solid lightgrey", width: "300px" }}
+                    style={{ border: "1px solid lightgrey",width: "85%" }}
                   />
                 </div>
                 <div>

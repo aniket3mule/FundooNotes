@@ -1,5 +1,3 @@
-
-
 /* .active, .drawer-links:hover {
   background-color: #666;
   color: white;
@@ -634,23 +632,25 @@ input.input:focus {
   overflow: visible;
   margin-left: -10%;
   margin-top: -10%;
- transition: transform .1s;
+  transition: transform .1s;
 }
 
 .inner-card {
-    width: 25%;
-    overflow: visible;
-    background-color: antiquewhite;
+  width: 25%;
+  overflow: visible;
+  background-color: antiquewhite;
 }
 
 
 
 
-.inner-card:hover{
-  -ms-transform: scale(1.5); /* IE 9 */
-    -webkit-transform: scale(1.5); /* Safari 3-8 */
-    transform: scale(1.1);
-    background-color: orange
+.inner-card:hover {
+  -ms-transform: scale(1.5);
+  /* IE 9 */
+  -webkit-transform: scale(1.5);
+  /* Safari 3-8 */
+  transform: scale(1.1);
+  background-color: orange
 }
 
 .new-register-email {
@@ -668,11 +668,11 @@ input.input:focus {
   width: 90%;
 }
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }
 
-.cart-details-div{
+.cart-details-div {
   width: 900px;
   height: 40%;
   display: flex;
@@ -684,7 +684,7 @@ input.input:focus {
 
 }
 
-.login-cart-div1  {
+.login-cart-div1 {
   margin-top: 3%;
 }
 
@@ -702,12 +702,18 @@ input.input:focus {
 }
 
 .product-price {
+  margin: 2%;
   height: 70px;
-    width: 110px;
-    background-color: darkgrey;
-    border-radius: 8px;
-    padding: 10px;
-    /* margin: 5%; */
+  width: 110px;
+  background-color: darkgrey;
+  border-radius: 8px;
+  padding: 10px;
+  /* margin: 5%; */
+}
+
+.payment-div-box {
+  display: flex;
+  padding: 4%
 }
 
 .checkout-box {
@@ -715,9 +721,9 @@ input.input:focus {
   height: 100px;
   border: 1px solid darkgray;
   display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 
@@ -735,8 +741,8 @@ input.input:focus {
 } */
 
 
-@media only screen and (max-width: 1300px) {
-  .shopping-cart{
+@media only screen and (max-width: 1275px) {
+  .shopping-cart {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -746,13 +752,17 @@ input.input:focus {
   .inner-card {
     width: 65%;
     margin-top: 10%;
-}
-.new-register-input{
-  width: 90.5%;
-}
-.new-register-email {
-  width: 90.5%
-}
+  }
+
+  .new-register-input {
+    width: 90.5%;
+  }
+
+  .new-register-email {
+    width: 90.5%
+  }
+  
+
 }
 
 @media only screen and (max-width: 700px) {
@@ -761,10 +771,11 @@ input.input:focus {
     /* height: auto; */
     margin-left: 1%;
   }
+
   .new-register-email {
     width: 90.5%
   }
-  
+
 
   .container-allnotes {
     padding-left: 0%;
@@ -774,6 +785,7 @@ input.input:focus {
   .take-note-user-card-dialog {
     width: 100%
   }
+
   .cart-selected {
     width: 100%;
     /* height: 250PX; */
@@ -894,18 +906,38 @@ input.input:focus {
     justify-content: center;
     align-items: center;
   }
-  .login-cart{
+
+  .login-cart {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
-  .login-cart-div{
+
+  .login-cart-div {
     width: 100%;
   }
-  .inner-card{
+
+  .inner-card {
     width: 65%;
     margin-top: 10%;
+  }
+
+  .cart-details-div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 5%;
+    font-size: 0.8rem;
+    border-top: 1px solid darkgray;
+    border-bottom: 1px solid darkgray;
+  }
+
+  .payment-div-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 5%
   }
 
 
