@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BaseURL = "http://34.213.106.173/api"
+const BaseURL = "http://fundoonotes.incubation.bridgelabz.com/api"
 const token = localStorage.getItem("token");
 
 class QuestionAndAnswerServices {

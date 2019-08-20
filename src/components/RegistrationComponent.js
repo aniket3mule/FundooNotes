@@ -60,7 +60,7 @@ export default class RegistrationComponent extends Component {
   // }
 
   handleSignInInstead = (cartInfo) => {
-    console.log("this registr ", cartInfo);
+    // console.log("this registr ", cartInfo);
     var data = {
       'productId' : cartInfo.productId,
       'cartId': cartInfo.cartId,
@@ -90,22 +90,22 @@ export default class RegistrationComponent extends Component {
     }
     UserServices.userRegister(data)
       .then(response => {
-        console.log(response);
+        // console.log(response);
         this.props.history.push("/signin")
       })
       .catch(err => {
-        console.log("Eroorrrrrr....", err);
+        // console.log("Eroorrrrrr....", err);
       })
   }
 
   render() {
-    console.log("resister props", this.props.location.state);
+    // console.log("resister props", this.props.location.state);
     
     var cssColor = '', productId = '';
-    if (this.props.history.location.state !== undefined) {
-      cssColor = "orange";
-      productId = this.props.history.location.state.productId;
-    }
+    // if (this.props.history.location.state !== undefined) {
+    //   cssColor = "orange";
+    //   productId = this.props.history.location.state.productId;
+    // }
     const { firstName, lastName, email, password, confirmPassword } = this.state;
     return (
       <Container>
@@ -128,6 +128,7 @@ export default class RegistrationComponent extends Component {
                 placeholder="First name"
                 value={firstName}
                 name="firstName"
+                id="firstName"
                 onChange={this.handleChange}
                 margin="normal"
                 variant="outlined"
@@ -140,6 +141,7 @@ export default class RegistrationComponent extends Component {
                 placeholder="Last Name"
                 value={lastName}
                 name="lastName"
+                id="lastName"
                 onChange={this.handleChange}
                 margin="normal"
                 variant="outlined"
@@ -152,6 +154,7 @@ export default class RegistrationComponent extends Component {
                   placeholder="User name"
                   value={email}
                   name="email"
+                  id="email"
                   onChange={this.handleChange}
                   margin="normal"
                   variant="outlined"
@@ -166,6 +169,7 @@ export default class RegistrationComponent extends Component {
                   placeholder="Password"
                   value={password}
                   name="password"
+                  id="password"
                   onChange={this.handleChange}
                   margin="normal"
                   variant="outlined"
@@ -178,6 +182,7 @@ export default class RegistrationComponent extends Component {
                   placeholder="Confirm Password"
                   value={confirmPassword}
                   name="confirmPassword"
+                  id="confirmPassword"
                   onChange={this.handleChange}
                   margin="normal"
                   variant="outlined"

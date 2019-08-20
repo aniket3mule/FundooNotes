@@ -1,6 +1,6 @@
 import React  from 'react';
-import { shallow, mount } from '../testSetup';
-import Register from '../components/SignUpComponent';
+import { shallow } from '../testSetup';
+import Register from '../components/RegistrationComponent';
 
 describe('register component ', () => {
     it('Register details ', () => {
@@ -8,23 +8,19 @@ describe('register component ', () => {
     });
 
     it('Renders firstName input ', () => {
-        expect(mount(<Register/>).find('#firstName').length).toEqual(2);
+        expect(shallow(<Register/>).find('#firstName').length).toEqual(1);
     })
 
     it('Renders lastName input ', () => {
-        expect(mount(<Register/>).find('#lastName').length).toEqual(2);
+        expect(shallow(<Register/>).find('#lastName').length).toEqual(1);
     })
 
     it('Renders email input ', () => {
-        expect(mount(<Register/>).find('#email').length).toEqual(2);
-    })
-
-    it('Renders selectedOption input ', () => {
-        expect(mount(<Register/>).find('#selectedOption').length).toEqual(2);
+        expect(shallow(<Register/>).find('#email').length).toEqual(1);
     })
 
     it('Renders password input ', () => {
-        expect(mount(<Register/>).find('#password').length).toEqual(2);
+        expect(shallow(<Register/>).find('#password').length).toEqual(1);
     })
 });
 
@@ -64,19 +60,6 @@ describe('email input ', () => {
             }
         })
         expect(wrapper.state('email')).toEqual('anuj@gmail.com')
-    })
-})
-
-describe('selectedOption input ', () => {
-    it('responde to the change event and the change the state of the selectedOption', () => {
-        const wrapper = shallow(<Register/>);
-        wrapper.find('#selectedOption1').simulate('change', {
-            target: {
-                name: 'selectedOption',
-                value: 'Basic'
-            }
-        })
-        expect(wrapper.state('selectedOption')).toEqual('Basic')
     })
 })
 

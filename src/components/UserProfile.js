@@ -6,7 +6,7 @@ import { IconButton, Tooltip, Button } from "@material-ui/core";
 import Services from "../services/UserServices";
 
 const profile = new Services();
-const url = "http://34.213.106.173/"
+const url = "http://fundoonotes.incubation.bridgelabz.com/"
 
 const styles = theme => ({
   typography: {
