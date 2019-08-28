@@ -128,7 +128,6 @@ class UploadProfile extends React.Component {
                   <IconButton component="span">
                     <Tooltip title="Change profile">
                       <img
-                        htmlFor="contained-button-file"
                         src={this.state.profilePic}
                         alt="profile pic"
                         style={{ borderRadius: "50%" }}

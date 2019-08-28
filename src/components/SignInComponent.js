@@ -116,7 +116,7 @@ class SignInComponent extends Component {
                             onChange={this.changeHandler} />
                         <Label></Label>
                         <center>
-                            <Button outline color="info" className="text-uppercase" onClick={this.submitHandler}>Sign in</Button>
+                            <Button id="button" outline color="info" className="text-uppercase" onClick={this.submitHandler}>Sign in</Button>
                             <Label />
                             <CardTitle>Don't have an Account?
                                 <Button color="link" onClick={this.signUpButton}>

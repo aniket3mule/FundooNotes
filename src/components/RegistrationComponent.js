@@ -86,14 +86,13 @@ export default class RegistrationComponent extends Component {
       'email': this.state.email,
       'password': this.state.password,
       'cartId': (this.props.location.state !== undefined) ? this.props.location.state.cartId : ''
-
     }
     UserServices.userRegister(data)
-      .then(response => {
+      .then(() => {
         // console.log(response);
         this.props.history.push("/signin")
       })
-      .catch(err => {
+      .catch(() => {
         // console.log("Eroorrrrrr....", err);
       })
   }

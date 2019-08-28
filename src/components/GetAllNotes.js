@@ -53,8 +53,8 @@ function searchingFor(search) {
     }
 }
 class GetAllNotes extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             allNotes: [],
             open: false,
@@ -80,7 +80,7 @@ class GetAllNotes extends Component {
         this.handleQuestionAnsAnswer = this.handleQuestionAnsAnswer.bind(this);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         //Print All notes
         this.getUpdateNotes();
     }
@@ -383,7 +383,7 @@ class GetAllNotes extends Component {
         })
     }
     render() {
-        // console.log(this.props.isNotes);
+        console.log("this.props", this.props);
         var listgridvalue = this.props.listGridView;
         const listgridview = listgridvalue ? "list-view" : "default-view";
         const modalbottom = listgridvalue ? "list-view-bottom" : "card-bottom";

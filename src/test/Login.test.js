@@ -2,9 +2,12 @@ import React from 'react';
 import { shallow } from '../testSetup';
 import SignInComponent from '../components/SignInComponent';
 
+// var data = (<SignInComponent/>)
+// console.log("data", data);
+
 describe('Login test ', () => {
     it('Check login details ', () => {
-        expect(shallow(<SignInComponent />).exists()).toBe(true)
+       expect(shallow(<SignInComponent />).exists()).toBe(true);
     });
 
     it('renders a email input ', () => {
